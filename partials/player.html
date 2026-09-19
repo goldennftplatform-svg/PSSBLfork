@@ -1,0 +1,268 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+        <alert ng-show="invalidParams" close="closeAlert()">
+            <strong>Warning!</strong> Player not found.
+        </alert>
+
+        <!--Career Stats-->
+        <section class="player-details-page">
+            <h2>
+                {{player.playerName}}
+                <img ng-show="player.loadingData" src="img/loading1.gif" title="Loading" />
+            </h2>
+            <uib-tabset class="heading-subtext" active="player.activeTab">
+                <!--uib-tab heading="Profile" index="0" select="player.showTab('Profile')"></!--uib-tab-->
+                <uib-tab heading="Career Stats" index="1" select="player.showTab('Career')"></uib-tab>
+                <uib-tab heading="Schedule" index="2" select="player.showTab('Schedule')"></uib-tab>
+            </uib-tabset>
+
+            <div ng-switch on="player.tabSelected">
+
+                <div ng-switch-when="Career">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Batting</div>
+                        <div ng-if="player.hasBattingStats()" class="table-responsive">
+                            <table class="table table-hover stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Season</th>
+                                        <th class="number ">G</th>
+                                        <th class="number ">PA</th>
+                                        <th class="number ">AB</th>
+                                        <th class="number ">R</th>
+                                        <th class="number ">H</th>
+                                        <th class="number ">2B</th>
+                                        <th class="number ">3B</th>
+                                        <th class="number ">HR</th>
+                                        <th class="number ">RBI</th>
+                                        <th class="number ">SB</th>
+                                        <th class="number ">CS</th>
+                                        <th class="number ">BB</th>
+                                        <th class="number ">SO</th>
+                                        <th class="number ">AVG</th>
+                                        <th class="number ">OBP</th>
+                                        <th class="number ">SLG</th>
+                                        <th class="number ">OPS</th>
+                                        <th class="number ">TB</th>
+                                        <th class="number ">HBP</th>
+                                        <th class="number ">SH</th>
+                                        <th class="number ">SF</th>
+                                        <th class="number ">IBB</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="batStat in player.careerBattingStats">
+                                        <td><a href="#!/player/season/{{player.id}}/{{batStat.year}}">{{batStat.year}}</a></td>
+                                        <td class="number">{{batStat.g}}</td>
+                                        <td class="number">{{batStat.pa}}</td>
+                                        <td class="number">{{batStat.ab}}</td>
+                                        <td class="number">{{batStat.r}}</td>
+                                        <td class="number">{{batStat.h}}</td>
+                                        <td class="number">{{batStat.d}}</td>
+                                        <td class="number">{{batStat.t}}</td>
+                                        <td class="number">{{batStat.hr}}</td>
+                                        <td class="number">{{batStat.rbi}}</td>
+                                        <td class="number">{{batStat.sb}}</td>
+                                        <td class="number">{{batStat.cs}}</td>
+                                        <td class="number">{{batStat.bb}}</td>
+                                        <td class="number">{{batStat.so}}</td>
+                                        <td class="number">{{batStat.avg}}</td>
+                                        <td class="number">{{batStat.obp}}</td>
+                                        <td class="number">{{batStat.slg}}</td>
+                                        <td class="number">{{batStat.ops}}</td>
+                                        <td class="number">{{batStat.tb}}</td>
+                                        <td class="number">{{batStat.hbp}}</td>
+                                        <td class="number">{{batStat.sh}}</td>
+                                        <td class="number">{{batStat.sf}}</td>
+                                        <td class="number">{{batStat.ibb}}</td>
+                                    </tr>
+                                    <tr class="stats-totals-row">
+                                        <td>{{player.careerBattingTotals.year}}</td>
+                                        <td class="number">{{player.careerBattingTotals.g}}</td>
+                                        <td class="number">{{player.careerBattingTotals.pa}}</td>
+                                        <td class="number">{{player.careerBattingTotals.ab}}</td>
+                                        <td class="number">{{player.careerBattingTotals.r}}</td>
+                                        <td class="number">{{player.careerBattingTotals.h}}</td>
+                                        <td class="number">{{player.careerBattingTotals.d}}</td>
+                                        <td class="number">{{player.careerBattingTotals.t}}</td>
+                                        <td class="number">{{player.careerBattingTotals.hr}}</td>
+                                        <td class="number">{{player.careerBattingTotals.rbi}}</td>
+                                        <td class="number">{{player.careerBattingTotals.sb}}</td>
+                                        <td class="number">{{player.careerBattingTotals.cs}}</td>
+                                        <td class="number">{{player.careerBattingTotals.bb}}</td>
+                                        <td class="number">{{player.careerBattingTotals.so}}</td>
+                                        <td class="number">{{player.careerBattingTotals.avg}}</td>
+                                        <td class="number">{{player.careerBattingTotals.obp}}</td>
+                                        <td class="number">{{player.careerBattingTotals.slg}}</td>
+                                        <td class="number">{{player.careerBattingTotals.ops}}</td>
+                                        <td class="number">{{player.careerBattingTotals.tb}}</td>
+                                        <td class="number">{{player.careerBattingTotals.hbp}}</td>
+                                        <td class="number">{{player.careerBattingTotals.sh}}</td>
+                                        <td class="number">{{player.careerBattingTotals.sf}}</td>
+                                        <td class="number">{{player.careerBattingTotals.ibb}}</td>
+                                    </tr>
+                                    <tr class="stats-totals-row average-162">
+                                        <td>{{player.careerBattingAve.year}}</td>
+                                        <td class="number">{{player.careerBattingAve.g}}</td>
+                                        <td class="number">{{player.careerBattingAve.pa}}</td>
+                                        <td class="number">{{player.careerBattingAve.ab}}</td>
+                                        <td class="number">{{player.careerBattingAve.r}}</td>
+                                        <td class="number">{{player.careerBattingAve.h}}</td>
+                                        <td class="number">{{player.careerBattingAve.d}}</td>
+                                        <td class="number">{{player.careerBattingAve.t}}</td>
+                                        <td class="number">{{player.careerBattingAve.hr}}</td>
+                                        <td class="number">{{player.careerBattingAve.rbi}}</td>
+                                        <td class="number">{{player.careerBattingAve.sb}}</td>
+                                        <td class="number">{{player.careerBattingAve.cs}}</td>
+                                        <td class="number">{{player.careerBattingAve.bb}}</td>
+                                        <td class="number">{{player.careerBattingAve.so}}</td>
+                                        <td class="number">{{player.careerBattingAve.avg}}</td>
+                                        <td class="number">{{player.careerBattingAve.obp}}</td>
+                                        <td class="number">{{player.careerBattingAve.slg}}</td>
+                                        <td class="number">{{player.careerBattingAve.ops}}</td>
+                                        <td class="number">{{player.careerBattingAve.tb}}</td>
+                                        <td class="number">{{player.careerBattingAve.hbp}}</td>
+                                        <td class="number">{{player.careerBattingAve.sh}}</td>
+                                        <td class="number">{{player.careerBattingAve.sf}}</td>
+                                        <td class="number">{{player.careerBattingAve.ibb}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-if="!player.hasBattingStats()" class="panel-footer">No batting data for {{player.playerName}}</div>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Pitching</div>
+                        <div ng-if="player.hasPitchingStats()" class="table-responsive">
+                            <table class="table table-hover stats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Season</th>
+                                        <th class="number ">G</th>
+                                        <th class="number ">W</th>
+                                        <th class="number ">L</th>
+                                        <th class="number ">GS</th>
+                                        <th class="number ">GF</th>
+                                        <th class="number ">CG</th>
+                                        <th class="number ">SV</th>
+                                        <th class="number ">IP</th>
+                                        <th class="number ">H</th>
+                                        <th class="number ">R</th>
+                                        <th class="number ">ER</th>
+                                        <th class="number ">HR</th>
+                                        <th class="number ">BB</th>
+                                        <th class="number ">IBB</th>
+                                        <th class="number ">K</th>
+                                        <th class="number ">HBP</th>
+                                        <th class="number ">BK</th>
+                                        <th class="number ">WP</th>
+                                        <th class="number ">BF</th>
+                                        <th class="number ">ERA</th>
+                                        <th class="number ">WHIP</th>
+                                        <th class="number ">K/9</th>
+                                        <th class="number ">BB/9</th>
+                                        <th class="number ">PIT</th>
+                                        <th class="number ">STR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="pitchStat in player.careerPitchingStats">
+                                        <td><a href="#!/player/season/{{player.id}}/{{pitchStat.year}}">{{pitchStat.year}}</a></td>
+                                        <td class="number">{{pitchStat.g}}</td>
+                                        <td class="number">{{pitchStat.w}}</td>
+                                        <td class="number">{{pitchStat.l}}</td>
+                                        <td class="number">{{pitchStat.gs}}</td>
+                                        <td class="number">{{pitchStat.gf}}</td>
+                                        <td class="number">{{pitchStat.cg}}</td>
+                                        <td class="number">{{pitchStat.sv}}</td>
+                                        <td class="number">{{pitchStat.ip}}</td>
+                                        <td class="number">{{pitchStat.h}}</td>
+                                        <td class="number">{{pitchStat.r}}</td>
+                                        <td class="number">{{pitchStat.er}}</td>
+                                        <td class="number">{{pitchStat.hr}}</td>
+                                        <td class="number">{{pitchStat.bb}}</td>
+                                        <td class="number">{{pitchStat.ibb}}</td>
+                                        <td class="number">{{pitchStat.so}}</td>
+                                        <td class="number">{{pitchStat.hbp}}</td>
+                                        <td class="number">{{pitchStat.bk}}</td>
+                                        <td class="number">{{pitchStat.wp}}</td>
+                                        <td class="number">{{pitchStat.bf}}</td>
+                                        <td class="number">{{pitchStat.era}}</td>
+                                        <td class="number">{{pitchStat.whip}}</td>
+                                        <td class="number">{{pitchStat.k9}}</td>
+                                        <td class="number">{{pitchStat.bb9}}</td>
+                                        <td class="number">{{pitchStat.pit}}</td>
+                                        <td class="number">{{pitchStat.str}}</td>
+                                    </tr>
+                                    <tr class="stats-totals-row">
+                                        <td>{{player.careerPitchingTotals.year}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.g}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.w}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.l}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.gs}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.gf}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.cg}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.sv}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.ip}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.h}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.r}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.er}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.hr}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.bb}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.ibb}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.so}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.hbp}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.bk}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.wp}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.bf}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.era}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.whip}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.k9}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.bb9}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.pit}}</td>
+                                        <td class="number">{{player.careerPitchingTotals.str}}</td>
+                                    </tr>
+                                    <tr ng-show="false" class="stats-totals-row average-162">
+                                        <td>162 game average</td>
+                                        <td class="number">{{player.careerPitchingAve.g}}</td>
+                                        <td class="number">{{player.careerPitchingAve.w}}</td>
+                                        <td class="number">{{player.careerPitchingAve.l}}</td>
+                                        <td class="number">{{player.careerPitchingAve.gs}}</td>
+                                        <td class="number">{{player.careerPitchingAve.gf}}</td>
+                                        <td class="number">{{player.careerPitchingAve.cg}}</td>
+                                        <td class="number">{{player.careerPitchingAve.sv}}</td>
+                                        <td class="number">{{player.careerPitchingAve.ip}}</td>
+                                        <td class="number">{{player.careerPitchingAve.h}}</td>
+                                        <td class="number">{{player.careerPitchingAve.r}}</td>
+                                        <td class="number">{{player.careerPitchingAve.er}}</td>
+                                        <td class="number">{{player.careerPitchingAve.hr}}</td>
+                                        <td class="number">{{player.careerPitchingAve.bb}}</td>
+                                        <td class="number">{{player.careerPitchingAve.ibb}}</td>
+                                        <td class="number">{{player.careerPitchingAve.so}}</td>
+                                        <td class="number">{{player.careerPitchingAve.hbp}}</td>
+                                        <td class="number">{{player.careerPitchingAve.bk}}</td>
+                                        <td class="number">{{player.careerPitchingAve.wp}}</td>
+                                        <td class="number">{{player.careerPitchingAve.bf}}</td>
+                                        <td class="number">{{player.careerPitchingAve.era}}</td>
+                                        <td class="number">{{player.careerPitchingAve.whip}}</td>
+                                        <td class="number">{{player.careerPitchingAve.k9}}</td>
+                                        <td class="number">{{player.careerPitchingAve.bb9}}</td>
+                                        <td class="number">{{player.careerPitchingAve.pit}}</td>
+                                        <td class="number">{{player.careerPitchingAve.str}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-if="!player.hasPitchingStats()" class="panel-footer">No pitching data for {{player.playerName}}</div>
+                    </div>
+                </div>
+                <div ng-switch-when="Schedule">
+                    <schedule-directive />
+                </div>
+                <div ng-switch-when="Profile">
+                    <h1>Player Profile Coming Soon</h1>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

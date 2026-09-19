@@ -1,0 +1,296 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+
+        <div ng-switch on="draft.page">
+
+            <!-- Main draft registration page  -->
+            <div ng-switch-when="EnterDraft">
+                <h1 ng-click="callDebug()">Register for the 2026 PSSBL Player Draft&nbsp;<img ng-show="draft.loadingData" src="img/loading1.gif" title="Loading" /></h1>
+                <!--
+                    Pressed for time here, but eventually need to move all styling to .css file
+                    and reformat for responsive display.
+                -->
+
+                <style type="text/css">
+                    .tg {
+                        border-collapse: collapse;
+                        border-spacing: 0;
+                        border-color: #aaa;
+                    }
+
+                        .tg td {
+                            padding: 10px 5px;
+                            border-style: solid;
+                            border-width: 1px;
+                            overflow: hidden;
+                            word-break: normal;
+                            border-color: #aaa;
+                            color: #333;
+                            background-color: #fff;
+                        }
+
+                        .tg th {
+                            padding: 10px 5px;
+                            border-style: solid;
+                            border-width: 1px;
+                            overflow: hidden;
+                            word-break: normal;
+                            border-color: #aaa;
+                            color: #fff;
+                            background-color: #3082f3;
+                        }
+
+                        .tg .tg-yw4l {
+                            vertical-align: top;
+                        }
+
+                        .tg .tg-formheader {
+                            vertical-align: top;
+                            text-align: center;
+                        }
+
+                        .tg .tg-oskr {
+                            background-color: #ffffff;
+                            vertical-align: top;
+                        }
+
+                        .tg .tg-kjho {
+                            background-color: #FCFBE3;
+                            vertical-align: top;
+                            font: bold;
+                        }
+
+                        .tg .tg-uwer {
+                            background-color: #99fff3;
+                            vertical-align: top;
+                        }
+
+                        .tg .tg-account {
+                            background-color: #cfff99;
+                            vertical-align: top;
+                            width: 50%;
+                        }
+
+                        .tg .tg-money {
+                            text-align: right;
+                        }
+                </style>
+
+                <table class="tg">
+                    <tr>
+                        <th class="tg-formheader">Draft Registration Form</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-account">
+                            <h3>Tryout Player Information</h3>
+                            <div class="row">
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <h4 class="col-md-2 control-label"><strong>Position Preferences:</strong></h4>
+                            <div class="form-group col-md-2">
+                                <label for="draft-position1" class="control-label">1st Choice</label>
+                                <select ng-model="draft.form.position1" name="draft-position1">
+                                    <option value="none" selected>-none-</option>
+                                    <option value="P">Pitcher</option>
+                                    <option value="C">Catcher</option>
+                                    <option value="1B">First Base</option>
+                                    <option value="2b">Second Base</option>
+                                    <option value="ss">Short Stop</option>
+                                    <option value="3b">Third Base</option>
+                                    <option value="lf">Left Field</option>
+                                    <option value="cf">Center Field</option>
+                                    <option value="rf">Right Field</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="draft-position2" class="control-label">2nd Choice</label>
+                                <select ng-model="draft.form.position2" name="draft-position2">
+                                    <option value="none" selected>-none-</option>
+                                    <option value="P">Pitcher</option>
+                                    <option value="C">Catcher</option>
+                                    <option value="1B">First Base</option>
+                                    <option value="2b">Second Base</option>
+                                    <option value="ss">Short Stop</option>
+                                    <option value="3b">Third Base</option>
+                                    <option value="lf">Left Field</option>
+                                    <option value="cf">Center Field</option>
+                                    <option value="rf">Right Field</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="draft-position3" class="control-label">3rd Choice</label>
+                                <select ng-model="draft.form.position3" name="draft-position3">
+                                    <option value="none" selected>-none-</option>
+                                    <option value="P">Pitcher</option>
+                                    <option value="C">Catcher</option>
+                                    <option value="1B">First Base</option>
+                                    <option value="2b">Second Base</option>
+                                    <option value="ss">Short Stop</option>
+                                    <option value="3b">Third Base</option>
+                                    <option value="lf">Left Field</option>
+                                    <option value="cf">Center Field</option>
+                                    <option value="rf">Right Field</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="draft-position4" class="control-label">4th Choice</label>
+                                <select ng-model="draft.form.position4" name="draft-position4">
+                                    <option value="none" selected>-none-</option>
+                                    <option value="P">Pitcher</option>
+                                    <option value="C">Catcher</option>
+                                    <option value="1B">First Base</option>
+                                    <option value="2b">Second Base</option>
+                                    <option value="ss">Short Stop</option>
+                                    <option value="3b">Third Base</option>
+                                    <option value="lf">Left Field</option>
+                                    <option value="cf">Center Field</option>
+                                    <option value="rf">Right Field</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="draft-position5" class="control-label">5th Choice</label>
+                                <select ng-model="draft.form.position5" name="draft-position5">
+                                    <option value="none" selected>-none-</option>
+                                    <option value="P">Pitcher</option>
+                                    <option value="C">Catcher</option>
+                                    <option value="1B">First Base</option>
+                                    <option value="2b">Second Base</option>
+                                    <option value="ss">Short Stop</option>
+                                    <option value="3b">Third Base</option>
+                                    <option value="lf">Left Field</option>
+                                    <option value="cf">Center Field</option>
+                                    <option value="rf">Right Field</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group col-md-2">
+                                <label for="draft-experience">Experience</label>
+                                <select name=draft-experience ng-model="draft.form.experience">
+                                    <option value="none" selected>-none-</option>
+                                    <option value="ll">Little League</option>
+                                    <option value="ms">Middle School</option>
+                                    <option value="hs">High School</option>
+                                    <option value="adult">Adult League</option>
+                                    <option value="college">College</option>
+                                    <option value="pro">Professional</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="draft-availability" class="control-label">Availability:</label>
+                                <textarea rows="3" name="draft-availability" cols="40" ng-model="draft.form.availability" placeholder="describe your availablility schedule"></textarea>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="draft-notes" class="control-label">Notes:</label>
+                                <textarea rows="3" name="draft-notes" cols="40" ng-model="draft.form.notes" placeholder="enter any additional information"></textarea>
+                            </div>
+                            <div class="form-group col-md-12 col-md-offset-2">
+                                <label><input ng-model="draft.form.available80" type="checkbox" name="draft-80pct">Can you attend 80% of the games?</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td ng-hide="draft.waiver" class="tg-yw4l" colspan="2">
+                            <a role="button" ng-click="showWaiver()" class="btn btn-primary a">View and Sign the Waiver</a>
+                            <span style="color:red; text-align:right;">The waiver must be signed before you can register.</span>
+                        </td>
+                        <td ng-show="draft.waiver" class="tg-oskr" colspan="2">
+                            <h4>
+                                <span style="color:green" class="glyphicon glyphicon-ok"></span>
+                                &nbsp;<em><b>Waiver Signed</b></em>
+                            </h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tg-kjho">
+                            There is no cost to trying out, but tryout players must be fully paid in order to be eligible for the draft, to be held {{season.draftHeld}}. Payment is due no later than {{season.paymentDue}}.
+                            The cost of new player dues for {{season.currentYear}} is <strong>{{season.newPlayerCost}}</strong>. Returning players looking to be drafted onto a second (or third) team will owe just the additional {{season.additionalCost}} to be
+                            draft eligible. These amounts are subject to revision and/or partial refund.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tg-account">
+                            <a role="button" ng-disabled="!draft.waiver || draft.submitted" ng-click="submitDraft()" class="btn btn-success a col-md-offset-5">Register For Draft</a>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row"><canvas width="200" height="150"></canvas></div>
+            </div>
+
+            <!-- Show and sign waiver -->
+            <div ng-switch-when="Waiver">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="well row">
+                            <h2>About the Waiver</h2>
+                            <p>
+                                Signing the Waiver of Liability is required to play in the Puget Sound Senior Baseball League.
+                            </p>
+                            <p>Please take the time to read the waiver, and then digitally sign the waiver at the bottom of the page.</p>
+                            <p>If you have any questions about the waiver, please contact the league staff.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div ng-bind-html="html | to_trusted"></div>
+                </div>
+                <div class="well row">
+                    <div class="alert alert-warning">
+                        Type your name <strong>Exactly</strong> as it appears to sign your waiver.
+                    </div>
+                    <h2>{{login.userName}}</h2>
+                    I, <input name="waiver-signature" ng-model="draft.form.signature" placeholder="type name here">, agree to the Waiver of Liability
+                    <div ng-show="draft.form.signatureError" class="alert alert-danger">
+                        <strong>Error:</strong> Signature does not match name
+                    </div>
+                </div>
+                <div class="row">
+                    <a role="button" ng-click="signWaiver(true)" class="btn btn-success a">Yes, I Agree</a>
+                    <a role="button" ng-click="signWaiver(false)" class="btn btn-danger a">No, I Don't Agree</a>
+                </div>
+            </div>
+
+            <!-- Invalid token parameters passed in -->
+            <div ng-switch-when="SignedUp">
+                <div class="col-md-8 col-md-offset-2 well">
+                    <h2 ngclick="callDebug()">Draft Registration Successful</h2>
+                    <p>
+                        You have successfully registered for the {{season.currentYear}} PSSBL player draft. You must attend one of the tryouts and
+                        be fully paid in order to be eligible to be drafted {{season.draftHeld}}.
+                    </p>
+                    <p>
+                        To pay your dues, select the "registration" item from the login menu (upper right corner) and view your current status.
+                    </p>
+                    <p>
+                        You can find additional information about the tryouts and the league on this website. If you have additional questions about the
+                        league, contact <a href="mailto:info@pssbl.com">info@pssbl.com</a>. If you have any technical issues with the signup process,
+                        contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> <br />
+                    </p>
+                    <p>
+                        <strong>Good luck!</strong>
+                    </p>
+                </div>
+                <div class="row"><canvas width="200" height="400"></canvas></div>
+            </div>
+
+            <!-- Signup Fails -->
+            <div ng-switch-when="SignupFailed">
+                <div class="col-md-8 col-md-offset-2 well">
+                    <h2 ngclick="callDebug()">Draft Registration Unsuccessful</h2>
+                    <p>
+                        The system was unable to register you for the {{season.currentYear}} draft. Please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> and report the
+                        following error: "{{draft.result.error}}"
+                    </p>
+                </div>
+                <div class="row"><canvas width="200" height="400"></canvas></div>
+            </div>
+
+        </div>
+    </section>
+</div>
+

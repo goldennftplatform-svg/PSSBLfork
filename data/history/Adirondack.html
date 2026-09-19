@@ -1,0 +1,189 @@
+<html>
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Style the article content */
+        .content {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: #333333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            line-height: 1.0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="row">
+
+        <!-- Left column -->
+        <div class="column">
+            <p><span style="font-size:24px;"><strong>Champions</strong></span></p>
+
+            <table class="champions-table">
+                <tr>
+                    <th>Year</th>
+                    <th>Playoffs</th>
+                    <th>Regular Season</th>
+                </tr>
+                <tr>
+                    <td>2008</td>
+                    <td>Generals</td>
+                    <td>Generals</td>
+                </tr>
+                <tr>
+                    <td>2009</td>
+                    <td>Mustangs</td>
+                    <td>Mustangs</td>
+                </tr>
+                <tr>
+                    <td>2010</td>
+                    <td>Solar Sox</td>
+                    <td>Solar Sox</td>
+                </tr>
+                <tr>
+                    <td>2011</td>
+                    <td>Mustangs</td>
+                    <td>Solar Sox</td>
+                </tr>
+                <tr>
+                    <td>2012</td>
+                    <td>Mustangs</td>
+                    <td>Mustangs</td>
+                </tr>
+                <tr>
+                    <td>2013</td>
+                    <td>Mustangs</td>
+                    <td>Mustangs</td>
+                </tr>
+                <tr>
+                    <td>2014</td>
+                    <td>Wizards</td>
+                    <td>Osprey</td>
+                </tr>
+                <tr>
+                    <td>2015</td>
+                    <td>Osprey</td>
+                    <td>Wizards</td>
+                </tr>
+                <tr>
+                    <td>2016</td>
+                    <td>Osprey</td>
+                    <td>Osprey</td>
+                </tr>
+                <tr>
+                    <td>2017</td>
+                    <td>Twins</td>
+                    <td>Twins</td>
+                </tr>
+                <tr>
+                    <td>2018</td>
+                    <td>Mustangs</td>
+                    <td>Osprey</td>
+                </tr>
+                <tr>
+                    <td>2019</td>
+                    <td>Osprey</td>
+                    <td>Osprey</td>
+                </tr>
+                <tr>
+                    <td>2021</td>
+                    <td>Generals</td>
+                    <td>Generals</td>
+                </tr>
+                <tr>
+                    <td>2022</td>
+                    <td>Generals</td>
+                    <td>Generals</td>
+                </tr>
+                <tr>
+                    <td>2023</td>
+                    <td>Generals</td>
+                    <td>Bees</td>
+                </tr>
+                <tr>
+                    <td>2024</td>
+                    <td>Bees</td>
+                    <td>Bees</td>
+                </tr>
+            </table>
+            <!-- End of left column -->
+        </div>
+
+        <!-- Right column -->
+        <div class="column">
+            <p><span style="font-size:24px;"><strong>Timeline</strong></span></p>
+
+            <ul>
+                <li><strong>2008</strong>: The Adirondack is formed with three teams: The Generals, the Osprey, and the
+                    Bees.</li>
+                <li><strong>2009</strong>: The division expands to 5 teams with the addition of the Wizards and the
+                    Mustangs.</li>
+                <li><strong>2010</strong>: The Solar Sox join the division to bring the total teams to 6. The teams play
+                    a 16 game
+                    schedule.</li>
+                <li><strong>2011</strong>: Adirondack becomes an 8 team division with the addition of the Timbers and
+                    the Silver
+                    Foxes (who came over from the Teton Division).</li>
+                <li><strong>2012</strong>: The Silver Foxes and Timbers move up to the newly formed Everest Division,
+                    leaving
+                    Adirondack with 6 teams once more.</li>
+                <li><strong>2014</strong>: The Mustangs are moved to the Everest Division. The remaining 5 teams move to
+                    an 18 game
+                    schedule.</li>
+                <li><strong>2016</strong>: A new expansion team, the Mavericks, join the division.</li>
+                <li><strong>2017</strong>: As a one year transitional team, a new Twins team joins the division.</li>
+                <li><strong>2018</strong>: The Twins leave the division for the newly formed Rainier Division.</li>
+                <li><strong>2019</strong>: The Osprey go undefeated and finish 21-0.</li>
+                <li><strong>2020</strong>: Season cancelled due to Covid.</li>
+                <li><strong>2021</strong>: The division schedule drops down to 16 games.</li>
+                <li><strong>2022</strong>: An 18 game schedule is restored.</li>
+            </ul>
+            <!-- End of right column -->
+        </div>
+
+        <!-- End of row -->
+    </div>
+
+</body>
+
+</html>
+ 

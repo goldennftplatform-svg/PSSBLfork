@@ -1,0 +1,103 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+
+                <div class="col-md-10">
+                    <h2 ng-click="callDebug()">Support Mail<small class="heading-subtext">Summer {{season.currentYear}}</small></h2>
+                    <img ng-show="admin.support.loadingData" src="img/loading1.gif" title="Loading" />
+                    <div class="col-md-12">
+                        <label>
+                            By Year:
+                            <span class="nullable">
+                                <select class="btn btn-primary" ng-model="support.yearFilter">
+                                    <option ng-repeat="year in support.yearList" value="{{year}}">{{year}}</option>
+                                </select>
+                            </span>
+                        </label>
+
+                        <label>Search Contents:<span>&nbsp;&nbsp;<input ng-model="support.search" type="text" placeholder="Search" autofocus></span></label>
+                        <div class="panel panel-default">
+                            <div class="table-responsive">
+                                <table class="table transaction-list">
+                                    <thead>
+                                        <tr>
+                                            <th>Tkt ID</th>
+                                            <th>Thrd ID</th>
+                                            <th>Status</th>
+                                            <th>Assignee</th>
+                                            <th>Sender</th>
+                                            <th>Created</th>
+                                            <th>Updated</th>
+                                            <th>Subject</th>
+                                            <th>Body</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat-start="item in support.items | filter: support.search">
+                                            <td style="max-width:25px">
+                                                {{item.id}}
+                                            </td>
+                                            <td style="max-width:90px">
+                                                <div class="btn-group" uib-dropdown keyboard-nav>
+                                                    <button id="btn-thread" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                                        <span ng-if="item.id_origin">
+                                                            {{item.id_origin}}
+                                                        </span>
+                                                        <span ng-if="!item.id_origin">
+                                                            None
+                                                        </span>
+                                                        <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="btn-thread">
+                                                        <li role="menuitem" ng-repeat="option in support.items">
+                                                            <a role="button" ng-click="support.onOriginChange(item, option.id)">{{option.id}}</a>
+                                                        </li>                    
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" uib-dropdown keyboard-nav>
+                                                    <button id="btn-status" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                                        {{item.status}} <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="btn-status">
+                                                        <li role="menuitem" ng-repeat="option in support.statusOptions">
+                                                            <a role="button" ng-click="support.onStatusChange(item, option.val)">{{option.val}}</a>
+                                                        </li>                    
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group" uib-dropdown keyboard-nav>
+                                                    <button id="btn-assigned" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                                        {{item.assigned}} <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu" role="menu" aria-labelledby="btn-assigned">
+                                                        <li role="menuitem" ng-repeat="option in support.assigneeOptions">
+                                                            <a role="button" ng-click="support.onAssigneeChange(item, option.name)">{{option.name}}</a>
+                                                        </li>                    
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td style="max-width:150px">{{item.sender}}</td>
+                                            <td>{{support.asDate(item.created) | date: "M/d/yy h:mm a"}}</td>
+                                            <td>{{support.asDate(item.updated) | date: "M/d/yy h:mm a"}}</td>
+                                            <td>{{item.subject}}</td>
+                                            <td><input type="checkbox" ng-model="item.showBody" unchecked ng-change="support.fixBody(item)" /><span>Show</span></td>
+                                        </tr>
+                                        <tr ng-if="item.showBody" ng-repeat-end>
+                                            <td colspan="9">{{item.body}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

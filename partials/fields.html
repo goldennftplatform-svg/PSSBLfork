@@ -1,0 +1,62 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+        <section class="field-list">
+            <h2>
+                Fields&nbsp;
+                <img ng-show="loadingData" src="img/loading1.gif" title="Loading" />
+            </h2>
+
+            <div class="row">
+                <div uib-pagination boundary-links="true" total-items="fieldCount" items-per-page="itemsPerPage" ng-change="pageChanged()" ng-model="currentPage" class="col-md-4" max-size="maxPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                </div>
+
+                <!-- Button dropdown with keyboard nav -->
+                <div class="col-md-4 pagination">
+                    <div class="btn-group" uib-dropdown dropdown-append-to-body>
+                        <button id="per-page-btn" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                            Show Per Page <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(20)">20</a></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(50)">50</a></li>
+                            <li class="divider"></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(-1)">Show All</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Query Box -->
+                    <span>&nbsp;&nbsp;<input ng-model="query" type="text" placeholder="Filter by" autofocus></span>
+                </div>
+                    
+
+                    <!-- Currently showing info -->
+                <div class="pagination-info pagination pull-right">
+                    Showing
+                    <span class="label label-info">{{currentPage * itemsPerPage - itemsPerPage + 1}}&mdash;{{currentPage * itemsPerPage}}</span>
+                    of <span class="label label-info">{{fieldCount}}</span>
+                </div>                
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover fields-list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Short Name</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="field in fields | filter:query">
+                            <td><a href="#!/fields/{{field.fieldId}}">{{field.fieldName}}</a></td>
+                            <td>{{field.shortName}}</td>
+                            <td>
+                                <a href="http://maps.google.com/maps?q=loc:{{field.mapLink}}" target="_blank" title="View map" class="nav-icon-with-text"><span class="fa fa-map-marker"></span>{{field.address}}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</div>

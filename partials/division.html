@@ -1,0 +1,796 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+        <!-----------------------------------------
+         Rough First cut at this ... will probably want to clean up the tab selection logic and
+         use angularjs directives to display the tables.
+         ---------------------------------------- -->
+        <section>
+            <alert ng-show="invalidParams" close="closeAlert()">
+                <strong>Warning!</strong> No results were found for selected parameters: *** {{ originalParams}} ***
+                Selecting defaults for invalid values.
+            </alert>
+            <h1>
+                {{ divisionName }} Division
+                <small class="heading-subtext">
+                    Summer {{divisionYear}}&nbsp;
+                </small>
+                <img ng-show="loadingData" src="img/loading1.gif" title="Loading" />
+            </h1>
+            <uib-tabset active="activeTabIndex">
+                <uib-tab heading="Teams" select="division.showTab('Teams')"></uib-tab>
+                <uib-tab heading="Schedule" select="division.showTab('Schedule')"></uib-tab>
+                <uib-tab heading="Standings" select="division.showTab('Standings')"></uib-tab>
+                <uib-tab heading="Playoffs" select="division.showTab('Playoffs')"></uib-tab>
+                <uib-tab heading="Stats" select="division.showTab('Stats')"></uib-tab>
+                <uib-tab heading="Trades" ng-show="isGM() || isAdmin()" select="division.showTab('Trades')"></uib-tab>
+                <uib-tab heading="Taxi Requests" ng-show="division.isCommissioner() || division.isAdmin()" select="division.showTab('Taxi')"></uib-tab>
+                <uib-tab heading="Division History" select="division.showTab('OtherSeasons')"></uib-tab>
+                <uib-tab ng-click="navigateUp()">
+                    <uib-tab-heading>
+                        <i class="glyphicon glyphicon-arrow-up"></i> PSSBL Summer {{ divisionYear }}
+                    </uib-tab-heading>
+                </uib-tab>
+            </uib-tabset>
+            <div ng-switch on="tabSelected">
+                <div ng-switch-when="Teams">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>{{divisionName}} Teams</h4>
+                            <div class="panel panel-default">
+                                <table class="table table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Team</th>
+                                            <th>Manager</th>
+                                            <th>Active Roster</th>
+                                            <th>Paid Active</th>
+                                            <th>Total Roster</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="team in teams">
+                                            <td><a href="#!/team/{{team.teamId}}/{{ teamLinkName(team.teamName) }}/{{divisionName}}/{{divisionYear}}">{{ team.teamName }}</a></td>
+                                            <td>{{ team.GM }}</td>
+                                            <td>{{ team.active }}</td>
+                                            <td>{{ team.paid }}</td>
+                                            <td>{{ team.total }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="Schedule">
+                    <schedule-directive />
+                </div>
+                <div ng-switch-when="Standings">
+                    <div class="row">
+                        <div class="col-md-12 standings">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Team</th>
+                                            <th>W</th>
+                                            <th>L</th>
+                                            <th>T</th>
+                                            <th>PCT</th>
+                                            <th>GB</th>
+                                            <th>Last 10</th>
+                                            <th>Streak</th>
+                                            <th>RF<span data-toggle="tooltip" title="Runs for" class="fa fa-question-circle help-tooltip"></span></th>
+                                            <th>RA<span data-toggle="tooltip" title="Runs against" class="fa fa-question-circle help-tooltip"></span></th>
+                                            <th>Diff<span data-toggle="tooltip" title="Average run differential" class="fa fa-question-circle help-tooltip"></span></th>
+                                            <th>Last Game</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="record in standings">
+                                            <td><a href="#!/team/{{record.teamId}}/{{ teamLinkName(record.teamName) }}/{{divisionName}}/{{divisionYear}}">{{ record.teamName }}</a></td>
+                                            <td>{{record.wins}}</td>
+                                            <td>{{record.losses}}</td>
+                                            <td>{{record.ties}}</td>
+                                            <td>{{record.pct | number : 3}}</td>
+                                            <td>{{record.GB == 0 ? "-" : record.GB}}</td>
+                                            <td>{{getLastTen(record)}}</td>
+                                            <td>{{getStreak(record)}}</td>
+                                            <td>{{record.rf}}</td>
+                                            <td>{{record.ra}}</td>
+                                            <td>
+                                                <span class="text-success">{{record.diff | number : 2}}</span>
+                                            </td>
+                                            <td>
+                                                <a href="#!/game/{{record.lastGameId}}">{{record.lastGameResult}}</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <input ng-model="stats.includePlayoffs" ng-change="updateStandings()" type="checkbox">
+                                    Include Playoffs
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-switch-when="Playoffs">
+                    <img style="width:100%;" check-bracket ng-src="playoffs/{{divisionYear}}/{{divisionName}} Bracket {{divisionYear}}.png" />
+                </div>
+
+                <div ng-switch-when="Stats">
+                    <uib-tabset>
+                        <uib-tab heading="Division Batting" select="showStatsTab('DivisionBatting')"></uib-tab>
+                        <uib-tab heading="Division Pitching" select="showStatsTab('DivisionPitching')"></uib-tab>
+                        <uib-tab heading="Team Batting" select="showStatsTab('TeamBatting')"></uib-tab>
+                        <uib-tab heading="Team Pitching" select="showStatsTab('TeamPitching')"></uib-tab>
+                    </uib-tabset>
+                    <div ng-switch on="statsSelected">
+                        <div ng-switch-when="DivisionBatting">
+                            <h3>Division Batting Stats</h3>
+                            <div class="pagination-container row">
+                                <ul uib-pagination boundary-links="true" total-items="cumulativeBattingStats.length" items-per-page="itemsPerPage" ng-change="pageChanged()" ng-model="currentPage" class="pagination-md" max-size="maxPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+                                <!-- Button dropdown with keyboard nav -->
+                                <div class="btn-group" uib-dropdown keyboard-nav style="margin-top:-28px">
+                                    <button id="per-page-btn" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                        Show Per Page <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(20)">20</a></li>
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(50)">50</a></li>
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(100)">100</a></li>
+                                        <li class="divider"></li>
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(-1)">Show All</a></li>
+                                    </ul>
+                                    <span>&nbsp;&nbsp;<input ng-model="query" type="text" placeholder="Filter by" autofocus></span>
+                                </div>
+                                <div>
+                                    <div class="pagination-info">
+                                        Showing
+                                        <span class="label label-info">{{currentPage * itemsPerPage - itemsPerPage + 1}}&mdash;{{currentPage * itemsPerPage}}</span>
+                                        of <span class="label label-info">{{cumulativeBattingStats.length}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-condensed stats-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th ng-click="sortBatting('Name')" ng-class="isSortColumn('Name')">Name</th>
+                                            <th ng-click="sortBatting('g')" ng-class="isSortColumn('g')" class="number">G</th>
+                                            <th ng-click="sortBatting('pa')" ng-class="isSortColumn('pa')" class="number">PA</th>
+                                            <th ng-click="sortBatting('ab')" ng-class="isSortColumn('ab')" class="number">AB</th>
+                                            <th ng-click="sortBatting('r')" ng-class="isSortColumn('r')" class="number">R</th>
+                                            <th ng-click="sortBatting('h')" ng-class="isSortColumn('h')" class="number">H</th>
+                                            <th ng-click="sortBatting('d')" ng-class="isSortColumn('d')" class="number">2B</th>
+                                            <th ng-click="sortBatting('t')" ng-class="isSortColumn('t')" class="number">3B</th>
+                                            <th ng-click="sortBatting('hr')" ng-class="isSortColumn('hr')" class="number">HR</th>
+                                            <th ng-click="sortBatting('rbi')" ng-class="isSortColumn('rbi')" class="number">RBI</th>
+                                            <th ng-click="sortBatting('sb')" ng-class="isSortColumn('sb')" class="number">SB</th>
+                                            <th ng-click="sortBatting('cs')" ng-class="isSortColumn('cs')" class="number">CS</th>
+                                            <th ng-click="sortBatting('bb')" ng-class="isSortColumn('bb')" class="number">BB</th>
+                                            <th ng-click="sortBatting('so')" ng-class="isSortColumn('so')" class="number">SO</th>
+                                            <th ng-click="sortBatting('avg')" ng-class="isSortColumn('avg')" class="number">AVG</th>
+                                            <th ng-click="sortBatting('obp')" ng-class="isSortColumn('obp')" class="number">OBP</th>
+                                            <th ng-click="sortBatting('slg')" ng-class="isSortColumn('slg')" class="number">SLG</th>
+                                            <th ng-click="sortBatting('ops')" ng-class="isSortColumn('ops')" class="number">OPS</th>
+                                            <th ng-click="sortBatting('tb')" ng-class="isSortColumn('tb')" class="number">TB</th>
+                                            <th ng-click="sortBatting('hbp')" ng-class="isSortColumn('hbp')" class="number">HBP</th>
+                                            <th ng-click="sortBatting('sh')" ng-class="isSortColumn('sh')" class="number">SH</th>
+                                            <th ng-click="sortBatting('sf')" ng-class="isSortColumn('sf')" class="number">SF</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--{"playerId":"312","firstName":"John","lastName":"Jury","teamId":"668","g":"17","ab":"56","r":"12","h":"28","d":"2","t":"0","hr":"0","rbi":"14","sb":"5","cs":"0","bb":"5","so":"3","gdp":"0","hbp":"0","rboe":"2","sh":"0","sf":"0","ibb":"0","ci":"0","rboe":"0"}-->
+                                        <tr ng-Repeat="statLine in cumulativeBattingStats | filter:query" ng-show="inRange($index, currentPage, statLine)">
+                                            <td>{{$index+1}}</td>
+                                            <td ng-class="isSortColumn('Name')">
+                                                <a href="/#!/player/{{statLine.playerId}}" title="{{statLine.firstName}}&nbsp;{{statLine.lastName}}">
+                                                    {{getShortPlayerName(statLine)}}
+                                                </a>
+                                                <a href="#!/team/{{statLine.teamId}}/{{statLine.teamName}}/{{divisionName}}/{{divisionYear}}" title="Team" class="team-short-name">({{statLine.abrev}})</a>
+                                            </td>
+                                            <td ng-class="isSortColumn('g')" class="number ">{{statLine.g}}</td>
+                                            <td ng-class="isSortColumn('pa')" class="number ">{{statLine.pa}}</td>
+                                            <td ng-class="isSortColumn('ab')" class="number ">{{statLine.ab}}</td>
+                                            <td ng-class="isSortColumn('r')" class="number ">{{statLine.r}}</td>
+                                            <td ng-class="isSortColumn('h')" class="number ">{{statLine.h}}</td>
+                                            <td ng-class="isSortColumn('d')" class="number ">{{statLine.d}}</td>
+                                            <td ng-class="isSortColumn('t')" class="number ">{{statLine.t}}</td>
+                                            <td ng-class="isSortColumn('hr')" class="number ">{{statLine.hr}}</td>
+                                            <td ng-class="isSortColumn('rbi')" class="number ">{{statLine.rbi}}</td>
+                                            <td ng-class="isSortColumn('sb')" class="number ">{{statLine.sb}}</td>
+                                            <td ng-class="isSortColumn('cs')" class="number ">{{statLine.cs}}</td>
+                                            <td ng-class="isSortColumn('bb')" class="number ">{{statLine.bb}}</td>
+                                            <td ng-class="isSortColumn('so')" class="number ">{{statLine.so}}</td>
+                                            <td ng-class="isSortColumn('avg')" class="number ">{{statLine.avg}}</td>
+                                            <td ng-class="isSortColumn('obp')" class="number ">{{statLine.obp}}</td>
+                                            <td ng-class="isSortColumn('slg')" class="number ">{{statLine.slg}}</td>
+                                            <td ng-class="isSortColumn('ops')" class="number ">{{statLine.ops}}</td>
+                                            <td ng-class="isSortColumn('tb')" class="number ">{{statLine.tb}}</td>
+                                            <td ng-class="isSortColumn('hbp')" class="number ">{{statLine.hbp}}</td>
+                                            <td ng-class="isSortColumn('sh')" class="number ">{{statLine.sh}}</td>
+                                            <td ng-class="isSortColumn('sf')" class="number ">{{statLine.sf}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <input ng-model="stats.qualified" type="checkbox">
+                                    Qualified Only
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-switch-when="DivisionPitching">
+                            <h3>Division Pitching Stats</h3>
+                            <div class="pagination-container row">
+                                <ul uib-pagination boundary-links="true" total-items="cumulativePitchingStats.length" items-per-page="itemsPerPage" ng-change="pageChanged()" ng-model="currentPage" class="pagination-md" max-size="maxPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+                                <!-- Button dropdown with keyboard nav -->
+                                <div class="btn-group" uib-dropdown keyboard-nav style="margin-top:-28px">
+                                    <button id="per-page-btn" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                        Show Per Page <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(20)">20</a></li>
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(50)">50</a></li>
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(100)">100</a></li>
+                                        <li class="divider"></li>
+                                        <li role="menuitem"><a role="button" ng-click="setPerPage(-1)">Show All</a></li>
+                                    </ul>
+                                    <span>&nbsp;&nbsp;<input ng-model="query" type="text" placeholder="Filter by" autofocus></span>
+                                </div>
+                                <div>
+                                    <div class="pagination-info" style="margin-top:-40px">
+                                        Showing
+                                        <span class="label label-info">{{currentPage * itemsPerPage - itemsPerPage + 1}}&mdash;{{currentPage * itemsPerPage}}</span>
+                                        of <span class="label label-info">{{cumulativePitchingStats.length}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-condensed stats-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th ng-class="isSortColumn('Name')" ng-click="sortPitching('Name')">Name</th>
+                                            <th ng-class="isSortColumn('g')" ng-click="sortPitching('g')" class="number sortable-column">G</th>
+                                            <th ng-class="isSortColumn('w')" ng-click="sortPitching('w')" class="number sortable-column">W</th>
+                                            <th ng-class="isSortColumn('l')" ng-click="sortPitching('l')" class="number sortable-column">L</th>
+                                            <th ng-class="isSortColumn('gs')" ng-click="sortPitching('gs')" class="number sortable-column">GS</th>
+                                            <th ng-class="isSortColumn('gf')" ng-click="sortPitching('gf')" class="number sortable-column">GF</th>
+                                            <th ng-class="isSortColumn('cg')" ng-click="sortPitching('cg')" class="number sortable-column">CG</th>
+                                            <th ng-class="isSortColumn('sv')" ng-click="sortPitching('sv')" class="number sortable-column">SV</th>
+                                            <th ng-class="isSortColumn('ip')" ng-click="sortPitching('ip')" class="number sortable-column">IP</th>
+                                            <th ng-class="isSortColumn('h')" ng-click="sortPitching('h')" class="number sortable-column">H</th>
+                                            <th ng-class="isSortColumn('r')" ng-click="sortPitching('r')" class="number sortable-column">R</th>
+                                            <th ng-class="isSortColumn('er')" ng-click="sortPitching('er')" class="number sortable-column">ER</th>
+                                            <th ng-class="isSortColumn('hr')" ng-click="sortPitching('hr')" class="number sortable-column">HR</th>
+                                            <th ng-class="isSortColumn('bb')" ng-click="sortPitching('bb')" class="number sortable-column">BB</th>
+                                            <th ng-class="isSortColumn('so')" ng-click="sortPitching('so')" class="number sortable-column">K</th>
+                                            <th ng-class="isSortColumn('hbp')" ng-click="sortPitching('hbp')" class="number sortable-column">HBP</th>
+                                            <th ng-class="isSortColumn('bk')" ng-click="sortPitching('bk')" class="number sortable-column">BK</th>
+                                            <th ng-class="isSortColumn('wp')" ng-click="sortPitching('wp')" class="number sortable-column">WP</th>
+                                            <th ng-class="isSortColumn('bf')" ng-click="sortPitching('bf')" class="number sortable-column">BF</th>
+                                            <th ng-class="isSortColumn('era')" ng-click="sortPitching('era')" class="number sortable-column">ERA</th>
+                                            <th ng-class="isSortColumn('whip')" ng-click="sortPitching('whip')" class="number sortable-column">WHIP</th>
+                                            <th ng-class="isSortColumn('k9')" ng-click="sortPitching('k9')" class="number sortable-column">K/9</th>
+                                            <th ng-class="isSortColumn('bb9')" ng-click="sortPitching('bb9')" class="number sortable-column">BB/9</th>
+                                            <th ng-class="isSortColumn('pit')" ng-click="sortPitching('pit')" class="number sortable-column">PIT</th>
+                                            <th ng-class="isSortColumn('str')" ng-click="sortPitching('str')" class="number sortable-column">STR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-Repeat="statLine in cumulativePitchingStats | filter:query" ng-show="inRange($index, currentPage, statLine)">
+                                            <td>{{$index+1}}</td>
+                                            <td ng-class="isSortColumn('Name')">
+                                                <a href="#!/player/{{statLine.playerId}}" title="{{statLine.firstName}}&nbsp;{{statLine.lastName}}">
+                                                    {{getShortPlayerName(statLine)}}
+                                                </a>
+                                                <a href="#!/team/{{statLine.teamId}}/{{statLine.teamName}}/{{divisionName}}/{{divisionYear}}" title="Team" class="team-short-name">({{statLine.abrev}})</a>
+                                            </td>
+                                            <td ng-class="isSortColumn('g')" class="number ">{{statLine.g}}</td>
+                                            <td ng-class="isSortColumn('w')" class="number ">{{statLine.w}}</td>
+                                            <td ng-class="isSortColumn('l')" class="number ">{{statLine.l}}</td>
+                                            <td ng-class="isSortColumn('gs')" class="number ">{{statLine.gs}}</td>
+                                            <td ng-class="isSortColumn('gf')" class="number ">{{statLine.gf}}</td>
+                                            <td ng-class="isSortColumn('cg')" class="number ">{{statLine.cg}}</td>
+                                            <td ng-class="isSortColumn('sv')" class="number ">{{statLine.sv}}</td>
+                                            <td ng-class="isSortColumn('ip')" class="number ">{{statLine.ip}}</td>
+                                            <td ng-class="isSortColumn('h')" class="number ">{{statLine.h}}</td>
+                                            <td ng-class="isSortColumn('r')" class="number ">{{statLine.r}}</td>
+                                            <td ng-class="isSortColumn('er')" class="number ">{{statLine.er}}</td>
+                                            <td ng-class="isSortColumn('hr')" class="number ">{{statLine.hr}}</td>
+                                            <td ng-class="isSortColumn('bb')" class="number ">{{statLine.bb}}</td>
+                                            <td ng-class="isSortColumn('so')" class="number ">{{statLine.so}}</td>
+                                            <td ng-class="isSortColumn('hbp')" class="number ">{{statLine.hbp}}</td>
+                                            <td ng-class="isSortColumn('bk')" class="number ">{{statLine.bk}}</td>
+                                            <td ng-class="isSortColumn('wp')" class="number ">{{statLine.wp}}</td>
+                                            <td ng-class="isSortColumn('bf')" class="number ">{{statLine.bf}}</td>
+                                            <td ng-class="isSortColumn('era')" class="number ">{{statLine.era}}</td>
+                                            <td ng-class="isSortColumn('whip')" class="number ">{{statLine.whip}}</td>
+                                            <td ng-class="isSortColumn('k9')" class="number ">{{statLine.k9}}</td>
+                                            <td ng-class="isSortColumn('bb9')" class="number ">{{statLine.bb9}}</td>
+                                            <td ng-class="isSortColumn('pit')" class="number ">{{statLine.pit}}</td>
+                                            <td ng-class="isSortColumn('str')" class="number ">{{statLine.str}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <input ng-model="stats.qualified" type="checkbox">
+                                    Qualified Only
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-switch-when="TeamBatting">
+                            <h3>Team Batting Stats</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-condensed stats-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th ng-click="sortBatting('teamName')" ng-class="isSortColumn('teamName')">Team</th>
+                                            <th ng-click="sortBatting('g')" ng-class="isSortColumn('g')" class="number sortable-column">G</th>
+                                            <th ng-click="sortBatting('pa')" ng-class="isSortColumn('pa')" class="number sortable-column">PA</th>
+                                            <th ng-click="sortBatting('ab')" ng-class="isSortColumn('ab')" class="number sortable-column">AB</th>
+                                            <th ng-click="sortBatting('r')" ng-class="isSortColumn('r')" class="number sortable-column">R</th>
+                                            <th ng-click="sortBatting('h')" ng-class="isSortColumn('h')" class="number sortable-column">H</th>
+                                            <th ng-click="sortBatting('d')" ng-class="isSortColumn('d')" class="number sortable-column">2B</th>
+                                            <th ng-click="sortBatting('t')" ng-class="isSortColumn('t')" class="number sortable-column">3B</th>
+                                            <th ng-click="sortBatting('hr')" ng-class="isSortColumn('hr')" class="number sortable-column">HR</th>
+                                            <th ng-click="sortBatting('rbi')" ng-class="isSortColumn('rbi')" class="number sortable-column">RBI</th>
+                                            <th ng-click="sortBatting('sb')" ng-class="isSortColumn('sb')" class="number sortable-column">SB</th>
+                                            <th ng-click="sortBatting('cs')" ng-class="isSortColumn('cs')" class="number sortable-column">CS</th>
+                                            <th ng-click="sortBatting('bb')" ng-class="isSortColumn('bb')" class="number sortable-column">BB</th>
+                                            <th ng-click="sortBatting('so')" ng-class="isSortColumn('so')" class="number sortable-column">SO</th>
+                                            <th ng-click="sortBatting('avg')" ng-class="isSortColumn('avg')" class="number sortable-column">AVG</th>
+                                            <th ng-click="sortBatting('obp')" ng-class="isSortColumn('obp')" class="number sortable-column">OBP</th>
+                                            <th ng-click="sortBatting('slg')" ng-class="isSortColumn('slg')" class="number sortable-column">SLG</th>
+                                            <th ng-click="sortBatting('ops')" ng-class="isSortColumn('ops')" class="number sortable-column">OPS</th>
+                                            <th ng-click="sortBatting('tb')" ng-class="isSortColumn('tb')" class="number sortable-column">TB</th>
+                                            <th ng-click="sortBatting('hbp')" ng-class="isSortColumn('hbp')" class="number sortable-column">HBP</th>
+                                            <th ng-click="sortBatting('sh')" ng-class="isSortColumn('sh')" class="number sortable-column">SH</th>
+                                            <th ng-click="sortBatting('sf')" ng-class="isSortColumn('sf')" class="number sortable-column">SF</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!--{"playerId":"312","firstName":"John","lastName":"Jury","teamId":"668","g":"17","ab":"56","r":"12","h":"28","d":"2","t":"0","hr":"0","rbi":"14","sb":"5","cs":"0","bb":"5","so":"3","gdp":"0","hbp":"0","rboe":"2","sh":"0","sf":"0","ibb":"0","ci":"0","rboe":"0"}-->
+                                        <tr ng-Repeat="statLine in cumulativeBattingStats | filter:query" ng-show="inRange($index, currentPage)">
+                                            <td>{{$index+1}}</td>
+                                            <td ng-class="isSortColumn('teamName')">
+                                                <a href="#!/team/{{statLine.teamId}}/{{statLine.teamName}}/{{divisionName}}/{{divisionYear}}" title="{{statLine.teamName}}">
+                                                    {{statLine.teamName}}
+                                                </a>
+                                            </td>
+                                            <td ng-class="isSortColumn('g')" class="number ">{{statLine.g}}</td>
+                                            <td ng-class="isSortColumn('pa')" class="number ">{{statLine.pa}}</td>
+                                            <td ng-class="isSortColumn('ab')" class="number ">{{statLine.ab}}</td>
+                                            <td ng-class="isSortColumn('r')" class="number ">{{statLine.r}}</td>
+                                            <td ng-class="isSortColumn('h')" class="number ">{{statLine.h}}</td>
+                                            <td ng-class="isSortColumn('d')" class="number ">{{statLine.d}}</td>
+                                            <td ng-class="isSortColumn('t')" class="number ">{{statLine.t}}</td>
+                                            <td ng-class="isSortColumn('hr')" class="number ">{{statLine.hr}}</td>
+                                            <td ng-class="isSortColumn('rbi')" class="number ">{{statLine.rbi}}</td>
+                                            <td ng-class="isSortColumn('sb')" class="number ">{{statLine.sb}}</td>
+                                            <td ng-class="isSortColumn('cs')" class="number ">{{statLine.cs}}</td>
+                                            <td ng-class="isSortColumn('bb')" class="number ">{{statLine.bb}}</td>
+                                            <td ng-class="isSortColumn('so')" class="number ">{{statLine.so}}</td>
+                                            <td ng-class="isSortColumn('avg')" class="number ">{{statLine.avg}}</td>
+                                            <td ng-class="isSortColumn('obp')" class="number ">{{statLine.obp}}</td>
+                                            <td ng-class="isSortColumn('slg')" class="number ">{{statLine.slg}}</td>
+                                            <td ng-class="isSortColumn('ops')" class="number ">{{statLine.ops}}</td>
+                                            <td ng-class="isSortColumn('tb')" class="number ">{{statLine.tb}}</td>
+                                            <td ng-class="isSortColumn('hbp')" class="number ">{{statLine.hbp}}</td>
+                                            <td ng-class="isSortColumn('sh')" class="number ">{{statLine.sh}}</td>
+                                            <td ng-class="isSortColumn('sf')" class="number ">{{statLine.sf}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div ng-switch-when="TeamPitching">
+                            <h3>Team Pitching Stats</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-condensed stats-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th ng-class="isSortColumn('teamName')" ng-click="sortPitching('teamName')">Team</th>
+                                            <th ng-class="isSortColumn('g')" ng-click="sortPitching('g')" class="number sortable-column">G</th>
+                                            <th ng-class="isSortColumn('w')" ng-click="sortPitching('w')" class="number sortable-column">W</th>
+                                            <th ng-class="isSortColumn('l')" ng-click="sortPitching('l')" class="number sortable-column">L</th>
+                                            <th ng-class="isSortColumn('gs')" ng-click="sortPitching('gs')" class="number sortable-column">GS</th>
+                                            <th ng-class="isSortColumn('gf')" ng-click="sortPitching('gf')" class="number sortable-column">GF</th>
+                                            <th ng-class="isSortColumn('cg')" ng-click="sortPitching('cg')" class="number sortable-column">CG</th>
+                                            <th ng-class="isSortColumn('sv')" ng-click="sortPitching('sv')" class="number sortable-column">SV</th>
+                                            <th ng-class="isSortColumn('ip')" ng-click="sortPitching('ip')" class="number sortable-column">IP</th>
+                                            <th ng-class="isSortColumn('h')" ng-click="sortPitching('h')" class="number sortable-column">H</th>
+                                            <th ng-class="isSortColumn('r')" ng-click="sortPitching('r')" class="number sortable-column">R</th>
+                                            <th ng-class="isSortColumn('er')" ng-click="sortPitching('er')" class="number sortable-column">ER</th>
+                                            <th ng-class="isSortColumn('hr')" ng-click="sortPitching('hr')" class="number sortable-column">HR</th>
+                                            <th ng-class="isSortColumn('bb')" ng-click="sortPitching('bb')" class="number sortable-column">BB</th>
+                                            <th ng-class="isSortColumn('so')" ng-click="sortPitching('so')" class="number sortable-column">K</th>
+                                            <th ng-class="isSortColumn('hbp')" ng-click="sortPitching('hbp')" class="number sortable-column">HBP</th>
+                                            <th ng-class="isSortColumn('bk')" ng-click="sortPitching('bk')" class="number sortable-column">BK</th>
+                                            <th ng-class="isSortColumn('wp')" ng-click="sortPitching('wp')" class="number sortable-column">WP</th>
+                                            <th ng-class="isSortColumn('bf')" ng-click="sortPitching('bf')" class="number sortable-column">BF</th>
+                                            <th ng-class="isSortColumn('era')" ng-click="sortPitching('era')" class="number sortable-column">ERA</th>
+                                            <th ng-class="isSortColumn('whip')" ng-click="sortPitching('whip')" class="number sortable-column">WHIP</th>
+                                            <th ng-class="isSortColumn('k9')" ng-click="sortPitching('k9')" class="number sortable-column">K/9</th>
+                                            <th ng-class="isSortColumn('bb9')" ng-click="sortPitching('bb9')" class="number sortable-column">BB/9</th>
+                                            <th ng-class="isSortColumn('pit')" ng-click="sortPitching('pit')" class="number sortable-column">PIT</th>
+                                            <th ng-class="isSortColumn('str')" ng-click="sortPitching('str')" class="number sortable-column">STR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-Repeat="statLine in cumulativePitchingStats">
+                                            <td>{{$index+1}}</td>
+                                            <td ng-class="isSortColumn('teamName')">
+                                                <a href="#!/team/{{statLine.teamId}}/{{statLine.teamName}}/{{divisionName}}/{{divisionYear}}" title="{{statLine.teamName}}">
+                                                    {{statLine.teamName}}
+                                                </a>
+                                            </td>
+                                            <td ng-class="isSortColumn('g')" class="number ">{{statLine.g}}</td>
+                                            <td ng-class="isSortColumn('w')" class="number ">{{statLine.w}}</td>
+                                            <td ng-class="isSortColumn('l')" class="number ">{{statLine.l}}</td>
+                                            <td ng-class="isSortColumn('gs')" class="number ">{{statLine.gs}}</td>
+                                            <td ng-class="isSortColumn('gf')" class="number ">{{statLine.gf}}</td>
+                                            <td ng-class="isSortColumn('cg')" class="number ">{{statLine.cg}}</td>
+                                            <td ng-class="isSortColumn('sv')" class="number ">{{statLine.sv}}</td>
+                                            <td ng-class="isSortColumn('ip')" class="number ">{{statLine.ip}}</td>
+                                            <td ng-class="isSortColumn('h')" class="number ">{{statLine.h}}</td>
+                                            <td ng-class="isSortColumn('r')" class="number ">{{statLine.r}}</td>
+                                            <td ng-class="isSortColumn('er')" class="number ">{{statLine.er}}</td>
+                                            <td ng-class="isSortColumn('hr')" class="number ">{{statLine.hr}}</td>
+                                            <td ng-class="isSortColumn('bb')" class="number ">{{statLine.bb}}</td>
+                                            <td ng-class="isSortColumn('so')" class="number ">{{statLine.so}}</td>
+                                            <td ng-class="isSortColumn('hbp')" class="number ">{{statLine.hbp}}</td>
+                                            <td ng-class="isSortColumn('bk')" class="number ">{{statLine.bk}}</td>
+                                            <td ng-class="isSortColumn('wp')" class="number ">{{statLine.wp}}</td>
+                                            <td ng-class="isSortColumn('bf')" class="number ">{{statLine.bf}}</td>
+                                            <td ng-class="isSortColumn('era')" class="number ">{{statLine.era}}</td>
+                                            <td ng-class="isSortColumn('whip')" class="number ">{{statLine.whip}}</td>
+                                            <td ng-class="isSortColumn('k9')" class="number ">{{statLine.k9}}</td>
+                                            <td ng-class="isSortColumn('bb9')" class="number ">{{statLine.bb9}}</td>
+                                            <td ng-class="isSortColumn('pit')" class="number ">{{statLine.pit}}</td>
+                                            <td ng-class="isSortColumn('str')" class="number ">{{statLine.str}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- *****   TRADES TAB  ***** -->
+                <div ng-switch-when="Trades">
+                    <h1>
+                        <img ng-show="loadingData" src="img/loading1.gif" title="Loading" />
+                    </h1>
+                    <uib-tabset>
+                        <uib-tab heading="Active Trades" select="showTradesTab('ActiveTrades')"></uib-tab>
+                        <uib-tab heading="Completed Trades" select="showTradesTab('CompletedTrades')"></uib-tab>
+                    </uib-tabset>
+                    <div ng-switch on="tradesSelected">
+                        <div ng-switch-when="ActiveTrades">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <hr>
+                                    <div class="text-left">
+                                        <a role="button" ng-show="isAdmin()  && !addingTrade" ng-click="addTrade()" class="btn btn-success">Log New Trade</a>
+                                        <a role="button" ng-show="isDivisionGM() && !isAdmin() && !addingTrade" ng-click="addTrade()" class="btn btn-success">Propose Trade</a>
+                                    </div>
+                                    <hr>
+                                    <!-- NEW TRADE FORM -->
+                                    <div ng-show="addingTrade">
+                                        <div class="alert alert-danger" role="alert">
+                                            The Trade Tool is designed for <strong>logging</strong> trades only, not for <strong>proposing</strong> trades.
+                                            GMs should agree to the terms of the trade prior to submitting.
+                                            See this <a href="#!/articles/gm-help-faq#trade">FAQ Article</a> for trade guidelines.
+                                        </div>
+                                        <form name="trade">
+                                            <div class="form-group" ng-show="isDivisionGM() && !isAdmin()">
+                                                <label for="team1Select">Your Team: {{ isGMTeamName }}</label>
+                                            </div>
+                                            <div class="form-group" ng-show="isAdmin()">
+                                                <label for="team1Select">Team 1: </label>
+                                                <select name="team1Select" id="team1Select" ng-model="newTrade.team1" ng-change="setGM(1)">
+                                                    <option ng-repeat="team in teams" value="{{team.teamId}}" required>{{team.teamName}}</option>
+                                                </select>
+                                                <label>GM: </label>{{ newTrade.team1Approver }}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="team1Receives" ng-show="isAdmin()">Team 1 Receives: </label>
+                                                <label for="team1Receives" ng-show="isDivisionGM() && !isAdmin()">Your Team Receives: </label>
+                                                <textarea rows="4" cols="40" maxlength="300" ng-model="newTrade.team1Receives"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="team2Select">Team 2: </label>
+                                                <select name="team2Select" id="team2Select" ng-model="newTrade.team2" ng-change="setGM(2)">
+                                                    <option ng-repeat="team in teams" value="{{team.teamId}}" required>{{team.teamName}}</option>
+                                                </select>
+                                                <label>GM: </label> {{ newTrade.team2Approver }}
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="team2Receives">Team 2 Receives: </label>
+                                                <textarea rows="4" cols="40" maxlength="300" ng-model="newTrade.team2Receives"></textarea>
+                                            </div>
+                                            <a role="button" ng-show="addingTrade" ng-click="saveTrade()" class="btn btn-success" ng-disabled="!newTrade.team1 || !newTrade.team2 || !newTrade.team1Receives || !newTrade.team2Receives">Save Changes</a>
+                                            <a role="button" ng-show="addingTrade" ng-click="cancelTrade()" class="btn btn-danger">Cancel</a>
+                                        </form>
+                                        <hr>
+                                    </div>
+                                    <!-- END TRADE FORM -->
+
+                                    <div class="pagination-container row">
+                                        <div class="btn-group" dropdown keyboard-nav style="margin-top:-28px">
+                                            <span>
+                                                &nbsp;&nbsp;
+                                                <input ng-model="query" type="text" placeholder="Filter by" autofocus>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <div class="pagination-info" style="margin-top:-40px">
+                                                Showing
+                                                <span class="label label-info">{{activeTrades.length}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-default">
+                                        <table class="table table-responsive" ng-show="activeTrades.length">
+                                            <thead>
+                                                <tr>
+                                                    <!-- <th>Division</th> -->
+                                                    <th>Date</th>
+                                                    <th>Team 1</th>
+                                                    <th>Team 1 Receives</th>
+                                                    <th>Team 2</th>
+                                                    <th>Team 2 Receives</th>
+                                                    <th>Proposing GM</th>
+                                                    <th>Team 2 Approval</th>
+                                                    <th>Division Commissioner Approval</th>
+                                                    <th>Player Agent Approval</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="trade in activeTrades | filter: query">
+                                                    <!-- <td>{{ trade.division }}</td> -->
+                                                    <td>{{ trade.date }}</td>
+                                                    <td>{{ trade.team1 }}</td>
+                                                    <td>{{ trade.team1Receives }}</td>
+                                                    <td>{{ trade.team2 }}</td>
+                                                    <td>{{ trade.team2Receives }}</td>
+                                                    <td>
+                                                        <div class="alert alert-success">{{ trade.team1Approver }}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div ng-show="trade.team2Approval == 0" class="alert alert-warning">{{ trade.team2Approver }}'s Approval is Pending</div>
+                                                        <a role="button" ng-show="isApprover(trade.team2GmId) && trade.team2Approval == 0" ng-click="processApproval(trade.id, 0)" class="btn btn-success btn-sm">Approve</a>
+                                                        <div ng-show="trade.team2Approval == 1" class="alert alert-success">{{ trade.team2Approver }} Has Approved</div>
+                                                    </td>
+                                                    <td>
+                                                        <div ng-show="trade.CommissionerApproval == 0" class="alert alert-warning">{{ trade.CommissionerApprover }}'s Approval is Pending</div>
+                                                        <a role="button" ng-show="isApprover(trade.divisionCommissionerId) && trade.CommissionerApproval == 0 && trade.team2Approval == 1" ng-click="processApproval(trade.id, 1)" class="btn btn-success btn-sm">Approve</a>
+                                                        <div ng-show="trade.CommissionerApproval  == 1" class="alert alert-success">{{ trade.CommissionerApprover }} Has Approved</div>
+                                                    </td>
+                                                    <td>
+                                                        <div ng-show="trade.PlayerAgentApproval == 0" class="alert alert-warning">{{ trade.PlayerAgentApprover }}'s Approval is Pending</div>
+                                                        <a role="button" ng-show="isApprover(trade.playerAgentId) && trade.PlayerAgentApproval == 0" ng-click="processApproval(trade.id, 2)" class="btn btn-success btn-sm">Approve</a>
+                                                        <div ng-show="trade.PlayerAgentApproval  == 1" class="alert alert-success">{{ trade.PlayerAgentApprover }} Has Approved</div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <p ng-hide="activeTrades.length">There are no active trades.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- *****  COMPLETED TRADES TAB -->
+                        <div ng-switch-when="CompletedTrades">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="pagination-container row">
+                                        <ul uib-pagination boundary-links="true" total-items="completedTrades.length" items-per-page="itemsPerPage" ng-change="pageChanged()"
+                                            ng-model="currentPage" class="pagination-md" max-size="maxPages" previous-text="&lsaquo;" next-text="&rsaquo;"
+                                            first-text="&laquo;" last-text="&raquo;"></ul>
+
+                                        <!-- Button dropdown with keyboard nav -->
+                                        <div class="btn-group" dropdown keyboard-nav style="margin-top:-28px">
+                                            <span>
+                                                &nbsp;&nbsp;
+                                                <input ng-model="query" type="text" placeholder="Filter by" autofocus>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <div class="pagination-info" style="margin-top:-40px">
+                                                Showing
+                                                <span class="label label-info">{{currentPage * itemsPerPage - itemsPerPage + 1}}&mdash;{{currentPage * itemsPerPage}}</span>
+                                                of
+                                                <span class="label label-info">{{completedTrades.length}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-default">
+                                        <table class="table table-responsive" ng-show="completedTrades.length">
+                                            <thead>
+                                                <tr>
+                                                    <!-- <th>Division</th> -->
+                                                    <th>Date</th>
+                                                    <th>Team 1</th>
+                                                    <th>Team 1 Received</th>
+                                                    <th>Team 2</th>
+                                                    <th>Team 2 Received</th>
+                                                    <th>Team 1 Proposed By</th>
+                                                    <th>Team 2 Accepted By</th>
+                                                    <th>Division Commissioner Approved By</th>
+                                                    <th>Player Agent Approved By</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="trade in completedTrades | filter: query">
+                                                    <!-- <td>{{ trade.division }}</td> -->
+                                                    <td>{{ trade.date }}</td>
+                                                    <td>{{ trade.team1 }}</td>
+                                                    <td>{{ trade.team1Receives }}</td>
+                                                    <td>{{ trade.team2 }}</td>
+                                                    <td>{{ trade.team2Receives }}</td>
+                                                    <td>{{ trade.team1Approver }}</td>
+                                                    <td>{{ trade.team2Approver }}</td>
+                                                    <td>{{ trade.CommissionerApprover }}</td>
+                                                    <td>{{ trade.PlayerAgentApprover }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <p ng-hide="completedTrades.length">There are no completed trades.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- *****  TAXI REQUESTS TAB -->
+                <div ng-switch-when="Taxi">
+                    <div class="panel panel-default table-responsive">
+                        <h2>{{ divisionName }} Taxi Requests</h2>
+                        <table class="table games-list">
+                            <thead>
+                                <tr>
+                                    <th>Home Team</th>
+                                    <th>Away Team</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Field</th>
+                                    <th>Result</th>
+                                    <th>Taxi Requests</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat-start="game in division.taxiGames">
+                                    <td>
+                                        <a href="#!/team/{{game.homeId}}/{{game.homeName}}/{{game.homeDivision}}/{{game.date | date:'yyyy'}}">{{game.homeName}}</a>
+                                    </td>
+                                    <td>
+                                        <a href="#!/team/{{game.awayId}}/{{game.awayName}}/{{game.awayDivision}}/{{game.date | date:'yyyy'}}">{{game.awayName}}</a>
+                                    </td>
+                                    <td>
+                                        {{game.date | date:'EEE MMM d'}}
+                                    </td>
+                                    <td>
+                                        {{game.time | date:'h:mm a'}}
+                                    </td>
+                                    <td>
+                                        <a href="#!/fields/{{game.fieldId}}">{{game.fieldName}}</a>
+                                    </td>
+                                    <td><a href="#!/game/{{game.gameId}}">{{game.result}}</a></td>
+                                    <td>
+                                        <span ng-if="!game.homeTaxi && !game.awayTaxi">None</span>
+                                        <button ng-if="game.homeTaxi || game.awayTaxi" ng-click="division.showTaxi(game)">Show</button> {{division.requestingTeams(game)}}
+                                    </td>
+                                </tr>
+                                <tr ng-repeat-end ng-if="game.showTaxi">
+                                    <td colspan="5"></td>
+                                    <td colspan="2">
+                                        <h3>Taxi Pool Info</h3>
+                                        <div class="well well-sm">
+                                            <dl>
+                                                <dt class="col-md-3">{{game.homeName}}:</dt>
+                                                <dd><em>{{game.taxi.info[game.homeId].summary}}</em></dd>
+                                                <dd ng-repeat="request in game.taxi.info[game.homeId].requests">
+                                                    <span>
+                                                        {{request.requestor}} requested {{request.players}} player(s) and
+                                                        {{request.catchers}} catcher(s) {{(request.gear == 1) ? "(with gear)" : ""}}
+                                                        on {{request.requestTime | date}}
+                                                        <br />
+                                                        <span style="color:blue">
+                                                            Status: {{request.accepted}} accepted, {{request.declined}} declined, {{request.pending}} pending
+                                                            {{(request.closed == 1) ? "(closed)" : "(open)"}}
+                                                        </span>
+                                                    </span>
+                                                    <ul>
+                                                        <li ng-repeat="accept in request.accepts">
+                                                            {{accept}}
+                                                        </li>
+                                                    </ul>
+                                                </dd>
+                                                <dd>&nbsp;</dd>
+                                                <dt class="col-md-3">{{game.awayName}}:</dt>
+                                                <dd><em>{{game.taxi.info[game.awayId].summary}}</em></dd>
+                                                <dd ng-repeat="request in game.taxi.info[game.awayId].requests">
+                                                    <span>
+                                                        {{request.requestor}} requested {{request.players}} player(s) and
+                                                        {{request.catchers}} catcher(s) {{(request.gear == 1) ? "(with gear)" : ""}}
+                                                        on {{request.requestTime | date}}
+                                                        <br />
+                                                        <span style="color:blue">
+                                                            Status: {{request.accepted}} accepted, {{request.declined}} declined, {{request.pending}} pending
+                                                            {{(request.closed == 1) ? "(closed)" : "(open)"}}
+                                                        </span>
+                                                    </span>
+                                                    <ul>
+                                                        <li ng-repeat="accept in request.accepts">
+                                                            {{accept}}
+                                                        </li>
+                                                    </ul>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Temp insert styling here and then move to psssbl.css -->
+                <style>
+                    #division-history {
+                        box-sizing: border-box;
+                    }
+                
+                    /* Left one-third is link list to previous seasons */
+                    #division-history .column {
+                        float: left;
+                        width: 330px;
+                        padding: 10px;
+                    }
+
+                    /* The remaining two thirds is am html doc containing champions and timeline */
+                    #division-history .history {
+                        float: left;
+                        width: 66.67%;
+                        padding: 10px;
+                    }
+                
+                    /* Clear floats after the columns */
+                    #division-history .row:after {
+                        content: "";
+                        display: table;
+                        clear: both;
+                    }
+                </style>
+
+                <div id="division-history" ng-switch-when="OtherSeasons">
+                        <div class="row">
+                            <div class="column">
+                                <h3>Season Links</h3>
+                                <ul>
+                                    <li ng-repeat="pastYear in pastYears">
+                                        <a href="#!/division/{{divisionName}}/{{pastYear}}">
+                                            {{ divisionName }} Summer {{ pastYear }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="history">
+                                <div ng-bind-html="history.html | to_trusted"></div>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

@@ -1,0 +1,99 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+        <section class="registered-players">
+            <h2>
+                Taxi Players
+                <small class="heading-subtext">
+                    Summer {{year}}&nbsp;
+                </small>
+                <img ng-show="loadingData" src="img/loading1.gif" title="Loading" />
+            </h2>
+            <div class="row">
+                <div uib-pagination boundary-links="true" class="col-md-5" total-items="playerCount" items-per-page="itemsPerPage" ng-change="pageChanged(currentPage)" ng-model="currentPage" max-size="maxPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                </div>
+
+                <!-- Button dropdown with keyboard nav -->
+                <div class="col-md-5 pagination">
+                    <div class="btn-group" uib-dropdown dropdown-append-to-body>
+                        <button id="per-page-btn" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                            Show Per Page <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="per-page-btn">
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(20)">20</a></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(50)">50</a></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(100)">100</a></li>
+                            <li class="divider"></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(-1)">Show All</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Query Box -->
+                    <span>&nbsp;&nbsp;<input ng-model="query" type="text" placeholder="Filter by" autofocus></span>
+                </div>
+
+                <!-- Currently showing info -->
+                <div class="pagination-info pagination pull-right">
+                    Showing
+                    <span class="label label-info">{{currentPage * itemsPerPage - itemsPerPage + 1}}&mdash;{{currentPage * itemsPerPage}}</span>
+                    of <span class="label label-info">{{playerCount}}</span>
+                </div>
+
+            </div>
+
+            <!--Name	Accepted/Invited	Positions	Has Gear?	Notes	Created-->
+            <!--{"firstName":"Zachary","lastName":"Auer","playerName":"Zachary Auer","playerId":"4684","invited":"0","accepted":"0","gear":"0","notes":"Pitcher 2nd base and any outfield","positions":"100100001"}-->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Positions</th>
+                            <th>Has Gear?</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="player in taxiPlayers | filter:query">
+                            <td width="15%"><a href="#!/player/{{player.playerId}}">{{player.playerName}}</a></td>
+                            <td width="15%">{{formatPositions(player.positions)}}</td>
+                            <td>
+                                <span class="label" ng-class="isTrue(player.gear) ? 'success fa fa-check' : 'danger fa fa-times'">{{isTrue(player.gear) ? 'Yes' : 'No'}}</span>
+                            </td>
+                            <td>{{player.notes}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div uib-pagination boundary-links="true" class="col-md-5" total-items="playerCount" items-per-page="itemsPerPage" ng-change="pageChanged(currentPage)" ng-model="currentPage" max-size="maxPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                </div>
+
+                <!-- Button dropdown with keyboard nav -->
+                <div class="col-md-5 pagination">
+                    <div class="btn-group" uib-dropdown dropdown-append-to-body>
+                        <button id="per-page-btn" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                            Show Per Page <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="per-page-btn">
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(20)">20</a></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(50)">50</a></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(100)">100</a></li>
+                            <li class="divider"></li>
+                            <li role="menuitem"><a role="button" ng-click="setPerPage(-1)">Show All</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Currently showing info -->
+                <div class="pagination-info pagination pull-right">
+                    Showing
+                    <span class="label label-info">{{currentPage * itemsPerPage - itemsPerPage + 1}}&mdash;{{currentPage * itemsPerPage}}</span>
+                    of <span class="label label-info">{{playerCount}}</span>
+                </div>
+
+            </div>
+        </section>
+    </section>
+</div>
+
+

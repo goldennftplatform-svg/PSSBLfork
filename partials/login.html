@@ -1,0 +1,120 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+
+        <div ng-switch on="login.page">
+
+            <!--Main Login page -->
+            <div ng-switch-when="login">
+                <section class="login" ng-hide="login.resetPasswordVisible">
+                    <form name="loginForm" class="login-form form">
+                        <h2 ngclick="callDebug()">Login &nbsp;<img ng-show="login.loadingData" src="img/loading1.gif" title="Loading" /></h2>
+                        <noscript>
+                            <div class="alert alert-warning noscript">
+                                JavaScript must be enabled in order to login.
+                            </div>
+                        </noscript>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <a role="button" tabindex="-1" ng-click="showLoginPage('forgot')" class="password-reset">Forgot password?</a>
+                                    <label for="login-email" class="control-label">Email</label>
+                                    <input name="login-email" type="email" autofocus ng-model="login.email" placeholder="enter a valid email address" autocomplete="on" required maxlength="150" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="login-password" class="control-label">Password</label>
+                                    <input name="login-password" ng-enter="log_in()" type="password" ng-model="login.password" placeholder="password" required min-length="5" class="form-control">
+                                </div>
+                                <div ng-show="login.error" class="alert alert-danger">
+                                    {{login.error}}
+                                </div>
+                                <button type="button" autocomplete="off" ng-click="log_in()" class="btn btn-primary submit-input btn-icon-with-text"><span class=" btn btn-content">Login</span></button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <!--If the user clicks forgot password, they get a chance to send a reset email -->
+            <div ng-switch-when="forgot">
+                <section>
+                    <form name="passwordRequestForm" ng-submit="requestReset()" class="reset-password-form form">
+                        <h2>Reset Password Request &nbsp;<img ng-show="login.reset.loadingData" src="img/loading1.gif" title="Loading" /></h2>
+                        <noscript>
+                            <div class="alert alert-warning noscript">
+                                JavaScript must be enabled in order to reset your password.
+                            </div>
+                        </noscript>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <a role="button" tabindex="-1" ng-click="showLoginPage('login')" class="password-reset">Back to login</a>
+                                    <label for="reset-password-email" class="control-label">Email</label>
+                                    <input name="reset-password-email" type="email" ng-disabled="login.reset.disabled"  ng-enter="requestReset()" ng-model="login.reset.email" placeholder="enter a valid email address" required autocomplete="on" maxlength="150" class="form-control">
+                                </div>
+                                <button class="btn btn-primary submit-input"><span class="btn btn-content">Request Password Reset</span></button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <!--This message is shown after a password reset has been generated -->
+            <div ng-switch-when="message">
+                <section>
+                    <h2> An email has been sent to {{login.reset.email}}.</h2>
+                    <h3>This mail will contain a link that enables you to reset your password.</h3>
+                </section>
+            </div>
+
+            <!--If the user clicks forgot password, they get a chance to send a reset email -->
+            <div ng-switch-when="reset">
+                <section>
+                    <form name="paswordResetForm" ng-submit="resetPassword()" class="login-form form">
+                        <h2 ngclick="callDebug()">Enter New Password for {{login.reset.email}} &nbsp;<img ng-show="login.loadingData" src="img/loading1.gif" title="Loading" /></h2>
+                        <noscript>
+                            <div class="alert alert-warning noscript">
+                                JavaScript must be enabled in order to login.
+                            </div>
+                        </noscript>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="login-reset1" class="control-label">Password</label>
+                                    <input name="login-reset1" type="password" ng-model="login.reset.password1" placeholder="password" required min-length="5" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="login-reset2" class="control-label">Re-Enter Password</label>
+                                    <input name="login-reset2" type="password" ng-model="login.reset.password2" placeholder="re-enter" required min-length="5" class="form-control">
+                                </div>
+                                <div ng-show="login.reset.password1 != login.reset.password2" class="alert alert-danger">
+                                    Passwords do not match
+                                </div>
+                                <button class="btn btn-primary submit-input" ng-disabled="login.reset.password1 != login.reset.password2"><span class="btn btn-content">Reset Password</span></button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <!--This message is shown if the server call returns an error -->
+            <div ng-switch-when="error">
+                <section class="alert alert-danger">
+                    <h3>The following error occured regarding your request to reset your password:</h3>
+                    <p>{{login.reset.result.error}}</p>
+                    <br />
+                    <h4>Please contact support@pssbl.com for further assistance.</h4>
+                </section>
+            </div>
+
+            <!--This message is shown if the server call returns successfully -->
+            <div ng-switch-when="success">
+                <section class="alert alert-success">
+                    <h3>Your password has been successfully reset.</h3>
+                </section>
+            </div>
+
+        </div>
+
+    </section>
+</div>
+

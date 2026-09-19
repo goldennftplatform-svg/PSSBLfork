@@ -1,0 +1,198 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+        <section class="profile-info form">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>{{profile.userName}}</h2>
+                    <div class="panel panel-default">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.user_name}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.user_name" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.email" />
+                                    <a ng-hide="profile.canEdit" href="mailto:{{profile.email}}">{{profile.email}}</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Birth Date</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.birth_date | date : 'MMM dd, yyyy'}}</span>
+                                    <span ng-show="profile.canEdit">(Contact System Administrator to Change)</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Nickname</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.nickname}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.nickname" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.address}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.address" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>City</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.city}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.city" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>State</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.state}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.state" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Zip Code</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.zip}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.zip" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Mobile Phone</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.mobile}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.mobile" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Alternate Phone 1</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.alt_phone_1}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.alt_phone_1" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Alternate Phone 2</th>
+                                <td>
+                                    <span ng-hide="profile.canEdit">{{profile.alt_phone_2}}</span>
+                                    <input ng-show="profile.canEdit" type="text" ng-model="profile.alt_phone_2" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a role="button" ng-hide="profile.canEdit" ng-click="profile.canEdit = true" class="btn btn-primary">Edit</a>
+                                    <a role="button" ng-show="profile.canEdit" ng-click="saveProfile()" class="btn btn-success">Save Changes</a>
+                                    <a role="button" ng-show="profile.canEdit" ng-click="cancelEdit()" class="btn btn-danger">Cancel Edit</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <a role="button" ng-click="changePassword()" class="btn btn-danger">Change Password</a>
+                </div>
+                <div class="col-md-6">
+                    <h2 ng-click="callDebug()">
+                        Roles
+                    </h2>
+                    <div class="panel panel-default">
+                        <table class="table table-striped">
+                            <tr ng-repeat="permission in profile.permissions" ng-if="$index > 0">
+                                <th>
+                                    {{getPermissionScope(permission)}}
+                                </th>
+                                <td>
+                                    {{getPermissionList(permission)}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="alert alert-warning">
+                        This page shows the profile data currently stored for you in the league database. The player profile page will be revamped
+                        this summer and new features like photo uploads will be added.
+                    </div>
+                    <div ng-show="canAdministerTryouts()" >
+                        <a role="button" ng-href="#!/tryout" class="btn btn-primary">Administer Paperless Registration</a>
+                        PIN = {{pinNumber}}
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr />
+        <section data-method="post" class="user-preferences-form form">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><b>Preferences</b></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label for="preferences-notificationNewsletter" class="control-label">Notify me of league news</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <!--[{"notificationAccount":"1"},{"notificationDraft":"1"},{"notificationGM":"1"},{"notificationNewsletter":"1"},{"notificationSchedule":"1"},{"notificationTaxiPoolInvite":"1"}]-->
+                                    <input type="checkbox" name="preferences-notificationNewsletter" ng-model="preferences.notificationNewsletter" ng-true-value='"1"' ng-false-value='"0"' id="preferences-notificationNewsletter">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label for="preferences-notificationAccount" class="control-label">Notify me of account-related changes (balance updates, payments, etc.)</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" name="preferences-notificationAccount" ng-model="preferences.notificationAccount" ng-true-value='"1"' ng-false-value='"0"' id="preferences-notificationAccount">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label for="preferences-notificationGM" class="control-label">Notify me of General Manager news (if applicable)</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" name="preferences-notificationGM" ng-model="preferences.notificationGM" ng-true-value='"1"' ng-false-value='"0"' id="preferences-notificationGM">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label for="preferences-notificationDraft" class="control-label">Notify me of Draft &amp; Tryout information (if entered in draft)</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" name="preferences-notificationDraft" ng-model="preferences.notificationDraft" ng-true-value='"1"' ng-false-value='"0"' id="preferences-notificationDraft">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label for="preferences-notificationSchedule" class="control-label">Notify me of schedule updates</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" name="preferences-notificationSchedule" ng-model="preferences.notificationSchedule" ng-true-value='"1"' ng-false-value='"0"' id="preferences-notificationSchedule">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <label for="preferences-notificationTaxiPoolInvite" class="control-label">Notify me of taxi pool requests</label>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="checkbox" name="preferences-notificationTaxiPoolInvite" ng-model="preferences.notificationTaxiPoolInvite" ng-true-value='"1"' ng-false-value='"0"' id="preferences-notificationTaxiPoolInvite">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-offset-5">
+                                <button ng-click="savePreferences()" class="btn btn-primary">Save Preferences</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">
+                        User preference settings are currently under review and subject to future revision. Not all of the mailing preferences you select
+                        may be active at this time.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>

@@ -1,0 +1,73 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <h2>
+                        {{team.roster.divisionName}} {{team.roster.teamName}} Roster
+                        <button ng-disabled="false" ng-click="team.invitePlayers()" class="btn btn-primary">
+                            <span>Invite Buddy Picks</span>
+                        </button>
+                        <a ng-href="mailto:{{team.teamMailList()}}" class="btn btn-default">
+                            <span>Send Team Mail</span>
+                        </a>
+                   </h2>
+                    <div class="panel panel-default">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th ng-if="team.canAssignGM()" ng-click="callDebug()">GM?</th>
+                                    <th>Name</th>
+                                    <th>DOB</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Roles</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="player in team.roster.players">
+                                    <td><input ng-disabled="!team.canAssignNumbers()" ng-model="player.number" size="2" pattern="[0-9]{1,2}" maxlength="2" type="text" /></td>
+                                    <td ng-if="team.canAssignGM()">
+                                        <span ng-click="team.assignGM($index)" ng-if="player.GM == 0" style="cursor:pointer" class="label label-warning">Set</span>
+                                        <span ng-if="player.GM == 1" class="label label-success">Yes</span>
+                                    </td>
+                                    <td>
+                                        <a href="#!/player/{{player.playerId}}">{{player.firstName}} {{player.lastName}}</a>
+                                    </td>
+                                    <td>{{player.birthDate}}</td>
+                                    <td>{{player.email}}</td>
+                                    <td>{{player.phone}}</td>
+                                    <td>
+                                        <span class="label" ng-class="isActive(player.status) ? 'label-success' : 'label-default'">{{player.status}}</span>
+                                    </td>
+                                    <td width="20%">{{team.showRoles(player.playerId)}}</td>
+                                    <td>
+                                        <button ng-click="team.editPlayer(player.playerId)" class="btn btn-success">
+                                            <span>Edit Player</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button ng-disabled="!team.canAssignNumbers()" ng-click="team.saveNumbers()" class="btn btn-primary">
+                        <span>Save #s</span>
+                    </button>
+                    <img ng-show="team.loadingData" src="img/loading1.gif" title="Loading" />
+                    <span class="col-md-9 col-md-offset-3">&nbsp;</span>
+                    <div ng-show="team.numbers.confirm" class="alert alert-success col-md-4">
+                        {{team.numbers.confirm}}
+                        <a ng-show="team.numbers.confirm" role="button" style="float:right" ng-click="team.numbers.confirm = ''" class="glyphicon glyphicon-remove-sign"></a>
+                    </div>
+                    <div ng-show="team.numbers.error" class="alert alert-danger col-md-4">
+                        {{team.numbers.error}}
+                        <a ng-show="team.numbers.error" role="button" style="float:right" ng-click="team.numbers.error = ''" class="glyphicon glyphicon-remove-sign"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

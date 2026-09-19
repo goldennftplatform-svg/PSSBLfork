@@ -1,0 +1,104 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+
+                <div class="col-md-10">
+                    <h2>View Billing Transactions</h2>
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><strong>Billing Stats</strong></div>
+                        <div class="panel-body">
+                            <dl class="dl-horizontal">
+                                <dt>Registrations</dt>
+                                <dd>{{admin.billing.registrations}}</dd>
+                                <dt>Transactions</dt>
+                                <dd>{{admin.billing.transactionCount}} ({{admin.billing.successfulTransactions}}/{{admin.billing.transactionCount}} succeeded)</dd>
+                                <dt>Income</dt>
+                                <dd>{{.01 * admin.billing.amountCollected | currency}} / {{.01 * admin.billing.amountExpected | currency}}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <h2>
+                        Transactions
+                        <small class="heading-subtext">
+                            Summer {{admin.billing.year}}&nbsp;<img ng-show="admin.billing.loadingData" src="img/loading1.gif" title="Loading" />
+                        </small>
+                    </h2>
+                    <div class="pagination-container row">
+                        <ul uib-pagination boundary-links="true" total-items="admin.billing.transactionCount" items-per-page="admin.itemsPerPage" ng-change="admin.pageChanged(admin.currentPage)" ng-model="admin.currentPage" class="pagination-md" max-size="admin.maxPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;">
+                        </ul>
+
+                        <!-- Button dropdown with keyboard nav -->
+                        <div class="btn-group" uib-dropdown keyboard-nav style="margin-top:-28px">
+                            <button id="per-page-btn" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                Show Per Page <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                                <li role="menuitem"><a role="button" ng-click="admin.setPerPage(20)">20</a></li>
+                                <li role="menuitem"><a role="button" ng-click="admin.setPerPage(50)">50</a></li>
+                                <li role="menuitem"><a role="button" ng-click="admin.setPerPage(100)">100</a></li>
+                                <li class="divider"></li>
+                                <li role="menuitem"><a role="button" ng-click="admin.setPerPage(-1)">Show All</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group" uib-dropdown keyboard-nav style="margin-top:-28px">
+                            <span>&nbsp;&nbsp;<input ng-model="query" type="text" placeholder="Filter by" autofocus></span>
+                            <button id="btn-year" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                Year <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="btn-year">
+                                <li role="menuitem" ng-repeat="year in admin.billing.yearList"><a role="button" ng-click="admin.setYear(year)">{{year}}</a></li>
+                                <!--<li role="menuitem"><a role="button" ng-click="admin.setYear(2020)">2020</a></li>-->
+
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="pagination-info" style="margin-top:-40px">
+                                Showing
+                                <span class="label label-info">{{admin.currentPage * admin.itemsPerPage - admin.itemsPerPage + 1}}&mdash;{{admin.currentPage * admin.itemsPerPage}}</span>
+                                of <span class="label label-info">{{admin.billing.transactionCount}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="table-responsive">
+                            <table class="table transaction-list">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Payer</th>
+                                        <th>TxId</th>
+                                        <th>Type</th>
+                                        <th>Method</th>
+                                        <th>Amount</th>
+                                        <th>Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-class="admin.isSuccessful(transaction.success)" ng-repeat="transaction in admin.billing.transactions | filter:query">
+                                        <td>
+                                            <span ng-if="transaction.success == 1" title="transaction was successfully completed" class="fa fa-check success"></span>
+                                            <span ng-if="transaction.success != 1" title="transaction was not successfully completed" class="fa fa-times danger"></span>
+                                        </td>
+                                        <td>
+                                            <a href="#!/registration/{{admin.billing.year}}/{{transaction.playerId}}">{{transaction.playerName}}</a>
+                                        </td>
+                                        <td>
+                                            <tt>{{transaction.TxId}}</tt>
+                                        </td>
+                                        <td>{{transaction.type}}</td>
+                                        <td>{{transaction.method}}</td>
+                                        <td class="number"><span class="label label-success">{{.01 * transaction.amount | currency}}</span></td>
+                                        <td>{{transaction.created}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

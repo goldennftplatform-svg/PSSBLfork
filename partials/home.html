@@ -1,0 +1,199 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+        <section class="home-page">
+            <div class="row">
+
+                <!-- This is the content on the right side panel of the home page -->
+                <div class="col-md-4 col-md-push-8">
+
+                    <!-- Ad rotator -->
+                    <div class="row">
+                        <div ng-if="adSrc" class="col-md-12" ng-click="clickAd($event)">
+                            <a href="{{adRef}}" target="_blank" class="ad">
+                                <img ng-src="{{adSrc}}" alt="Your ad here">
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Recent and Upcoming Games-->
+                    <div class="row">
+
+
+                        <div class="col-sm-6 col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading col-sm-6" ng-class="recentClass" ng-click="setPage(-1)"><strong>Recent Games</strong></div>
+                                <div class="panel-heading col-sm-6" ng-class="upcomingClass" ng-click="setPage(1)"><strong>Upcoming Games</strong></div>
+                                <div class="panel-body">
+                                    <alert ng-show="emptyList()" type="warning" style="text-align:center">No More Games Found</alert>
+                                    <ul class="list-unstyled landing-games-list">
+                                        <li ng-repeat="game in games">
+                                            <table class="scoreboard" ng-class="scoreClass">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{game.awayTeam}}&nbsp;{{showScore(game, "Away")}}</th>
+                                                        <th>@</th>
+                                                        <th>{{game.homeTeam}}&nbsp;{{showScore(game, "Home")}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><a href="#!/game/{{game.gameId}}">{{game.date | date:"MMM d"}}</a></td>
+                                                        <td>{{game.time | date:"h:mm a"}}</td>
+                                                        <td><a href="#!/fields/{{game.fieldId}}">{{game.fieldName}}</a></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <!-- Old Version
+                        <h5><a href#!/">{{game.visitor}} @ {{game.homeTeam}}</a></h5>
+                        <p class="game-details">
+                            {{game.date}} {{game.time}} @ <a href="/fields/{{game.fieldId}}">{{game.fieldName}}</a>
+                        </p>
+                             -->
+                                        </li>
+                                    </ul>
+                                    <span class="glyphicon glyphicon-chevron-left" ng-click="movePage(-1)"></span>
+                                    <img ng-show="loadingData" src="img/loading1.gif" width="128" style="margin-left: 60px;" title="Loading" />
+                                    <span class="glyphicon glyphicon-chevron-right" style="float: right" ng-click="movePage(1)"></span>
+                                </div>
+                                <div class="panel-heading" style="text-align:center">
+                                    <h3><strong>{{season.currentYear}} PSSBL Schedule</strong></h3>
+                                    <h4>{{season.scheduleMessage}}</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="well">
+                                
+                                <img style="width:100%" src="img/clipart/play-ball.png" />
+                                <h2><span class="affiliate-name">New Player Signup</span></h2>
+                                
+                                <!-- Several Variations of Front Page Text. Only one version should be uncommented-->
+
+                                <!-- <p>
+                                    Registration for the {{season.currentYear}} season is now open. Returning players should log into their accounts
+                                    and navigate to the registration page. New players wishing to join the league can sign up here.
+                                </p> -->
+
+                                <p>
+                                    Tryouts have concluded, and the {{season.currentYear}} draft is complete. However, there
+                                    are still opportunites for new players to join teams as free agents or to participate
+                                    in a taxi pool. Click below to create an account and register:
+                                </p>
+
+                                <!--p>
+                                The {{season.currentYear}} season has concluded. Registration for the {{season.currentYear + 1}} season will commence early
+                                in {{season.currentYear + 1}}. Please wait for the new year before attempting to sign up as a new member.
+                                GMs should also refrain from any attempted roster changes until {{season.currentYear + 1}} registration opens.
+                                </p-->
+
+                                <p style="text-align:center">
+                                    <a role="button" ng-click="main.signup()" ng-disabled="false" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-check"></span>Sign Up!</a>
+                                </p>
+
+                                <!-- The text under the Sign Up! button needs to match current registration open status-->
+                                <!--p style="color:green;">
+                                    <strong>
+                                        This button is for new members only.
+                                    </strong>
+                                    <strong>
+                                    Registration for {{season.currentYear}} is now closed. Check back in early {{season.currentYear + 1}} to register for next season.
+                                    </strong>
+                                </p-->
+                                <!-- <p>
+                                    For more detailed information and instructions regarding registration, see the <a ng-href="#!/articles/faq-registration">Registration FAQ</a>
+                                </p> -->
+                                <div style="text-align:center">
+                                    <a href="#!/helpbot" target="_blank">
+                                        <img ng-src="/img/Questions.png" alt="Helpbot">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PSSBL Merch Link -->
+                        <div class="col-md-12">
+                            <a href="https://stores.loyaltee.com/PSSBL/shop/home" target="_blank" class="ad">
+                                <img ng-src="/img/ads/pssbl_shop.png" alt="PSSBL Gear">
+                            </a>
+                        </div>
+
+                        <!-- Baden Link -->
+                        <div class="col-md-12" style="margin-bottom:20px;">
+                            <a href="http://www.badensports.com/" target="_blank">
+                                <img ng-src="\img\ads\baden_ball.jpg" alt="Baden Sports">
+                            </a>
+                        </div>
+
+                        <!-- Amazon Link -->
+                        <div class="col-md-12" style="margin-bottom:20px;">
+                            <a href="https://www.amazon.com/?tag=pssbl-20&linkCode=ez" target="_blank">
+                                <img ng-src="\img\ads\amazon-link.png" alt="Shop Amazon">
+                            </a>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="well">
+                                <h2 ng-click="enterDebug()" style="color:blue"><span class="affiliate-name">{{season.currentYear}} PSSBL Website</span></h2>
+                                <p>
+                                    PSSBL registration for {{season.currentYear}} is now open.
+                                </p>
+<!--                                 <p>
+                                    PSSBL registration for {{season.currentYear}} is complete.
+									<BR/> Registration for {{season.currentYear + 1}} will open in Mid-February
+                                </p> -->
+                                <p>
+                                    Please report any problems you experience to <a href="mailto:support@pssbl.com">support@pssbl.com</a>.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- MSBL National Link -->
+                        <div class="col-md-12" style="margin-bottom:20px;">
+                            <a href="http://www.msblnational.com/" target="_blank">
+                                <img ng-src="\img\MSBL Logo.jpg" alt="MSBL National">
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- This is the blog portion of the main page -->
+                <div class="col-md-8 col-md-pull-4">
+
+                    <!-- In Progress - Dynamic Loading of articles by page -->
+
+                    <article ng-repeat="blogArticle in main.currentBlogPage" class="blog-post tease">
+                        <h3>
+                            <a href="#!/articles/{{blogArticle.contentId}}">{{blogArticle.title}}</a>
+                        </h3>
+                        <div class="blog-post-meta row">
+                            <div class="col-md-6"><span class="label label-default">by {{blogArticle.author}}</span></div>
+                            <div class="col-md-6 text-right">
+                                <span class="label label-default">{{blogArticle.dateTime | date : 'M/dd/yyyy'}}</span>
+                            </div>
+                        </div>
+                        <div class="blog-post-main">
+                            <div class="post-body">
+                                <!--Here is where the article content gets injected-->
+                                <div ng-bind-html="blogArticle.html | to_trusted"></div>
+                            </div>
+                        </div>
+                        <div class="post-footer text-right">
+                            <a href="#!/articles/{{blogArticle.contentId}}#top" class="btn btn-link">
+                                <span class="btn btn-content">
+                                    <span class="fa fa-arrow-circle-o-right"></span>{{getReadLabel(blogArticle)}}
+                                </span>
+                            </a>
+                        </div>
+                    </article>
+
+                    <!--Pager-->
+                    <hr />
+                    <ul uib-pager total-items="main.totalBlogPages" ng-change="main.setBlogPage(main.blogPage)" previous-text="« Newer Blog Posts" next-text="Older Blog Posts »" ng-model="main.blogPage" items-per-page="1"></a></ul>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+

@@ -1,0 +1,483 @@
+﻿<!--
+    Styling information has been moved to tablet.css
+-->
+
+<div class="container main-body">
+
+    <!--- TOP OF PAGE IS PROGRESS, STATUS -->
+    <div class="panel panel-info">
+        <div class="panel-heading"><strong>Status</strong></div>
+        <div class="panel-body">
+            <ol>
+                <li>{{tryout.stepStatus[1]}}</li>
+                <li>{{tryout.stepStatus[2]}}</li>
+                <li>{{tryout.stepStatus[3]}}</li>
+                <li>{{tryout.stepStatus[4]}}</li>
+            </ol>
+        </div>
+    </div>
+    <!--- VIEW SUB-PAGE -->
+    <div ng-switch on="tryout.page">
+        <div ng-switch-when="Select">
+            <div class="panel-default">
+                <button autocomplete="off" ng-click="tryout.newPlayer()" class="btn btn-success">
+                    <span>New Player</span>
+                </button>
+            </div>
+            <div>
+                -OR -
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="col-md-12">
+                        <h3><strong>Player Search</strong></h3>
+                        <p>
+                            You can search for any player who has registered with the PSSBL since 2007, even if they are not a currently registered member. Just enter all or part of their
+                            first and/or last name and click the "Submit" button. Up to 20 results containing the text entered will be returned. Clicking on any of the results will advance the signup process
+                            based on the player's current registration status.
+                        </p>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label style="display:block" class="control-label">First Name</label>
+                            <input style="display:block;width:100%" type="text" name="firstName" autocomplete="off" ng-model="tryout.playerFirstName">
+                        </div>
+                        <div class="col-md-2">
+                            <label style="display:block" class="control-label">Last Name</label>
+                            <input style="display:block;width:100%" type="text" name="lastName" autocomplete="off" ng-model="tryout.playerLastName">
+                        </div>
+                        <div class="col-md-2">
+                            <label style="display:block" class="control-label">Search&nbsp;</label>
+                            <button autocomplete="off" ng-disabled="tryout.playerFirstName.length + tryout.playerLastName.length < 3" ng-click="tryout.submitPlayerQuery()" class="btn btn-primary">
+                                <span>Submit</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <h3> After submitting search, click on selected player from list below:</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Date of Birth</th>
+                                <th>Account Created</th>
+                                <th>Reg</th>
+                                <th>Reg Draft</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="result in tryout.searchResults">
+                                <td><button ng-click="tryout.selectPlayer(result)">{{result.firstName}} {{result.lastName}}</button></td>
+                                <td>{{result.birthDate}}</td>
+                                <td>{{result.year}}</td>
+                                <td>
+                                    <span class="label" ng-class="result.registrationId > 0 ? 'success fa fa-check' : 'danger fa fa-times'">{{(result.registrationId > 0) ? 'Yes' : 'No'}}</span>
+                                </td>
+                                <td>
+                                    <span class="label" ng-class="result.draftRegistrationId > 0 ? 'success fa fa-check' : 'danger fa fa-times'">{{(result.draftRegistrationId > 0) ? 'Yes' : 'No'}}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div ng-show="tryout.emptyResults()" class="alert alert-info">
+                    (No matches found)
+                </div>
+            </div>
+        </div>
+
+        <div ng-switch-when="Create">
+            <h1 ng-click="callDebug()">Create a New Account&nbsp;<img ng-show="tryout.signup.loadingData" src="img/loading1.gif" title="Loading" /></h1>
+
+            <table class="tg">
+                <tr>
+                    <th colspan="2" class="tg-formheader">Account Signup Form</th>
+                </tr>
+                <tr>
+                    <td class="tg-kjho" colspan="2">
+                        Please do not create a new account if you have previously established an account on PSSBL. If you have played in the
+                        league since 2006 or have tried out in any recent year, you likely already have an account here. If you can not
+                        remember the login information for that account, please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> rather than creating
+                        a new account. Thank you.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tg-account">
+                        <h3>Account Information</h3>
+                        <div class="row">
+                            <div class="col-md-9 col-md-offset-1">
+                                <div class="form-group col-md-6">
+                                    <label for="signup-first-name" class="control-label">First Name</label>
+                                    <input name="signup-first-name" type="text" autofocus ng-model="tryout.signup.firstName" placeholder="first name" autocomplete="on" required maxlength="100" class="form-control">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="signup-last-name" class="control-label">Last Name</label>
+                                    <input name="signup-last-name" type="text" ng-model="tryout.signup.lastName" placeholder="last name" autocomplete="on" required maxlength="100" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-email" class="control-label">Email Address (this will serve as your login id)</label>
+                                    <input name="signup-email" type="email" ng-model="tryout.signup.email" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-password" class="control-label">Password (Select a password to log in to PSSBL.com)</label>
+                                    <input name="signup-password" type="password" ng-model="tryout.signup.password" placeholder="password" required min-length="6" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="signup-password2" class="control-label">Retype Password</label>
+                                    <input name="signup-password2" type="password" ng-model="tryout.signup.password2" placeholder="password again" required min-length="6" class="form-control">
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="signup-dob" class="control-label">Date of Birth</label>
+                                    <input name="signup-dob" class="form-control" ng-model="tryout.signup.date" placeholder="MM/DD/YYYY" />
+                                </div>
+                                <div ng-show="tryout.signup.account.errorText" ng-bind-html="tryout.signup.account.errorText" class=" form-group col-md-12 alert alert-danger">
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                    <td class="tg-uwer">
+                        <h3>Contact Information</h3>
+                        <div class="row">
+                            <div class="col-md-offset-1">
+                                <div class="form-group col-md-12">
+                                    <label for="signup-address" class="control-label">Address</label>
+                                    <input name="signup-address" type="text" ng-model="tryout.signup.address" placeholder="address" autocomplete="on" required maxlength="100" class="form-control">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label for="signup-address" class="control-label">Address 2</label>
+                                    <input name="signup-address" type="text" ng-model="tryout.signup.address2" placeholder="(address 2)" autocomplete="on" maxlength="100" class="form-control">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="signup-address" class="control-label">City</label>
+                                    <input name="signup-address" type="text" ng-model="tryout.signup.city" placeholder="city" autocomplete="on" required maxlength="50" class="form-control">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="signup-address" class="control-label">State</label>
+                                    <input name="signup-address" type="text" ng-model="tryout.signup.state" value="WA" autocomplete="on" required maxlength="2" class="form-control">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="signup-address" class="control-label">Zip 5 Digits</label>
+                                    <input name="signup-address" type="number" ng-model="tryout.signup.zip" placeholder="zip" autocomplete="on" required maxlength="15" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="signup-address" class="control-label">Phone (mobile)</label>
+                                    <input name="signup-address" type="tel" ng-model="tryout.signup.phone" placeholder="phone" autocomplete="on" required maxlength="15" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="signup-address" class="control-label">Alt phone 1</label>
+                                    <input name="signup-address" type="tel" ng-model="tryout.signup.alt_phone1" autocomplete="on" maxlength="15" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="signup-address" class="control-label">Alt phone 2</label>
+                                    <input name="signup-address" type="tel" ng-model="tryout.signup.alt_phone2" autocomplete="on" maxlength="15" class="form-control">
+                                </div>
+                                <div ng-show="tryout.signup.contact.errorText" ng-bind-html="tryout.signup.contact.errorText" class=" form-group col-md-12 alert alert-danger">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tg-kjho" colspan="2">
+                        <a role="button" ng-click="tryout.submitAccount()" class="btn btn-info a  col-md-offset-5">Create Your Account</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div ng-switch-when="Form">
+            <h1 ng-click="callDebug()">Register for the {{season.currentYear}} PSSBL Player Draft&nbsp;<img ng-show="draft.loadingData" src="img/loading1.gif" title="Loading" /></h1>
+            <!--
+                Pressed for time here, but eventually need to move all styling to .css file
+                and reformat for responsive display.
+            -->
+
+            <table class="tg">
+                <tr>
+                    <th class="tg-formheader tg-th2">Draft Registration Form</th>
+                </tr>
+                <tr>
+                    <td class="tg-account">
+                        <h3>Tryout Player Information -- <b>{{tryout.playerFirstName}} {{tryout.playerLastName}}</b> (DOB {{tryout.playerBirthDate}})</h3>
+                        <div class="row">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4 class="col-md-2 control-label"><strong>Position Preferences:</strong></h4>
+                        <div class="form-group col-md-2">
+                            <label for="draft-position1" class="control-label">1st Choice</label>
+                            <select ng-model="tryout.form.position1" name="draft-position1">
+                                <option value="none" selected>-none-</option>
+                                <option value="P">Pitcher</option>
+                                <option value="C">Catcher</option>
+                                <option value="1B">First Base</option>
+                                <option value="2b">Second Base</option>
+                                <option value="ss">Short Stop</option>
+                                <option value="3b">Third Base</option>
+                                <option value="lf">Left Field</option>
+                                <option value="cf">Center Field</option>
+                                <option value="rf">Right Field</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="draft-position2" class="control-label">2nd Choice</label>
+                            <select ng-model="tryout.form.position2" name="draft-position2">
+                                <option value="none" selected>-none-</option>
+                                <option value="P">Pitcher</option>
+                                <option value="C">Catcher</option>
+                                <option value="1B">First Base</option>
+                                <option value="2b">Second Base</option>
+                                <option value="ss">Short Stop</option>
+                                <option value="3b">Third Base</option>
+                                <option value="lf">Left Field</option>
+                                <option value="cf">Center Field</option>
+                                <option value="rf">Right Field</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="draft-position3" class="control-label">3rd Choice</label>
+                            <select ng-model="tryout.form.position3" name="draft-position3">
+                                <option value="none" selected>-none-</option>
+                                <option value="P">Pitcher</option>
+                                <option value="C">Catcher</option>
+                                <option value="1B">First Base</option>
+                                <option value="2b">Second Base</option>
+                                <option value="ss">Short Stop</option>
+                                <option value="3b">Third Base</option>
+                                <option value="lf">Left Field</option>
+                                <option value="cf">Center Field</option>
+                                <option value="rf">Right Field</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="draft-position4" class="control-label">4th Choice</label>
+                            <select ng-model="tryout.form.position4" name="draft-position4">
+                                <option value="none" selected>-none-</option>
+                                <option value="P">Pitcher</option>
+                                <option value="C">Catcher</option>
+                                <option value="1B">First Base</option>
+                                <option value="2b">Second Base</option>
+                                <option value="ss">Short Stop</option>
+                                <option value="3b">Third Base</option>
+                                <option value="lf">Left Field</option>
+                                <option value="cf">Center Field</option>
+                                <option value="rf">Right Field</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="draft-position5" class="control-label">5th Choice</label>
+                            <select ng-model="tryout.form.position5" name="draft-position5">
+                                <option value="none" selected>-none-</option>
+                                <option value="P">Pitcher</option>
+                                <option value="C">Catcher</option>
+                                <option value="1B">First Base</option>
+                                <option value="2b">Second Base</option>
+                                <option value="ss">Short Stop</option>
+                                <option value="3b">Third Base</option>
+                                <option value="lf">Left Field</option>
+                                <option value="cf">Center Field</option>
+                                <option value="rf">Right Field</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group col-md-2">
+                            <label for="draft-experience">Experience</label>
+                            <select name=draft-experience ng-model="tryout.form.experience">
+                                <option value="none" selected>-none-</option>
+                                <option value="ll">Little League</option>
+                                <option value="ms">Middle School</option>
+                                <option value="hs">High School</option>
+                                <option value="adult">Adult League</option>
+                                <option value="college">College</option>
+                                <option value="pro">Professional</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="draft-availability" class="control-label">Availability:</label>
+                            <textarea rows="3" name="draft-availability" cols="40" ng-model="tryout.form.availability" placeholder="describe your availablility schedule"></textarea>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="draft-notes" class="control-label">Notes:</label>
+                            <textarea rows="3" name="draft-notes" cols="40" ng-model="tryout.form.notes" placeholder="enter any additional information"></textarea>
+                        </div>
+                        <div class="form-group col-md-12 col-md-offset-2">
+                            <label><input ng-model="tryout.form.available80" type="checkbox" name="draft-80pct">80% Availablility?</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-hide="tryout.waiver" class="tg-yw4l" colspan="2">
+                        <a role="button" ng-click="tryout.showWaiver()" class="btn btn-primary a">View and Sign the Waiver</a>
+                        <span style="color:red; text-align:right;">The waiver must be signed before you can register.</span>
+                    </td>
+                    <td ng-show="tryout.waiver" class="tg-oskr" colspan="2">
+                        <h4>
+                            <span style="color:green" class="glyphicon glyphicon-ok"></span>
+                            &nbsp;<em><b>Waiver Signed</b></em>
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tg-kjho">
+                        There is no cost to trying out, but tryout players must be fully paid in order to be eligible for the draft, to be held {{season.draftHeld}}. Payment is due no later than {{season.paymentDue}}.
+                        The cost of new player dues for {{season.currentYear}} is <strong>{{season.newPlayerCost}}</strong>. Returning players looking to be drafted onto a second (or third) team will owe just the additional {{season.additionalCost}} to be
+                        draft eligible. These amounts are subject to revision and/or partial refund.
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tg-account2">
+                        <a role="button" ng-disabled="!tryout.waiver || tryout.submitted || !tryout.form.experience" ng-click="tryout.submitDraft()" class="btn btn-success a col-md-offset-5">Register For Draft</a>
+                    </td>
+                </tr>
+            </table>
+            <div class="row"><canvas width="200" height="150"></canvas></div>
+        </div>
+
+        <div ng-switch-when="Submit">
+            <!-- Individual Draft Player Page -->
+            <h2 class="row col-md-9">
+                <span ng-click="callDebug()" style="color:blue"><strong>{{tryout.playerName}}</strong></span> Draft Profile -
+                <small>Bib #{{tryout.bibNumber}}</small>
+            </h2>
+            <hr />
+            <!-- This is the information Row -->
+            <div class="row">
+                <div class="col-md-4">
+                    <img width="400" check-image ng-src="data/upload/photos/draft/{{tryout.player.year}}/{{tryout.player.bib}}.jpg" />
+                    <!-- See https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications -->
+                    <input id="capture" style="display: none;" type="file" accept="image/*" capture="camera" onchange="tryout.handleFiles(this.files)">
+                    <div id="preview"></div>
+                    <input id="upload"
+                           type="file"
+                           ng-file-select="onFileSelect($files)"
+                           style="display: none;">
+                    <button type="button" class="shutter" disabled ng-click="tryout.clickUpload()">Take Photo</button>
+                    Temporarily Disabled - Please take photo using standard tablet camera app
+                </div>
+                <div class="col-md-4">
+                    <div class="col-md-12">
+                        <h3>Bib Number: {{tryout.bibNumber}}</h3>
+                        <div id="root">
+                            <div id="num-pad">
+                                <button class="btn-number seven" ng-click="tryout.addBibDigit(7)">7</button>
+                                <button class="btn-number eight" ng-click="tryout.addBibDigit(8)">8</button>
+                                <button class="btn-number nine" ng-click="tryout.addBibDigit(9)">9</button>
+                                <button class="btn-number four" ng-click="tryout.addBibDigit(4)">4</button>
+                                <button class="btn-number five" ng-click="tryout.addBibDigit(5)">5</button>
+                                <button class="btn-number six" ng-click="tryout.addBibDigit(6)">6</button>
+                                <button class="btn-number one" ng-click="tryout.addBibDigit(1)">1</button>
+                                <button class="btn-number two" ng-click="tryout.addBibDigit(2)">2</button>
+                                <button class="btn-number three" ng-click="tryout.addBibDigit(3)">3</button>
+                                <button class="btn-number" ng-click="tryout.addBibDigit(0)">0</button>
+                                <button class="btn-number clr" ng-click="tryout.clearBibDigits()">CLR</button>
+                                <button class="btn-number ok" ng-show="tryout.bibNumber.length > 2">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <div class="col-md-4">
+                    <div class="col-md-12">
+                        <h3>Admin Pin Code:</h3>
+                        <div id="root">
+                            <div id="result-box">{{tryout.pinMask}}
+                            </div>
+                            <div id="num-pad">
+                                <button class="btn-number seven" ng-click="tryout.addPinDigit(7)">7</button>
+                                <button class="btn-number eight" ng-click="tryout.addPinDigit(8)">8</button>
+                                <button class="btn-number nine" ng-click="tryout.addPinDigit(9)">9</button>
+                                <button class="btn-number four" ng-click="tryout.addPinDigit(4)">4</button>
+                                <button class="btn-number five" ng-click="tryout.addPinDigit(5)">5</button>
+                                <button class="btn-number six" ng-click="tryout.addPinDigit(6)">6</button>
+                                <button class="btn-number one" ng-click="tryout.addPinDigit(1)">1</button>
+                                <button class="btn-number two" ng-click="tryout.addPinDigit(2)">2</button>
+                                <button class="btn-number three" ng-click="tryout.addPinDigit(3)">3</button>
+                                <button class="btn-number" ng-click="tryout.addPinDigit(0)">0</button>
+                                <button class="btn-number clr" ng-click="tryout.clearPinDigits()">CLR</button>
+                                <button class="btn-number ok" ng-show="tryout.pinCode == tryout.pinMatch">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-md-6">
+                    <button type="button" class="upload" ng-hide="false" ng-click="tryout.uploadBibAndPhoto()">Upload</button>
+                </div>
+            </div>
+        </div>
+
+        <div ng-switch-when="Waiver">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="well row">
+                        <h2>About the Waiver</h2>
+                        <p>
+                            Signing the Waiver of Liability is required to play in the Puget Sound Senior Baseball League.
+                        </p>
+                        <p>Please take the time to read the waiver, and then digitally sign the waiver at the bottom of the page.</p>
+                        <p>If you have any questions about the waiver, please contact the league staff.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div ng-bind-html="html | to_trusted"></div>
+            </div>
+            <div class="well row">
+                <div class="alert alert-warning">
+                    Type your name <strong>Exactly</strong> as it appears to sign your waiver.
+                </div>
+                <h2>{{tryout.playerName}}</h2>
+                I, <input name="waiver-signature" ng-model="tryout.form.signature" placeholder="type name here">, agree to the Waiver of Liability
+                <div ng-show="tryout.form.signatureError" class="alert alert-danger">
+                    <strong>Error:</strong> Signature does not match name
+                </div>
+            </div>
+            <div class="row">
+                <a role="button" ng-click="tryout.signWaiver(true)" class="btn btn-success a">Yes, I Agree</a>
+                <a role="button" ng-click="tryout.signWaiver(false)" class="btn btn-danger a">No, I Don't Agree</a>
+            </div>
+        </div>
+
+        <div ng-switch-when="Confirm">
+            <h1>Player has been successfully registered for draft</h1>
+            <button ng-click="tryout.reloadPage()">Next Player</button>
+            <button ng-click="tryout.exitForm()">Exit</button>
+        </div>
+
+        <div ng-switch-when="Error">
+            <div ng-show="tryout.error" class="alert alert-danger col-md-12">
+                <h2>AN ERROR OCCURED. The reported error was:</h2>
+                <h3>{{tryout.error}}</h3>
+            </div>
+        </div>
+
+    </div>
+
+    <!--- BOTTOM OF PAGE SHOWS LOGGED IN ADMIN -->
+    <hr />
+    <h2>Current Admin is {{tryout.adminName}}</h2>
+    <button ng-click="tryout.exitForm()">Exit</button>
+    <button ng-click="tryout.reloadPage()">Start Over</button>
+
+    <!--- Temp buttons to select subpages 
+    <div class="panel panel-default pr-temp">
+        <h4>Temporary buttons to switch between various sub-pages</h4>
+        <button ng-click="tryout.page='Select'">Select</button>
+        <button ng-click="tryout.page='Create'">Create</button>
+        <button ng-click="tryout.page='Form'">Form</button>
+        <button ng-click="tryout.page='Waiver'">Waiver</button>
+        <button ng-click="tryout.page='Submit'">Submit</button>
+        <button ng-click="tryout.page='Confirm'">Confirm</button>
+        <button ng-click="tryout.page='Error'">Error</button>
+    </div-->
+
+</div>

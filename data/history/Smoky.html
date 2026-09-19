@@ -1,0 +1,91 @@
+<html>
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /* Style the article content */
+        .content {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: #333333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            line-height: 1.0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="row">
+
+        <!-- Left column -->
+        <div class="column">
+            <p><span style="font-size:24px;"><strong>Champions</strong></span></p>
+
+            <table class="champions-table">
+                <tr>
+                    <th>Year</th>
+                    <th>Playoffs</th>
+                    <th>Regular Season</th>
+                </tr>
+                <tr>
+                    <td>----</td>
+                    <td>TBD</td>
+                    <td>TBD</td>
+                </tr>
+            </table>
+            <!-- End of left column -->
+        </div>
+
+        <!-- Right column -->
+        <div class="column">
+            <p><span style="font-size:24px;"><strong>Timeline</strong></span></p>
+
+            <ul>
+                <li><strong>xxxx</strong>: Timeline Pending</li>
+            </ul>
+            <!-- End of right column -->
+        </div>
+
+        <!-- End of row -->
+    </div>
+
+</body>
+
+</html>

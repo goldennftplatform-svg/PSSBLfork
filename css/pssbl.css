@@ -1,0 +1,522 @@
+﻿/* temporary test section */
+/*
+.navbar-brand
+{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    margin: auto;
+}
+    background: #EEE url(../img/backgrounds.jpg) repeat 50% 0px;
+body {
+    background: url(../img/backgrounds.jpg);
+    width: 100%;
+    min-height: 370px;
+    padding: 0 0 0;
+}*/
+/*  End of test section */
+
+
+body { background: #888 url(../img/bg.png); }
+
+/* New menu styles */
+/* Review all #cssmenu tags as they may now be obsolete with menu overhaul */
+
+#cssmenu,
+#cssmenu ul,
+#cssmenu li,
+#cssmenu a {
+  border: none;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+}
+#cssmenu {
+  /*height: 37px;*/
+  height: 39px;
+  display: block;
+  border: 1px solid;
+  border-radius: 5px;
+  width: auto;
+  border-color: #080808;
+  margin: 0;
+  padding: 0;
+  /* Trying something*/
+  box-sizing: border-box;
+}
+#cssmenu > ul {
+  list-style: inside none;
+  margin: 0;
+  padding: 0;
+}
+#cssmenu > ul > li {
+  list-style: inside none;
+  float: left;
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+#cssmenu.align-center > ul {
+  text-align: center;
+}
+#cssmenu.align-center > ul > li {
+  float: none;
+  margin-left: -3px;
+}
+#cssmenu.align-center ul ul {
+  text-align: left;
+}
+#cssmenu.align-center > ul > li:first-child > a {
+  border-radius: 0;
+}
+#cssmenu > ul > li > a, #cssmenu > li > a {
+  outline: none;
+  display: block;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+  font-weight: 700;
+  font-size: 13px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-right: 1px solid #080808;
+  color: #ffffff;
+  padding: 12px 20px;
+}
+
+#cssmenu > ul > li:first-child > a, #cssmenu > li:first-child > a {
+  border-radius: 5px 0 0 5px;
+}
+
+#cssmenu > ul > li > a:after {
+  content: "";
+  position: absolute;
+  border-right: 1px solid;
+  top: -1px;
+  bottom: -1px;
+  right: -2px;
+  z-index: 99;
+  border-color: #15163A;
+}
+#cssmenu ul li.has-sub:hover > a:after {
+  top: 0;
+  bottom: 0;
+}
+#cssmenu > ul > li.has-sub > a:before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  right: 6px;
+  border: 5px solid transparent;
+  border-top: 5px solid #ffffff;
+}
+#cssmenu > ul > li.has-sub:hover > a:before {
+  top: 19px;
+}
+#cssmenu > ul > li.has-sub:hover > a {
+  padding-bottom: 14px;
+  z-index: 999;
+  border-color: #15163A;
+}
+#cssmenu ul li.has-sub:hover > ul,
+#cssmenu ul li.has-sub:hover > div {
+  display: block;
+}
+#cssmenu > ul > li.has-sub > a:hover,
+#cssmenu > ul > li.has-sub:hover > a {
+  background: #15163A;
+  border-color: #15163A;
+}
+#cssmenu ul li > ul,
+#cssmenu ul li > div {
+  display: none;
+  width: auto;
+  position: absolute;
+  top: 38px;
+  background: #15163A;
+  border-radius: 0 0 5px 5px;
+  z-index: 999;
+  padding: 10px 0;
+}
+#cssmenu ul li > ul {
+  width: 200px;
+}
+#cssmenu ul ul ul {
+  position: absolute;
+}
+#cssmenu ul ul li:hover > ul {
+  left: 100%;
+  top: -10px;
+  border-radius: 5px;
+}
+#cssmenu ul li > ul li {
+  display: block;
+  list-style: inside none;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+#cssmenu ul li > ul li a {
+  outline: none;
+  display: block;
+  position: relative;
+  font: 10pt Arial, Helvetica, sans-serif;
+  color: #ffffff;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+  margin: 0;
+  padding: 8px 20px;
+}
+#cssmenu,
+#cssmenu ul ul > li:hover > a,
+#cssmenu ul ul li a:hover {
+  background: #15163A;
+  background: -moz-linear-gradient(top, #15163A 0%, #0C0C21 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #15163A), color-stop(100%, #0C0C21));
+  background: -webkit-linear-gradient(top, #15163A 0%, #0C0C21 100%);
+  background: -o-linear-gradient(top, #15163A 0%, #0C0C21 100%);
+  background: -ms-linear-gradient(top, #15163A 0%, #0C0C21 100%);
+  background: linear-gradient(top, #15163A 0%, #0C0C21 100%);
+}
+#cssmenu > ul > li > a:hover {
+  background: #020207;
+  color: #ffffff;
+}
+#cssmenu ul ul a:hover {
+  color: #ffffff;
+}
+#cssmenu > ul > li.has-sub > a:hover:before {
+  border-top: 5px solid #ffffff;
+}
+
+/* My changes */
+
+#cssmenu .dropdown-header {
+  display: block;
+  padding: 3px 20px;
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.42857143;
+  color: #999999;
+}
+
+#cssmenu .divider {
+  height: 1px;
+  margin: 9px 0;
+  overflow: hidden;
+  background-color: #e5e5e5;
+}
+
+#cssmenu li {
+  text-align: left;
+}
+
+
+#cssmenu .market {
+	background: #666ECC !important;
+    color: white !important;
+}
+
+#cssmenu .market:hover {
+	background: #7983F2 !important;
+}
+
+#cssmenu .login {
+    background: #808080 !important;
+    color: white !important;
+}
+
+#cssmenu .login:hover {
+	background: #C0C0C0 !important;
+}
+
+/* Split panel header */
+
+.panel-heading.col-sm-6.panel-heading-active {
+    color: black;
+    background-color: lightgreen;
+}
+
+.panel-heading.col-sm-6.panel-heading-inactive {
+    color: lightgray;
+    background-color: #f5f5f5;
+}
+
+/* First cut at scoreboard */
+
+table.scoreboard {
+    width: 320px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+table.score-recent {
+    background: #fff3d6;
+}
+
+table.score-upcoming {
+    background: #d6ccb3;
+}
+
+table.scoreboard tr + th {
+    width: 40%;
+}
+
+table.scoreboard tr th:nth-child(2) {
+    width: 20%;
+}
+
+table.scoreboard tr th:last-child {
+    width: 40%;
+}
+
+
+.scoreboard {
+    font: normal 12px/150% Arial, Helvetica, sans-serif;
+    overflow: hidden;
+    border: 2px solid #000;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+    .scoreboard table td, .scoreboard table th {
+        padding: 3px 10px;
+    }
+
+    .scoreboard table thead th {
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #8C8C8C), color-stop(1, #7D7D7D) );
+        background: -moz-linear-gradient( center top, #8C8C8C 5%, #7D7D7D 100% );
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8C8C8C', endColorstr='#7D7D7D');
+        background-color: #8C8C8C;
+        color: #FFFFFF;
+        font-size: 15px;
+        font-weight: bold;
+        border-left: 2px solid #A3A3A3;
+    }
+
+
+    .scoreboard table tbody td {
+        color: #7D7D7D;
+        border-left: 1px solid #DBDBDB;
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+    .scoreboard table tbody .alt td {
+        background: #EBEBEB;
+        color: #7D7D7D;
+    }
+
+/* Admin Page */
+#main.admin-container {
+  margin-bottom: 100px;
+}
+.admin-body {
+  min-height: 100%;
+  background-color: #fefefe;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+  padding-top: 5px;
+  padding-bottom: 16px;
+  margin-bottom: -200px;
+}
+.admin-body:before,
+.admin-body:after {
+  content: '';
+  display: block;
+}
+@media (min-width: 768px) {
+  .admin-body {
+    margin-top: -141px;
+  }
+  .admin-body:before {
+    height: 141px;
+  }
+  .admin-body:after {
+    height: 200px;
+  }
+}
+@media (max-width: 768px) {
+  .admin-body {
+    margin-top: -51px;
+    margin-bottom: -60px;
+  }
+  .admin-body:before {
+    height: 51px;
+  }
+  .admin-body:after {
+    height: 51px;
+  }
+}
+.admin-menu {
+    padding-left: 2px;
+}
+
+/* Playoff Bracket Admin */
+
+#playoffs textarea {
+  resize:none;
+  padding-top: 30px;
+  color:blue;
+  background-color: lightgray;
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  display: inline-block;
+  vertical-align: middle;
+  width: 150px;
+}
+
+#playoffs textarea:focus {
+  background-color: lightgoldenrodyellow;
+}
+
+#playoffs h2 {
+  font-style: italic;
+  color:darkgreen;
+}
+
+/* Draft page .css */
+
+#draft .draft-main {
+    background-image: url('img/textures/grassTile.jpg');
+}
+
+#draft .draft-header-image {
+    max-width: 100%;
+}
+
+#draft .btn-left {
+}
+
+#draft .draft-division-label {
+    display: inline-block;
+    width: 422px;
+    color: yellow;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#draft .draft-round-label {
+    display: inline-block;
+    width: 533px;
+    color: lightgoldenrodyellow;
+    background-color: darkslategray;
+    text-align: center;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+#draft .draft-left-panel {
+    background-color: black;
+    border-style: solid;
+    border-color: white;
+    border-width: 4px 4px;
+}
+
+#draft .draft-previous-header {
+    color: white;
+    background-color: darkblue;
+    text-align: center;
+}
+
+#draft .draft-round-table {
+    background-color: lightgoldenrodyellow;
+    font-size: small;
+    text-align: left;
+    width: 45%;
+    margin-left: 20px;
+}
+
+    #draft .draft-round-table th {
+        background-color: #ff6a00;
+        color: white;
+        font-size: small;
+        text-align: center;
+    }
+
+#draft .draft-current-table {
+    background-color: aquamarine;
+    font-size: 18px;
+}
+
+#draft .draft-current-selection {
+    background-color: darkblue;
+    font-size: 36px;
+    color: white;
+    font-weight: bold;
+    border-top-width: 3px;
+}
+
+#draft .draft-current-controls {
+    background-color: darkblue;
+}
+
+#draft .draft-timer {
+    color: yellow;
+    font-size: 48px;
+}
+
+#draft-tile-canvas {
+    margin-right: 10px;
+    margin-top: 10px;
+    background-image: url("img/tryout-tile.png");
+}
+
+/* Custom boostrap button colors*/
+
+.btn-profile {
+  background-color: hsl(145, 62%, 68%) !important;
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#cdf3dd", endColorstr="#7adfa4");
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#cdf3dd), to(#7adfa4));
+  background-image: -moz-linear-gradient(top, #cdf3dd, #7adfa4);
+  background-image: -ms-linear-gradient(top, #cdf3dd, #7adfa4);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cdf3dd), color-stop(100%, #7adfa4));
+  background-image: -webkit-linear-gradient(top, #cdf3dd, #7adfa4);
+  background-image: -o-linear-gradient(top, #cdf3dd, #7adfa4);
+  background-image: linear-gradient(#cdf3dd, #7adfa4);
+  border-color: #7adfa4 #7adfa4 hsl(145, 62%, 63%);
+  color: #333 !important;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.33);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Content Editor */
+
+
+/* Braintree Hosted Fields Styling */
+.hosted-field {
+    height: 45px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.hosted-field:focus {
+    border-color: #66afe9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+
+.hosted-field.braintree-hosted-fields-invalid {
+    border-color: #f00;
+}
+
+.hosted-field.braintree-hosted-fields-focused {
+    border-color: #66afe9;
+}
+
+.hosted-field.braintree-hosted-fields-valid {
+    border-color: #3c763d;
+}

@@ -1,0 +1,27 @@
+﻿<div class="container main-body">
+    <section id="main" class="content-container">
+        <section class="blog-permalink">
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <article class="blog-post">
+                        <h3 ng-if="article.title">
+                            <a href="#!/articles/{{article.contentId}}">{{article.title}}</a>
+                        </h3>
+                        <div ng-if="article.author" class="blog-post-meta row">
+                            <div class="col-md-6"><span class="label label-default">by {{article.author}}</span></div>
+                            <div class="col-md-6 text-right">
+                                <span class="label label-default">{{article.dateTime | date : 'M/dd/yyyy'}}</span>
+                            </div>
+                        </div>
+
+                        <!--Here is where the article content gets injected-->
+                        <div ng-bind-html="article.html | to_trusted"></div>
+
+                    </article>
+                </div>
+            </div>
+        </section>
+    </section>
+</div>
+
+

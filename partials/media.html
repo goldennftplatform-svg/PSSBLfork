@@ -1,0 +1,56 @@
+﻿<div class="container main-body">
+    <section id="main-media" class="content-container">
+        <div class="alert alert-warning">
+            This is a rough mockup of a feature we plan to add in the future. We will offer the opportunity for
+            members to contribute photos and videos for display on this site once this feature is implemented.
+        </div>
+
+        <!--Right Column-->
+        <div id="twitterFeed" class="col-md-4 col-md-push-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="http://axebat.com" target="_blank" class="ad">
+                        <img src="img/ads/axe-bat-ad.jpg">
+                    </a>
+                </div>
+            </div>
+            <!-- Twitter Feed -->
+            <a class="twitter-timeline" href="https://twitter.com/PSSBLBaseball?ref_src=twsrc%5Etfw">Tweets by PSSBLBaseball</a>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8">
+            </script>
+            <div class="row">
+                <div class="col-sm-12 well">
+                    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    <a href="https://twitter.com/PSSBLBaseball?ref_src=twsrc%5Etfw" target="_blank">
+                        <small>Twitter feed for PSSBL</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!--Left Column-->
+        <div class="col-md-8 col-md-pull-4">
+            <div class="panel panel-default"  style="background-color:#808080;">
+
+                <div class="panel-heading"><strong>Video Gallery</strong></div>
+                <!--Youtube embed -->
+                <iframe width="640" height="480" src="https://www.youtube.com/embed/0JAUR8vHMaU" frameborder="0" style="margin-left:30px;" allowfullscreen></iframe>
+
+                <!--Photo Gallery Carousel-->
+                <div class="panel-heading" ng-click="callDebug()">
+                    <strong>Photo Gallery</strong>
+                </div>
+                <div>
+                    <div uib-carousel active="active" interval="5000" no-wrap="noWrapSlides">
+                        <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+                            <img ng-src="{{slide.image}}" style="max-height: 400px; margin:auto;">
+                            <!--div class="carousel-caption">
+                                <h4>Slide {{slide.id}}</h4>
+                            </!--div-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

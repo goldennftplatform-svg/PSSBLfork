@@ -1,0 +1,672 @@
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<style>
+    .content-wrapper {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+    }
+    .header {
+        text-align: center;
+        position: relative;
+        margin-bottom: 20px;
+    }
+    .toggle-label {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #8b4513;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 0 10px;
+    }
+    .toggle-label:hover {
+        background-color: #a0522d;
+    }
+    .toggle-input {
+        display: none;
+    }
+    #hof-container, #career-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    .plaque {
+        width: 264px;
+        height: 352px;
+        background-image: url('/img/Plaque.png');
+        background-size: cover;
+        background-position: center;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .name {
+        font-family: 'Cinzel', serif;
+        font-size: 16px;
+        color: #ffd700;
+        margin-top: 40px;
+        margin-bottom: 60px;
+        width: 80%;
+    }
+    .highlights {
+        font-size: 14px;
+        color: #333;
+        overflow-y: auto;
+        max-height: 160px;
+        padding: 0 10px;
+        margin-top: 10px;
+        width: 80%;
+    }
+    .year {
+        font-family: 'Cinzel', serif;
+        font-size: 20px;
+        font-weight: bold;
+        color: #ffffff;
+        -webkit-text-stroke: 1px goldenrod;
+        text-shadow: 2px 2px 4px black;
+        position: absolute;
+        bottom: 8px;
+        width: 100%;
+    }
+    .award {
+        width: 400px;
+        height: 300px;
+        background-image: url('/img/Career3.png');
+        background-size: 100% 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .award-name {
+        font-family: 'Cinzel', serif;
+        font-size: 25px;
+        color: #333;
+        margin-top: 88px;
+        width: 80%;
+    }
+    .award-year {
+        font-family: 'Cinzel', serif;
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        position: absolute;
+        bottom: 100px;
+        width: 100%;
+    }
+    .blog-post p {
+        margin: -1px 20px;
+    }
+
+    /* CSS-only toggle logic */
+    #hof-section, #career-section {
+        display: none;
+    }
+    #toggle-hof:checked ~ #hof-section,
+    #toggle-career:checked ~ #career-section {
+        display: block;
+    }
+    #toggle-hof:checked ~ .header .toggle-label[for="toggle-hof"],
+    #toggle-career:checked ~ .header .toggle-label[for="toggle-career"] {
+        background-color: #a0522d;
+    }
+</style>
+<div class="content-wrapper">
+    <input type="radio" id="toggle-hof" name="toggle" class="toggle-input" checked>
+    <input type="radio" id="toggle-career" name="toggle" class="toggle-input">
+    <div class="header">
+        <h1 style="font-family: 'Cinzel', serif; color: #8b4513;">PSSBL Hall of Fame and Awards</h1>
+        <label for="toggle-hof" class="toggle-label">Hall of Fame</label>
+        <label for="toggle-career" class="toggle-label">Career Achievement Awards</label>
+    </div>
+    <div id="hof-section">
+        <div id="hof-container">
+            <div class="plaque">
+                <div class="name">Ben Low</div>
+                <p class="highlights">Founded PSSBL in 1989</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Morgan Bartlett</div>
+                <p class="highlights">21 Seasons; 11 as Manager; Two 26-Game Win Streaks</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">John Cosfol</div>
+                <p class="highlights">10 Years on Board of Directors; Developed Sierra, Rocky, Teton, Adirondack Divisions</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dick Fitzgerald</div>
+                <p class="highlights">Most PSSBL Wins as Pitcher; 5 Years Executive Director & Executive VP; Numerous World Series & PSSBL Titles</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Rob Heesen</div>
+                <p class="highlights">Longest Serving PSSBL Vice President - 10 Years; 7 Seasons as Manager</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Craig Hogan</div>
+                <p class="highlights">5 Years as PSSBL President; 5 Years as Vice President</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jeff Kyger</div>
+                <p class="highlights">10 Years on Board of Directors; Served as President, Executive Director, Treasurer, Sierra Division Commissioner</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Lucky Miller</div>
+                <p class="highlights">From 1989 - Played in More PSSBL Games than Any Other Player</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Victor Ovena</div>
+                <p class="highlights">12 Seasons as Manager; 3 Years on Board of Directors; Helped Standardize PSSBL Bylaws & Rules</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Chuck Woods</div>
+                <p class="highlights">4 Years as PSSBL President; 4 Years as Sierra Division Commissioner</p>
+                <div class="year">2011</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Bob Gilnick</div>
+                <p class="highlights">#22; 3 Years as PSSBL Player Agent; 3 Years as Manager</p>
+                <div class="year">2012 (Posthumous)</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Carl Harms</div>
+                <p class="highlights">16 Seasons; 8 as Manager; 1 BB in 90 IP During 2000 Season</p>
+                <div class="year">2012</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Ivan Mott</div>
+                <p class="highlights">3 Years on Board of Directors; 9 Seasons as Manager; 2 MSBL World Series Titles; 3 PSSBL Titles; 50 Career HR</p>
+                <div class="year">2012</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Eric Sallee</div>
+                <p class="highlights">12 PSSBL Championships; Pitcher Stats: 120 Wins, 15 Losses, 21 Saves, 1.71 ERA, 1227 K in 1164.1 IP</p>
+                <div class="year">2012</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Kurt Schmidtke</div>
+                <p class="highlights">6 Seasons as Manager; 2 MSBL World Series Titles; 2 PSSBL Titles</p>
+                <div class="year">2012</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Rich Seiler</div>
+                <p class="highlights">3 World Series Titles, 4 MSBL Tourney Titles; 2 PSSBL Titles; 79 Career HR</p>
+                <div class="year">2012</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Carl Detert</div>
+                <p class="highlights">Pitched over 100 Wins & 1900 K's; MVP, 2007 MSBL World Series Title; 5 Years as Fields & Scheduling Director</p>
+                <div class="year">2013</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Joe Fisher</div>
+                <p class="highlights">PSUA Umpire-In-Chief</p>
+                <div class="year">2013</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dan "Doc" MacDougall</div>
+                <p class="highlights">15 Seasons; Dominant Pitcher for Pilots, Sugar Kings, Rainiers, Tugs, Titans</p>
+                <div class="year">2013</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Glenn Powers</div>
+                <p class="highlights">4 World Series Titles, 4 MSBL Tourney Titles; World Series MVP in 1997 & 2010</p>
+                <div class="year">2013</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Bart Waldman</div>
+                <p class="highlights">10 World Series Titles - Winning Pitcher in 5 Championship Games; 6 PSSBL Titles as Player/Manager</p>
+                <div class="year">2013</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Tom Layson</div>
+                <p class="highlights">Longtime Member, PSSBL Board of Directors; PSSBL Titles; Played Father-Son with All 3 Sons</p>
+                <div class="year">2014</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jim McDowell</div>
+                <p class="highlights">Long PSSBL Career; Dominant Hitter; Inducted with Brother Vern</p>
+                <div class="year">2014</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Vern McDowell</div>
+                <p class="highlights">Long PSSBL Career; "Tried to Play the Game the Right Way"; Inducted with Brother Jim</p>
+                <div class="year">2014</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Steve Myers</div>
+                <p class="highlights">20-Year PSSBL Career; Dominant Lefthanded Hitter; Played for the "Love of the Game"</p>
+                <div class="year">2014</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dave Nelson</div>
+                <p class="highlights">1 World Series Title - Won as Pitcher in Title Game; 2 MSBL Millenium Classic Titles; Nike World Masters Games</p>
+                <div class="year">2014</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Len Pupo</div>
+                <p class="highlights">12 Seasons; Numerous PSSBL Titles; Nike World Masters Games</p>
+                <div class="year">2014</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Brian Bill</div>
+                <p class="highlights">23 Seasons; Over 400 Games Played; Nearly 600 Hits; 2 PSSBL Titles</p>
+                <div class="year">2015</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Fernando Da Silva</div>
+                <p class="highlights">11 Seasons; Totally Dominant Pitcher; 33-3 Record Since 2007; As a Hitter 25 HR & .416 Avg.; Multiple PSSBL Titles; 5 World Series Championships</p>
+                <div class="year">2015</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dan Galaz</div>
+                <p class="highlights">Dominating Pitcher; Combined 16 Local & National Titles; 10 National World Series Rings</p>
+                <div class="year">2015</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Kelly Morton</div>
+                <p class="highlights">15 Seasons; Pure Hitter with .400+ Average Since 2000; Multiple PSSBL Titles; 6 National World Series Championships</p>
+                <div class="year">2015</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Bill Ralston</div>
+                <p class="highlights">14 Seasons; Smooth Fielding Shortstop; Numerous PSSBL Titles; Multiple National World Series Rings</p>
+                <div class="year">2015</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Larry Barlow</div>
+                <p class="highlights">10+ Seasons; Exceptional 1B nicknamed "Condor"; .400+ Avg., 394 RBI, 103 Doubles since 2007; 578 Hits=Most in PSSBL since 2007</p>
+                <div class="year">2016</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Nik Korschinowski</div>
+                <p class="highlights">16 Seasons; Clutch 1B nicknamed "Kojo"; 68 Career HR, .420 Career Avg.; 50 RBI Seasons in 2010 & 2011; 2 PSSBL Titles</p>
+                <div class="year">2016</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Brian Loucks</div>
+                <p class="highlights">10 Seasons; 5-Tool OF; .462 Career Avg. Leads the PSSBL Since 2007; 27 Career HR; 2 National World Series Rings; 2007 World Series MVP</p>
+                <div class="year">2016</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Steve Rapkoch</div>
+                <p class="highlights">10+ Seasons; Outstanding Defensive Shortstop; .350+ Career Hitter; Multiple PSSBL Titles; 5 National World Series Rings</p>
+                <div class="year">2016</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Steve Towey</div>
+                <p class="highlights">Premier OF & Closer; .420 Career Avg. with HR Power; 15 K/9 IP; 8 PSSBL Titles; 9 National World Series Championships</p>
+                <div class="year">2016</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Joe Townsend</div>
+                <p class="highlights">15 Seasons; 9 Years on Board of Directors; GM; C/3B/1B/P; 41 HR, 349 RBI, 270 BB, 55 SB (55 Attempts) Since 2007; 41 Wins as Pitcher; 2 National World Series Titles</p>
+                <div class="year">2016</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Curtis Vinson</div>
+                <p class="highlights">25 Seasons; All Star Catcher & Centerfielder; 5 years MSBL National Board of Directors; PSSBL League President; PSSBL Treasurer, Division Commisioner, GM</p>
+                <div class="year">2017</div>
+            </div>
+            <div class="plaque">
+                <div class="name">John Olsen</div>
+                <p class="highlights">One of the best catchers in PSSBL history; Multiple PSSBL Division Titles with the Mariners and Orioles, Two National World Series Rings</p>
+                <div class="year">2017</div>
+            </div>
+            <div class="plaque">
+                <div class="name">John Brandhagen</div>
+                <p class="highlights">OF/P; 17 PSSBL seasons; 6 Division Championships; 2 National World Series Rings; 800+ Career Stolen Bases; 8 Batting Titles</p>
+                <div class="year">2017</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Gabe Orendorff</div>
+                <p class="highlights">14 Seasons; Nicknamed "Legend"; SS, P, and 3B; Career .417 AVG, .504 OBP & 1.199 OPS; 57 Career HR's; 1 Division Title; 1 Las Vegas Open Title</p>
+                <div class="year">2017</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Tom Evans Krause</div>
+                <p class="highlights">23 Seasons; 15 Seasons as GM; 24 Divisional & National Championship Title Games; 12 Division Titles; 3 National World Series Rings; 275+ wins as manager; 44 Consecutive Regular Season Game Errorless Streak 2002-2003; Player Agent 2000-2005; PSSBL President 2006-Present; Longest Serving PSSBL Board Member - 18 Years; MSBL National Hall of Fame - 2012; MSBL National Lifetime Achievement Award - 2016</p>
+                <div class="year">2017</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Michael Collier</div>
+                <p class="highlights">SS, OF, P, 1B. 13 PSSBL seasons; 10 years as GM; Top tier defender and hitter; 4 Title Games; 2 PSSBL Division Championships</p>
+                <div class="year">2017</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dave Reynolds</div>
+                <p class="highlights">P, 1B. 14 Seasons; 130+ Career Wins; .360+ Career AVG; 5 Division Championships; 8 National World Series Rings; 2-Time World Series MVP</p>
+                <div class="year">2018</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jeremy Thornton</div>
+                <p class="highlights">P, CF. 13 Seasons; 1,000 IP; Over 1000 K's; 5 Division Championships; Intense Competitor; Respectful Opponent; Respected Champion</p>
+                <div class="year">2018</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jason Rivers</div>
+                <p class="highlights">P, IF. Heart, Hustle & Determination; Batting: .426 AVG; 50+ HR; 120+ SB; Pitching: 50+ Wins; 3.31 ERA; 600+ K's in 500+ IP; Numerous Division Titles</p>
+                <div class="year">2018</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dan Burbank</div>
+                <p class="highlights">P, IF 20 Years as GM of the Cascade/Sierra Brewers; 250+ Wins; 6 Division Finals; 2 Division Titles; 2016 Manager of the Year</p>
+                <div class="year">2018</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Bill Mann</div>
+                <p class="highlights">P, IF 25 Seasons; Pitching 100+ Career Wins, 650+ K's; Batting .400+ AVG, 330+ RBI, 300+ Runs; Multiple Division and Tournament Championships</p>
+                <div class="year">2019</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Rich Bonny</div>
+                <p class="highlights">P, IF Career Top 10 in pitching Wins, K's and batting Hits, Runs and RBI. 11 Division Championships, GM, Board Member, PSSBL Web Developer</p>
+                <div class="year">2019</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Paul Fisher</div>
+                <p class="highlights">SS, C, P 13 Seasons; .395/.475/.625 Career Slash LIne; 200+ IP, 74% Winning Record, 2.79 ERA, 1.1 K/IP; 7 Division Championships; 2011 Olympic Division MVP</p>
+                <div class="year">2019</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Larry Davis</div>
+                <p class="highlights">SS/2B 14 Seasons; Career .430+ Average, 400+ Runs; Multiple Division and Tournament Championships; 5 National World Series Rings</p>
+                <div class="year">2019</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Marlin Appelwick</div>
+                <p class="highlights">P, IF 31 Seasons Beginning in PSSBL Inaugural Year 1989, League Counsel 7 Years, Wrote PSSBL Bylaws, 91 Regular Season Career W's, Many Division Titles, 4 World Series Rings</p>
+                <div class="year">2020</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Mari-Jo Fraser</div>
+                <p class="highlights">OF 23 PSSBL Seasons, Outstanding Outfielder, 11 Years as GM, Many Division Titles, World Series Champion, Excellent Ambassador for PSSBL and Organ Donation</p>
+                <div class="year">2020</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Alan Gibson</div>
+                <p class="highlights">P, IF, OF 180 Career Wins on the Mound, Averages 135 IP/Season, Good Hitter, 10 PSSBL Championship Teams, Served 10 Years on Board of Directors</p>
+                <div class="year">2020</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dave Kuechle</div>
+                <p class="highlights">OF 16 PSSBL Seasons, Difference Maker, Slash Line Since 2007 .414/.472/.559, 277 Runs, 289 RBI, 62 SB, Multiple Division Titles & World Series Rings, Contributes Health/Training Columns as M.D.</p>
+                <div class="year">2020</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Dave Mathews</div>
+                <p class="highlights">OF .422 Lifetime Average over 25 PSSBL Seasons, Everest Division Career Leader in Hits, Doubles & Total Bases, Many Division Championships, 11 World Series Titles, Pierce County Baseball HOF</p>
+                <div class="year">2020</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Brian Morrison</div>
+                <p class="highlights">C, IF, OF Career Leader in Walks over Many PSSBL Seasons, 222 Career SB, Played All 9 Positions, Successful GM with Multiple Division Titles, 4 National World Series Rings</p>
+                <div class="year">2020</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Rick Park</div>
+                <p class="highlights">P, IF 20+ PSSBL Seasons, Lifetime ERA Under 3.50, 9 Years Board of Directors, Many Years as GM, Multiple Division Titles, 3 National World Series Rings, NBUA Umpire</p>
+                <div class="year">2020</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Mark Aspelund</div>
+                <p class="highlights">One of the Best Fielding SS in PSSBL History, 2004-2016 PSSBL Seasons, Multiple Division Titles, .369/.471/.475 in final 7 Seasons with 94% SB Rate</p>
+                <div class="year">2021</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Nate Binz</div>
+                <p class="highlights">Slick fielding 3B, 19 PSSBL seasons, Over 500 hits & 350 RBI, 2 Division Titles, Victoria Tourney Champ & MVP, 2 National World Series Rings</p>
+                <div class="year">2021</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Adrian Brockway</div>
+                <p class="highlights">1B, 12 PSSBL Seasons, 6 Division Titles, 2 National World Series Championships, 10 Years as PSSBL Board Secretary, Career Stats: .383/.467/.488 with 572 RBI</p>
+                <div class="year">2021</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Deryck Christensen</div>
+                <p class="highlights">Top Tier OF, 17 PSSBL Seasons, Many Division Titles with the Reds, Scorpions & Ravens, Since 2007 Slash Line of .363/.433/.496 .929 OPS, 169 RBI, 167 Runs, 65 2B, 7 HR, 33 SB</p>
+                <div class="year">2021</div>
+            </div>
+            <div class="plaque">
+                <div class="name">D.J. Penick Jr.</div>
+                <p class="highlights">Dual Threat 1B/P, 17 PSSBL Seasons, Multiple Division Titles, .407/.466/.586 w/ 20 HR Since 2007, Pitching: 3.58 ERA & 70% Win Percentage 2007-2014</p>
+                <div class="year">2021</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Sean Prouty</div>
+                <p class="highlights">OF/1B, 10 Seasons, One of the Most Feared Hitters in PSSBL History, Career Stats: .535/.591/.831 with an OPS 1.422, 29 HR, 328 RBI, 74 SB/3 CS</p>
+                <div class="year">2021</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jeff Austin</div>
+                <p class="highlights">27 PSSBL Seasons, OF/IF/C, GM/FM, 12 Division Championships, World Series Title, .373 Career Hitter with .467 OBP, Top 5 in Stolen Bases in PSSBL History</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Brad Cline</div>
+                <p class="highlights">13 Seasons, Outstanding defensive CF, 400+ Games with 500+ Hits and 500+ Runs, .380 Lifetime Batting Average, 500+ Stolen Bases, Multiple Division Titles</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Ken Combs</div>
+                <p class="highlights">PSSBL player since 1991, GM, Recipient of the PSSBL Career Achievement Award, Excellent Defensive Catcher, .444 OBP, Numerous Division and National Championships</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Troy Hanson</div>
+                <p class="highlights">Longtime PSSBL IF, Successful GM with Numerous Division and National World Series Championship, .435/.521/.584 Slash Line</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Brett Lee</div>
+                <p class="highlights">PSSBL Fan Favorite Since 2007,C/3B/OF, 2018 MSBL World Series Ring with Puget Sound Reds, Career Slash Line of .366/.454/.516</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Chet Morgan</div>
+                <p class="highlights">2 PSSBL Decades, GM, C/IF/OF, Top Five Base Stealer in PSSBL History Including Multiple Steals of Home, Lifetime .384 Average & .450 OBP, Multiple Division Titles, World Series Ring</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Bill Mayovsky</div>
+                <p class="highlights">IF/P, Game-Changing 5 Tool Player in PSSBL since 2002, Many PSSBL Division Titles and a World Series Championship, PSSBL Board Member/Underwriting Director</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jeff Naranjo</div>
+                <p class="highlights">PSSBL Since 1992, GM for 29 Seasons, Multiple Division Winners, 2016 PSSBL GM of the Year, 800 Games, 875 Hits, 27 HR, 620 RBI, .350/.439/.488 Career Slash Line</p>
+                <div class="year">2022</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Paul Davison</div>
+                <p class="highlights">OF/IF/P, Ravens GM in Olympic, Cascade and Sierra for 20+ seasons, 14 division championships, 7 as GM in 18+ open division, Pitching: 62 Wins 17 Losses, Career 3.76 ERA, 1.71 WHIP; 6 years as Division Commissioner</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Stan Friedlander</div>
+                <p class="highlights">CF/SS/2B/P, 20+ seasons beginning with the Olympic Division, Career slash line: .342/.458/.406; 171 Stolen Bases/22Caught Stealing; 198 RBI, 281 Runs; Pitching: 48 Wins 20 Losses; Career 3.99 ERA and 1.62 WHIP; GM multiple seasons</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Doug Harris</div>
+                <p class="highlights">OF/P, .379/.442/.468; 452 RBI, 470 Runs; 154 Stolen Bases and a mere 8 Caught Stealing; 15+ seasons; Cascade/Sierra/ Smoky/Everest; 2 World Series rings</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Eric Koosmann</div>
+                <p class="highlights">Excellent Defensive C; 15+ seasons; Cascade/Adams/Smoky; Board Treasurer for 16 years</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jake Liddil</div>
+                <p class="highlights">15+ seasons, Career slash line: .343/.454/.450; 322 RBI, 331 Runs, 8 years Board of Directors including Commissioner, Player Agent and current Vice President</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Don Moran</div>
+                <p class="highlights">OF/P, 13+ seasons, Career slash line: .404/.478/.688; 284 RBI, 215 Runs; World Series title</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Kelly Ryan</div>
+                <p class="highlights">14 seasons, Career slash line: .425/.460/.600; 9 HR; 244 RBI, 302 Runs; 171 Stolen Bases and only 10 Caught Stealing</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Tod Sakai</div>
+                <p class="highlights">12 seasons, Excellent defender; Career slash line: .440/.468/.575, OPS of 1.015; 424 Runs; 273 RBI; 230 Stolen Bases and only 25 Caught Stealing; Multiple Division Titles</p>
+                <div class="year">2023</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Scott Dillinger</div>
+                <p class="highlights">13 seasons; Served 8 years on the Board of Directors; Cascade, Sierra, Smoky, Rainier; 1B/2B/DH; Mr. Clutch, Career Slash Line: .380/.428/.491, 341 RBI, 231 Runs; PSSBL Single Season/Single Team Record 64 RBI in 2006; Bob Gilnick Award winner; Eight Division Titles; World Series Championship</p>
+                <div class="year">2024</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Jeff Meyer</div>
+                <p class="highlights">Top Flight SS; 16+ seasons; Career Slash Line: .342/.441/.415, 509 Runs, 280 RBI, 342 SB with only 33 Caught Stealing; Cascade, Sierra, Smoky, Everest; Multiple Division Titles; WS</p>
+                <div class="year">2024</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Scott Miller</div>
+                <p class="highlights">15+ seasons, Much feared P/DH; Career Slash Line: .369/.476/.515, 20 HR; 400+ IP, 3.37 ERA, 1.26 WHIP, 330 K; Olympic, Cascade, Sierra, Smoky; GM, Multiple Division Titles, Multiple World Series Championships</p>
+                <div class="year">2024</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Rocky Nordness</div>
+                <p class="highlights">Game Changer on Offense, Defense and Pitching; Career Slash Line: .408/.462/.536, 340 Runs, 295 RBI, 250 SB and only 10 Caught Stealing; 880+ IP, 72 Wins, 20 Losses, 28 Saves, 3.03 ERA, 1.37 WHIP, 640 K; 10 seasons; Seven Division Titles; Multiple World Series rings and 3X World Series MVP</p>
+                <div class="year">2024</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Brian Pattillo</div>
+                <p class="highlights">P/3B; 16+ seasons; 1048 IP, 76 Wins, 42 Losses, 4.53 ERA, 1.49 WHIP, 422 K; Career Slash Line: .337/.402/.371, 258 RBI, 231 Runs; Multiple Division Titles; World Series Champion</p>
+                <div class="year">2024</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Doug Springford</div>
+                <p class="highlights">12 seasons, Crafty LH Pitcher much sought after for national tournaments; 1145 IP, 83 Wins, 36 Losses, 653 K; Smoky, Everest, Rainier, Teton; Multiple Division Titles; Many World Series championships including four national titles in Fall, 2023.</p>
+                <div class="year">2024</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Greg Werre</div>
+                <p class="highlights">IF/C/P; Slick fielding infielder, Top notch catcher, Tough closer; 12+ seasons; Smoky, Everest, Rainier; Career Slash Line: .372/.482/.409, 165 Runs, Excellent eye - 17% of all career PA's are BB or HBP; Rainier Division MVP 2023; Kickoff Classic Title; World Series Champion</p>
+                <div class="year">2024</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Marty Bigelow</div>
+                <p class="highlights">P/IF with over 20 Seasons in the PSSBL; Olympic, Cascade, Sierra, Smoky, Adams, Denali, and Rocky Divisions; Multiple division titles and several World Series rings; Career batting: 403 Runs, 324 RBI; Career pitching: 66-29 Win/Loss record, 441 K's; 7 years on PSSBL Board of Directors as a Commissioner and League Player Agent</p>
+                <div class="year">2025</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Cale Carter</div>
+                <p class="highlights">15+ PSSBL Seasons; Olympic, Cascade and Sierra Divisions; exceptional centerfielder, and a terror on the basepaths; career slash line of .398/.448/.561 and an OPS of 1.009; excellent contact hitter with a mere 25 K's in 900+ plate appearances</p>
+                <div class="year">2025</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Todd Cochrane</div>
+                <p class="highlights">2025 marks 30 PSSBL Seasons as a P/IF; Cascade, Everest, Rainier, Rocky, Sierra, Smoky Divisions; Numerous division titles and multiple World Series rings; 3 Las Vegas Kickoff Classic championships; Pitching: 130 career W's and 750 K's; Served as GM and commissioner</p>
+                <div class="year">2025</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Carl Gleason</div>
+                <p class="highlights">20+ Seasons; Everest, Rainier, Teton, Adirondack Divisions; 11 division titles; career OPS of 1.003; Most HBP in PSSBL history; GM; 8 years on the PSSBL Board of Directors; helped create and supervised 65+ Daytime Baseball</p>
+                <div class="year">2025</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Scott Holstad</div>
+                <p class="highlights">Outstanding OF/1B with a rocket arm; 13 Seasons; Tugs and Ravens teams in Olympic and Cascade Divisions; middle of the order game changer; career slash line of .386/.438/.526 with 65 Doubles, 7 Triples, 13 HR, and a couple hundred Runs and RBI; Multiple division titles and a 25+ World series ring</p>
+                <div class="year">2025</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Ron Sherwin</div>
+                <p class="highlights">20+ PSSBL Seasons; Cascade, Everest, Rainier, Sierra, and Smoky Divisions; 6 division championships, multiple World Series rings; PSSBL Top 10 all time in Hits, Doubles, and RBI; slash line of .335/.433/.443 with 199 SB; GM for many teams and former member of the PSSBL Board of Directors</p>
+                <div class="year">2025</div>
+            </div>
+            <div class="plaque">
+                <div class="name">Wayne Ottum</div>
+                <p class="highlights">20+ Seasons; Outstanding C/IF with a career slash line of .378/.447/.458; 549 Runs, 345 RBI, 283 SB; multiple division titles and World Series championships; 7 years on the PSSBL Board of Directors including 4 years as Vice President</p>
+                <div class="year">2025</div>
+            </div>
+        </div>
+    </div>
+    <div id="career-section">
+        <div id="career-container">
+            <div class="award">
+                <div class="award-name">Jim Fleming</div>
+                <div class="award-year">2014</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Ken Combs</div>
+                <div class="award-year">2015</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Stu Fitelson</div>
+                <div class="award-year">2016</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Jerry Duris</div>
+                <div class="award-year">2017</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Larry Webb</div>
+                <div class="award-year">2018</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Al Manter</div>
+                <div class="award-year">2019</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Bob Sorensen</div>
+                <div class="award-year">2020</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Bruce Morrison</div>
+                <div class="award-year">2021</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Rex Lindquist</div>
+                <div class="award-year">2022</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Dan Ozment Sr.</div>
+                <div class="award-year">2023</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Stu Johnson</div>
+                <div class="award-year">2024</div>
+            </div>
+            <div class="award">
+                <div class="award-name">Stuart Chernis</div>
+                <div class="award-year">2025</div>
+            </div>
+        </div>
+    </div>
+</div>

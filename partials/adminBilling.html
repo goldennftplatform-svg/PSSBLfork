@@ -1,0 +1,328 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+                <div ng-controller="billingController" class="col-md-10">
+
+                    <h2 ng-click="callDebug()">
+                        Billing: <span class="label label-success">{{admin.billing.userName}}</span><span>&nbsp;<small>Summer {{admin.billing.year}} Registration</small></span>
+                        <a ng-hide="admin.billing.type == 'Select' || admin.billing.type == 'Queries'" ng-href="#!/registration/{{admin.billing.year}}/{{admin.billing.playerId}}" class="btn btn-info btn-sm">View Registration</a>
+                        <a ng-hide="admin.billing.type == 'Select' || admin.billing.type == 'Queries'" ng-href="#!/admin/player/{{admin.billing.playerId}}" class="btn btn-profile btn-sm">View Profile</a>
+                    </h2>
+                    <uib-tabset active="admin.billing.activeTab" type="pills">
+                        <uib-tab heading="Credit Payment" disable="admin.billing.tabsDisabled()" select="admin.billing.showType('Credit')"></uib-tab>
+                        <uib-tab heading="Cash/Check Payment" disable="admin.billing.tabsDisabled()" select="admin.billing.showType('Cash')"></uib-tab>
+                        <uib-tab heading="Add a Fee" disable="admin.billing.tabsDisabled()" select="admin.billing.showType('Fee')"></uib-tab>
+                        <uib-tab heading="Add a Deduction" disable="admin.billing.tabsDisabled()" select="admin.billing.showType('Deduction')"></uib-tab>
+                        <uib-tab heading="Select Player" select="admin.billing.showType('Select')"></uib-tab>
+                        <uib-tab heading="Account Queries" select="admin.billing.showType('Queries')"></uib-tab>
+                    </uib-tabset>
+
+                    <div ng-if="admin.billing.type == 'Select'">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><strong>Search Options</strong></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <label style="display:block" class="control-label">ID</label>
+                                        <input style="display:block;width:110%" type="text" name="playerID" autocomplete="off" ng-model="playerId">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label style="display:block" class="control-label">First Name</label>
+                                        <input style="display:block;width:110%" type="text" name="firstName" autocomplete="off" ng-model="playerFirstName">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label style="display:block" class="control-label">Last Name</label>
+                                        <input style="display:block;width:110%" type="text" name="lastName" autocomplete="off" ng-model="playerLastName">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label style="display:block" class="control-label">Email</label>
+                                        <input style="display:block;width:110%" type="text" name="email" autocomplete="off" ng-model="playerEmail">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label style="display:block" class="control-label">Search Type&nbsp;</label>
+                                        <select class="btn btn-default" ng-change="admin.billing.clearQuery()" ng-model="searchType">
+                                            <option value="Season">Season Registrations</option>
+                                            <option value="Team">Team Registrations</option>
+                                            <option value="Draft">Draft Registrations</option>
+                                            <option value="User">User Accounts</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label style="display:block" class="control-label">Search&nbsp;</label>
+                                        <button autocomplete="off" ng-click="admin.billing.submitPlayerQuery(playerId, playerFirstName, playerLastName, playerEmail, searchType)" class="btn btn-primary">
+                                            <span>Submit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <h3> After submitting search, click on selected player from list below:</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>DOB</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Status</th>
+                                            <th>Year</th>
+                                            <th>Division</th>
+                                            <th>Team</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="result in admin.billing.searchResults">
+                                            <td ng-hide="result.registrationId"><a href="#!/admin/player/{{result.playerId}}">{{result.playerId}}</a></td>
+                                            <td ng-show="result.registrationId">{{result.playerId}}</td>
+                                            <td ng-show="result.registrationId"><a href="#!/admin/billing/player/{{result.registrationId}}/{{result.playerId}}/{{result.year}}">{{result.firstName}} {{result.lastName}}</a></td>
+                                            <td ng-hide="result.registrationId">{{result.firstName}} {{result.lastName}}</td>
+                                            <td>{{result.birthDate}}</td>
+                                            <td>{{result.email}}</td>
+                                            <td>{{result.phone}}</td>
+                                            <td>
+                                                <span class="label" ng-class="admin.billing.isActive(result.status) ? 'label-success' : 'label-default'">{{result.status}}</span>
+                                            </td>
+                                            <td>{{result.year}}</td>
+                                            <td>{{result.division ? result.division : "N/A"}}</td>
+                                            <td>{{result.team ? result.team : "N/A"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-show="admin.billing.emptyResults()" class="alert alert-info">
+                                (No matches found)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="admin.billing.type == 'Queries'">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><strong>Select Query</strong></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label style="display:block" class="control-label">Select Query&nbsp;</label>
+                                        <select class="btn btn-default" ng-change="admin.billing.clearQuery()" ng-model="admin.billing.queryType">
+                                            <option value="Overpaid" selected>Overpaid Accounts</option>
+                                            <option value="OverpaidTryout">Overpaid Tryout Accounts</option>
+                                            <option value="Underpaid">Underpaid Accounts</option>
+                                            <option value="Refund">Refunds Issued</option>
+                                            <option value="Deductions">Deductions (Dues Waivers)</option>
+                                            <option value="Safeco">Safeco Registrations</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label style="display:block" class="control-label">For:&nbsp;</label>
+                                        <select class="btn btn-primary" ng-change="admin.billing.clearQuery()" ng-model="admin.billing.year">
+                                            <option value="{{season.currentYear}}" selected>{{season.currentYear}}</option>
+                                            <option ng-repeat="year in admin.billing.yearList" value="{{year}}">{{year}}</option>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label style="display:block" class="control-label">Search&nbsp;</label>
+                                        <button autocomplete="off" ng-click="admin.billing.submitAccountQuery(admin.billing.queryType, admin.billing.year)" class="btn btn-primary">
+                                            <span>Submit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <h3> After submitting search, click on selected player from list below:</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>DOB</th>
+                                            <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Year</th>
+                                            <th>{{admin.billing.getBalanceHeader()}}</th>
+                                            <th>Registration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="result in admin.billing.searchResults">
+                                            <td>{{result.playerId}}</td>
+                                            <td ng-show="result.registrationId"><a href="#!/admin/billing/player/{{result.registrationId}}/{{result.playerId}}/{{result.year}}">{{result.firstName}} {{result.lastName}}</a></td>
+                                            <td>{{result.birthDate}}</td>
+                                            <td>{{result.email}}</td>
+                                            <td>{{result.phone}}</td>
+                                            <td>{{result.year}}</td>
+                                            <td>{{result.balance}}</td>
+                                            <td><a ng-href="#!/registration/{{result.year}}/{{result.playerId}}">View</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-show="admin.billing.emptyResults()" class="alert alert-info">
+                                (No matches found)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="admin.billing.priorSeason()">
+                        <div class="alert alert-danger">
+                            <p>
+                                <strong>Warning!</strong> You are viewing registration records that are not for the current season. Any transactions that you enter
+                                will be assigned to an earlier registration and will not be credited toward current balances.
+                            </p>
+                        </div>
+                    </div>
+                    <div ng-if="admin.billing.type == 'Credit'">
+                        <h2>Process Credit Payment</h2>
+                        <div class="alert alert-info">
+                            <h4>Note</h4>
+                            <p>This page will process a credit card payment for <strong>{{admin.billing.userName}}</strong> against the billing provider.</p>
+                            <p>Please double check all form fields before submitting.</p>
+                        </div>
+                    </div>
+                    <div ng-if="admin.billing.type == 'Cash'">
+                        <h2>Process Manual Payment</h2>
+                        <div class="alert alert-info">
+                            <h4>Note</h4>
+                            <p>Process a manual payment for <strong>{{admin.billing.playerName}}</strong>.</p>
+                            <p>Manual payment types include cash and checks.</p>
+                        </div>
+                    </div>
+                    <div ng-if="admin.billing.type == 'Fee'">
+                        <h2>Add Billing Fee</h2>
+                        <div class="alert alert-info">
+                            <h4>Caution!</h4>
+                            <p>Adding a billing fee to a user will designate that user as <strong>Not In Good Standing</strong> across any and all teams that user is registered for until such time as that user has paid all outstanding dues.</p>
+                        </div>
+                    </div>
+                    <div ng-if="admin.billing.type == 'Deduction'">
+                        <h2>Add Billing Deduction</h2>
+                        <div class="alert alert-success">
+                            <h4>Note</h4>
+                            <p>Adding deductions can be useful in many cases; Waiving dues for board members, or giving a discount to a key league member who goes above and beyond. All deductions will be a part of the permantent record for that player's registration so be careful not to abuse it.</p>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card Payment -->
+                    <div class="form-horizontal">
+                        <div ng-if="admin.billing.type != 'Select' && admin.billing.type != 'Queries'">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">User</label>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">User Id: {{admin.billing.playerId}}</span>
+                                        <input disabled name="process-credit-card-payment-for-user-user" value="{{admin.billing.playerName}}" class="form-control disabled">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Outstanding Dues</label>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input name="current_dues" disabled type="text" value="{{.01 * admin.billing.duesBalance.balance | number : 2}}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label ng-click="callDebug()" for="process-credit-card-payment-for-user-amount" class="control-label col-md-2">Amount</label>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input name="process-credit-card-payment-for-user-amount" ng-change="admin.billing.adjustAmount()" ng-model="admin.billing.dollarAmount" type="number" min="0" data-required data-money data-placement="right" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="admin.billing.type == 'Credit'">
+                            <!--Don't use directive here or we wind up with two billing controllers-->
+                            <div ng-show="billing.showPay" class="row col-md-6 col-md-offset-2">
+                                <h2 ng-click="callDebug()">Enter credit card information:</h2>
+                                <!-- <form id="checkout"> -->
+                                    <div id="dropin"></div>
+                                    <span style="text-align:center">
+                                        <input class="btn btn-success" type="button" value="Pay {{.01 * billing.amount | currency}}" ng-click="submitPayment()" ng-disabled="billing.processing" ng-hide="billing.paymentSuccess" />
+                                    </span>
+                                <!-- </form> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Other forms of transactions -->
+                    <div class="form-horizontal">
+                        <div ng-if="billing.type == 'Cash'" class="form-group">
+                            <label for="process-manual-payment-for-user-method" class="control-label col-md-2">Type</label>
+                            <div class="col-md-4">
+                                <select ng-model="billing.method" name="process-manual-payment-for-user-method" class="form-control show-tick type">
+                                    <option value="check" selected>
+                                        Check
+                                    </option>
+                                    <option value="cash">
+                                        Cash
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div ng-if="billing.type == 'Fee'" class="form-group">
+                            <label ng-click="callDebug()" for="add-billing-fee-to-user-comment" class="control-label col-md-2">Comment</label>
+                            <div class="col-md-8">
+                                <textarea name="add-billing-fee-to-user-comment" ng-model="billing.comment" data-required placeholder="Explain the justification behind the fee that's being added to this user; i.e. appeal fee, disciplinary, etc" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div ng-if="billing.type == 'Deduction'" class="form-group">
+                            <label ng-click="callDebug()" for="add-billing-deduction-to-user-comment" class="control-label col-md-2">Comment</label>
+                            <div class="col-md-8">
+                                <textarea name="add-billing-deduction-to-user-comment" ng-model="billing.comment" data-required placeholder="Explain the justification behind the deduction that's being given to this user; i.e. board member waived dues, discount based on volunteering, etc" class="form-control"></textarea>
+                            </div>
+                        </div>
+                        <div ng-if="billing.type == 'Deduction' || billing.type == 'Fee'" class="form-group">
+                            <label for="appliesTo" class="control-label col-md-2">Apply To Events</label>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <select ng-model="billing.selectedEvent" ng-change="billing.applyTo()">
+                                        <option value="-1">None</option>
+                                        <option value="{{$index}}" ng-repeat="regEvent in billing.applyList">{{regEvent.description}} ({{.01 * regEvent.amount | currency}})</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="billing.type == 'Cash'" class="form-group">
+                            <div class="col-md-2 col-md-offset-2">
+                                <div class="submit-container">
+                                    <button ng-click="billing.processCash()" class="submit-input btn btn-primary"><span class="btn btn-content">Process Payment</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="billing.type == 'Fee'" class="form-group">
+                            <div class="col-md-2 col-md-offset-2">
+                                <div class="submit-container">
+                                    <aside class="global-error"></aside>
+                                    <button ng-click="billing.addFee()" class="submit-input btn btn-primary"><span class="btn btn-content">Add Fee</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="billing.type == 'Deduction'" class="form-group">
+                            <div class="col-md-2 col-md-offset-2">
+                                <div class="submit-container">
+                                    <button ng-click="billing.addDeduction()" class="submit-input btn btn-primary"><span class="btn btn-content">Add Deduction</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="billing.confirm" class="alert alert-success col-md-7 col-md-offset-2 panel-heading" ng-bind-html="billing.confirm | to_trusted"></div>
+                        <a ng-show="billing.confirm" role="button" style="text-align:right" ng-click="billing.confirm = ''" class="glyphicon glyphicon-remove-sign"></a>
+                        <div ng-show="billing.error" class="alert alert-danger col-md-7 col-md-offset-2 panel-heading">
+                            {{billing.error}}
+                            <a ng-show="billing.error" role="button" style="text-align:right" ng-click="billing.error = ''" class="glyphicon glyphicon-remove-sign"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

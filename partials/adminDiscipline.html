@@ -1,0 +1,385 @@
+<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+                <div class="col-md-9">
+                    <h2 ng-click="callDebug()">
+                        Discipline Tracker
+                        <img ng-show="loadingData" src="img/loading1.gif" title="Loading" />
+                    </h2>
+                    <h2>
+                        <button ng-hide="admin.discipline.addingDiscipline" ng-click="admin.discipline.addDiscipline()"
+                        class="btn btn-primary">
+                        <span>Add Discipline</span>
+                    </button>
+                    </h2>
+                    <!-- NEW DISCPLINE FORM -->
+                    <div ng-show="admin.discipline.addingDiscipline">
+                        <!--   We'll need the admin to be able to Select/Search the player's name -->
+                        <!--   Selecting player gets player's teams -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading" ng-hide="admin.discipline.playerSelected"><strong>Search
+                                    Options</strong></div>
+                            <div class="panel-body" ng-hide="admin.discipline.playerSelected">
+                                <div class="col-md-3">
+                                    <label style="display:block" class="control-label">First Name</label>
+                                    <input style="display:block;width:110%" type="text" name="firstName"
+                                        autocomplete="off" ng-model="playerFirstName">
+                                </div>
+                                <div class="col-md-3">
+                                    <label style="display:block" class="control-label">Last Name</label>
+                                    <input style="display:block;width:110%" type="text" name="lastName"
+                                        autocomplete="off" ng-model="playerLastName">
+                                </div>
+                                <div class="col-md-3">
+                                    <label style="display: block" class="control-label"></label>
+                                    <button autocomplete="off"
+                                        ng-click="admin.discipline.submitPlayerQuery(playerId, playerFirstName, playerLastName, playerEmail, 'Season')"
+                                        class="btn btn-primary">
+                                        <span>Search</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div ng-hide="admin.discipline.playerSelected"
+                                ng-show="admin.discipline.playerSearchActive">
+                                <div class="panel-footer">
+                                    <h3> Confirm Player:</h3>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Season</th>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>DOB</th>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="result in admin.discipline.searchResults">
+                                                <td ng-show="result.registrationId"><a role="button"
+                                                        ng-click="admin.discipline.selectPlayer(result.registrationId, result.firstName, result.lastName, result.year, result.playerId)"
+                                                        class="btn btn-primary">{{result.year}}</a></td>
+                                                <td>{{result.playerId}}</td>
+                                                <td ng-show="result.registrationId">{{result.firstName}}
+                                                    {{result.lastName}}</td>
+                                                <td>{{result.birthDate}}</td>
+                                                <td>{{result.email}}</td>
+                                                <td>
+                                                    <span class="label"
+                                                        ng-class="playerAdmin.isActive(result.status) ? 'label-success' : 'label-default'">{{result.status}}</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div ng-show="admin.discipline.emptyResults()" class="alert alert-info">
+                                    (No matches found)
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <ul class="list-group" ng-repeat="result in admin.discipline.teams"
+                                ng-show="admin.discipline.teamSelectActive">
+                                <h3>Select Team:</h3>
+                                <li class="list-group-item"><a role="button"
+                                        ng-click="admin.discipline.selectTeam(result.team_name, result.team_id, result.division_name, result.division_id)"
+                                        class="btn btn-success">{{result.division_name}} {{result.team_name}}</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <!--  After getting Associated teams -->
+                            <!--  Present dropdown with the available teams, setTeam(team.teamId) will retreive the Games for that team in that season -->
+                            <!--  After getting team's schedule, populate dropdown with games -->
+                            <!--  Game Object Dropdown format: 5/5/2020, 7:00PM, Opponent, GameID -->
+                        </div>
+
+                        <!-- GAME SELECT TABLE -->
+                        <div ng-show="admin.discipline.gameSelectActive">
+                            <div class="panel-footer">
+                                <h3> Select the applicable game:</h3>
+                            </div>
+                            <a role="button" ng-click="admin.discipline.selectGame(NULL, NULL)" class="btn btn-primary">No Game</a>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Date</th>
+                                            <th>Opponent</th>
+                                            <th>Field</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="result in admin.discipline.games">
+                                            <td><a role="button"
+                                                    ng-click="admin.discipline.selectGame(result.gameId, result.dateTime)"
+                                                    class="btn btn-primary">{{result.gameId}}</a></td>
+                                            <td>{{result.dateTime}}</td>
+                                            <td>{{result.opponent}}</td>
+                                            <td>{{result.fieldName}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div ng-show="admin.discipline.emptyResults()" class="alert alert-info">
+                                (No matches found)
+                            </div>
+                        </div>
+                        <!-- INPUT OFFENSE AND PENALTY FIELDS -->
+                        <div class="panel panel-default">
+                            <ul class="list-group">
+                                <li class="list-group-item"><label>Name:
+                                    </label>{{admin.discipline.newIncident.playerName}}</li>
+                                <li class="list-group-item"><label>Team:
+                                    </label>{{admin.discipline.newIncident.teamName}}</li>
+                                <li class="list-group-item"><label>Game ID:
+                                    </label>{{admin.discipline.newIncident.gameId}}</li>
+
+                                <li class="list-group-item" ng-show="admin.discipline.newIncident.gameId || admin.discipline.newIncident.gameId==NULL">
+                                    <label for="admin.discipline.newIncident.incidentType">Select Offense Type:</label>
+                                    <select class="form-control" ng-model="admin.discipline.newIncident.incidentType"
+                                        id="admin.discipline.newIncident.incidentType">
+                                        <option value="0">Ordinary Ejection</option>
+                                        <option value="1">Extraordinary Ejection</option>
+                                        <option value="2">League Violation</option>
+                                    </select>
+                                </li>
+                                <li class="list-group-item" ng-show="admin.discipline.newIncident.incidentType">
+                                    <label for="offense">Offense: </label>
+                                    <textarea rows="4" cols="40" maxlength="3000"
+                                        ng-model="admin.discipline.newIncident.offense" placeholder="Description of the Offense committed. Typically from the Umpire's Report"></textarea>
+                                </li>
+
+                                <li class="list-group-item" ng-show="admin.discipline.newIncident.offense">
+                                    <label for="offense">Penalty: </label>
+                                    <!-- we can put a number input for games/fines PHP will have to conver number to text -->
+                                    <span>
+                                        <textarea rows="4" cols="40" maxlength="300"
+                                            ng-model="admin.discipline.newIncident.penalty" placeholder="The initial penalty assessed to the player.">
+                                        </textarea>
+                                    </span>
+                                </li>
+                            </ul>
+                            <div>
+                                    <a role="button" ng-show="admin.discipline.addingDiscipline"
+                                    ng-click="admin.discipline.addNewDiscipline(admin.discipline.newIncident)"
+                                    class="btn btn-success">
+                                    Save</a>
+                                <a role="button" ng-show="admin.discipline.addingDiscipline"
+                                    ng-click="admin.discipline.cancelDiscipline()" class="btn btn-danger">Cancel</a>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <!-- END ADD DISCIPLINE FORM -->
+
+                    <!-- ACTIVE INCIDENTS TABLE -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Active Incidents</div>
+                        <div class="table-responsive" ng-show="admin.discipline.incident.length">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Year</th>
+                                        <th>Player</th>
+                                        <th>Appeal</th>
+                                        <th>Offense</th>
+                                        <th>Game</th>
+                                        <th>Penalty</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="incident in admin.discipline.incident"
+                                        ng-if="incident.appealStatus==0 || incident.appealStatus==1">
+                                        <td>
+                                            <span ng-if="incident.appealStatus==0">New</span>
+                                            <span ng-if="incident.appealStatus==1">Pending Appeal</span>
+                                        </td>
+                                        <td>{{incident.year}}</td>
+                                        <td><a href="#!/player{{incident.playerId}}">{{incident.playerName}}</a>
+                                            <br>{{incident.divisionName}} {{incident.teamName}}
+                                        </td>
+                                        <td>
+                                            <!-- Show Appeal Details -->
+                                            <li class="list-group-item" ng-if="incident.appealNotes"><b>Appeal Notes: </b>{{incident.appealNotes}}</li>
+                                            <li class="list-group-item" ng-if="incident.appealDate != null && incident.appealDate != 0"><b>Hearing Date: </b>{{incident.appealDate | date: 'MMMM dd, yyyy'}}</li>
+
+                                            <!-- OPEN APPEAL, LOG APPEAL DETAILS -->
+                                            <div ng-show="incident.appealStatus == 0 && incident.appealOpened!=1">
+                                                <a role="button" ng-click="admin.discipline.openAppeal(incident)"
+                                                    class="btn btn-warning btn-sm">Open Appeal</a>
+                                            </div>
+                                            <div ng-if="incident.appealOpened==1 && incident.appealStatus==0">
+                                                <li class="list-group-item">
+                                                    <label for="incident.offense"><b>Appeal Notes: </b></label>
+                                                    <!-- if I change this to a number input for games/fines PHP will have to conver number to text -->
+                                                    <textarea rows="4" cols="40" maxlength="3000"
+                                                        ng-model="incident.appealNotes" placeholder="Written response from player, GM or other notes.">
+                                                    </textarea>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <label for="incident.appealDate"><b>Hearing Date: </b></label>
+                                                    <input type="date" ng-model="incident.appealDate">
+                                                </li>
+                                                <a role="button" ng-click="admin.discipline.saveAppeal(incident)"
+                                                    class="btn btn-success btn-sm">Save Appeal</a>
+                                                <a role="button" ng-click="admin.discipline.cancelAppeal(incident)" class="btn btn-danger btn-sm">Cancel Appeal</a>
+                                            </div>
+
+                                            <!-- SHOW APPEAL RULING DETAILS -->
+                                            <li class="list-group-item" ng-if="incident.appealJudge"><b>Appeal Judge: </b>{{incident.appealJudge}}</li>
+                                            <li class="list-group-item" ng-if="incident.appealRuling" placeholder="Judge's Ruling. Additionally supporting witness reports, umpire reports and board member comments."><b>Appeal Ruling: </b>
+                                                <div ng-show="incident.appealRuling == 0">Approved</div>
+                                                <div ng-show="incident.appealRuling == 1">Denied</div>
+                                            </li>
+                                            
+                                            <li class="list-group-item" ng-if="incident.appealRulingNotes"><b>Appeal Ruling Notes: </b>{{incident.appealRulingNotes}}</li>
+                                            <li class="list-group-item" ng-if="incident.revisedPenalty"><b>Revised Penalty: </b>{{incident.revisedPenalty}}</li>
+
+                                            <!-- OPEN RULING, LOG RULING DETAILS -->
+                                            <div ng-show="incident.appealStatus == 1 && incident.appealOpened!=1">
+                                                <a role="button" ng-click="admin.discipline.openRuling(incident)"
+                                                    class="btn btn-warning btn-sm">Open Ruling</a>
+                                            </div>
+
+                                            <div ng-if="incident.appealOpened==1 && incident.appealStatus==1">
+                                                <li class="list-group-item">
+                                                    <label for="incident.appealRuling">Select Appeal Ruling:</label>
+                                                    <select class="form-control" ng-model="incident.appealRuling"
+                                                        id="incident.appealRuling">
+                                                        <option disabled selected value> -- Select the Ruling -- </option>
+                                                        <option value="0">Approved</option>
+                                                        <option value="1">Denied</option>
+                                                    </select>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <label for="offense"><b>Appeal Judge: </b></label>
+                                                    <input style="display:block;width:90%" type="text" name="incident.appealJudge"
+                                        autocomplete="off" ng-model="incident.appealJudge">
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <label for="offense">Appeal Ruling Notes: </label>
+                                                    <textarea rows="4" cols="40" maxlength="3000"
+                                                        ng-model="incident.appealRulingNotes" placeholder="Response from the Division Commissioner or Ruling Judge.">
+                                                    </textarea>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <label for="incident.revisedPenalty">Revised Penalty:</label>
+                                                        <span ng-show="incident.appealRulingNotes">
+                                                            <textarea rows="4" cols="40" maxlength="300"
+                                                                ng-model="incident.revisedPenalty">
+                                                            </textarea>
+                                                        </span>
+                                                </li>
+                                                <span ng-show="incident.revisedPenalty && incident.appealRulingNotes">
+                                                    <a role="button" ng-click="admin.discipline.saveRuling(incident)"
+                                                    class="btn btn-success btn-sm">Save Ruling</a>
+                                                </span>
+                                                <a role="button" ng-click="admin.discipline.cancelRuling(incident)" class="btn btn-danger btn-sm">Cancel</a>
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <b>
+                                                <div ng-show="incident.incidentType == 0">Ordinary Ejection</div>
+                                                <div ng-show="incident.incidentType == 1">Extraordinary Ejection</div>
+                                                <div ng-show="incident.incidentType == 2">League Violation</div>
+                                            </b>
+                                            {{incident.offense}}
+                                        </td>
+                                        <td> 
+                                            <div ng-show="{{incident.gameId != 0}}"><a href="#!/game/{{incident.gameId}}">{{incident.gameTime}}</a></div>
+                                            <div ng-show="{{incident.gameId == 0}}">N/A</div>
+                                        </td>
+                                        <td>
+                                            <!-- <div ng-show="incident.penaltyType == 0">Suspension</div>
+                                            <div ng-show="incident.penaltyType == 1">Fine</div>
+                                            <div ng-show="incident.penaltyType == 2">Other</div>
+                                            <div ng-show="incident.penaltyType == 1">$ </div> -->
+                                            {{incident.penalty}}
+                                            <!-- <span ng-show="incident.penaltyType == 0"> Games</span> -->
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p ng-hide="admin.discipline.incident.length">There are no stored discipline records.</p>
+                    </div>
+
+                    <!-- SHOWING RESOLVED/ARCHIVED INCIDENTS -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Archived Incidents</div>
+                        <div class="table-responsive" ng-show="admin.discipline.incident.length">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Year</th>
+                                        <th>Name</th>
+                                        <th>Division</th>
+                                        <th>Team</th>
+                                        <th>Offense</th>
+                                        <th>Game</th>
+                                        <th>Appeal Details</th>
+                                        <th>Revised Penalty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="incident in admin.discipline.incident"
+                                        ng-if="incident.appealStatus==2">
+                                        <td>{{incident.year}}</td>
+                                        <td><a href="#!/player{{incident.playerId}}">{{incident.playerName}}</a></td>
+                                        <td>{{incident.divisionName}}</td>
+                                        <td>{{incident.teamName}}</td>
+                                        <td>
+                                            <b>
+                                                <div ng-show="incident.incidentType == 0">Ordinary Ejection</div>
+                                                <div ng-show="incident.incidentType == 1">Extraordinary Ejection</div>
+                                                <div ng-show="incident.incidentType == 2">League Violation</div>
+                                            </b>
+                                            <div ng-if="!incident.appealExpanded">Expand for Offense Description</div>
+                                            <div ng-if="incident.appealExpanded">{{incident.offense}}</div>
+                                        </td>
+                                        <td>
+                                            <div ng-show="{{incident.gameId != 0}}"><a href="#!/game/{{incident.gameId}}">{{incident.gameTime}}</a></div>
+                                            <div ng-show="{{incident.gameId == 0}}">N/A</div>
+                                        </td>
+
+                                        <!-- APPEAL DETAILS -->
+                                        <td>
+                                            <button ng-if="incident.appealExpanded" ng-click="incident.appealExpanded = false"><span class="glyphicon glyphicon-minus"></span></button>
+                                            <button ng-if="!incident.appealExpanded" ng-click="incident.appealExpanded = true"><span class="glyphicon glyphicon-plus"></span></button>
+                                            <div ng-if="incident.appealExpanded" ng-repeat-end="">
+                                                <li class="list-group-item" ng-if="incident.penalty"><b>Initial Penalty: </b>{{incident.penalty}}</li>
+                                                <li class="list-group-item" ng-if="incident.appealNotes"><b>Appeal Notes: </b>{{incident.appealNotes}}</li>
+                                                <li class="list-group-item" ng-if="incident.appealDate"><b>Hearing Date: </b>{{incident.appealDate}}</li>
+    
+                                                <li class="list-group-item" ng-if="incident.appealJudge"><b>Appeal Judge: </b>{{incident.appealJudge}}</li>
+                                                <li class="list-group-item" ng-if="incident.appealRuling"><b>Appeal Ruling: </b>
+                                                    <div ng-show="incident.appealRuling == 0">Approved</div>
+                                                    <div ng-show="incident.appealRuling == 1">Denied</div>
+                                                </li>
+                                                <li class="list-group-item" ng-if="incident.appealRulingNotes"><b>Appeal Ruling Notes: </b>{{incident.appealRulingNotes}}</li>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{incident.revisedPenalty}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p ng-hide="admin.discipline.incident.length">There are no stored discipline records.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

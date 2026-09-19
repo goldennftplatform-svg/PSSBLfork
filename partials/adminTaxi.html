@@ -1,0 +1,267 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+                <div class="table-responsive col-md-10">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <h2 ng-click="callDebug()">
+                                        Taxi Pool Administration
+                                    </h2>
+                                    <uib-tabset ng-model="taxi.tabset" type="pills">
+                                        <uib-tab heading="Requests" select="taxi.showType('Requests')"></uib-tab>
+                                        <uib-tab heading="Players" select="taxi.showType('Players')"></uib-tab>
+                                        <uib-tab heading="Create" select="taxi.showType('Create')"></uib-tab>
+                                    </uib-tabset>
+                                </td>
+                                <td width="35%">
+                                    &nbsp;&nbsp;
+                                </td>
+                                <td ng-hide="taxi.activePlayerTaxiId == 0" style="text-align:center;border:2px solid black;padding-left:30px;padding-right:30px;background-color:lightgoldenrodyellow">
+                                    <h3 style="color:blue">{{taxi.activePlayerName}}</h3>
+                                    <button ng-disabled="taxi.loadingData || taxi.type != 'Requests' || taxi.view != 'Details'" ng-click="taxi.assignPlayer()" class="btn btn-success">
+                                        <span>Assign</span>
+                                    </button>
+                                    <label><input ng-model="taxi.activeCatcher" type="checkbox" name="catcher" ng-true-value="1" ng-false-value="0">Catcher</label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div ng-if="taxi.type == 'Requests'">
+                        <div class="panel panel-default">
+                            <div ng-show="taxi.error" class="alert alert-danger">
+                                Error Assigning Player: {{taxi.error}}
+                                <a ng-show="taxi.error" role="button" style="float:right" ng-click="taxi.error = ''" class="glyphicon glyphicon-remove-sign"></a>
+                            </div>
+                            <div class="panel-heading"><strong>Search Options</strong></div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <label style="display:block" class="control-label">From Date:</label>
+                                        <input style="display:block;width:110%" type="date" name="fromDate" autocomplete="off" ng-model="taxi.fromDate">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label style="display:block" class="control-label">Through Date:</label>
+                                        <input style="display:block;width:110%" type="date" name="toDate" autocomplete="off" ng-model="taxi.toDate">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label style="display:block" class="control-label">Division&nbsp;</label>
+                                        <select class="btn btn-default" ng-model="taxi.divisionFilter">
+                                            <option value="All">All</option>
+                                            <option value="Adams">Adams</option>
+                                            <option value="Adirondack">Adirondack</option>
+                                            <option value="Cascade">Cascade</option>
+                                            <option value="Denali">Denali</option>
+                                            <option value="Everest">Everest</option>
+                                            <option value="Rainier">Rainier</option>
+                                            <option value="Rocky">Rocky</option>
+                                            <option value="Sierra">Sierra</option>
+                                            <option value="Smoky">Smoky</option>
+                                            <option value="Teton">Teton</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label style="display:block" class="control-label">Status&nbsp;</label>
+                                        <select class="btn btn-default" ng-model="taxi.statusFilter">
+                                            <option value="All">All</option>
+                                            <option value="0">Open</option>
+                                            <option value="1">Closed</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <label style="display:block" class="control-label">Results&nbsp;</label>
+                                        <button autocomplete="off" ng-click="taxi.fetchTaxiRequests()" class="btn btn-primary">
+                                            <span>Fetch</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <h4>After submitting search, click the Accept/Decline/Pending entry for details:</h4>
+                            </div>
+                            <div ng-if="taxi.view =='List'">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Division</th>
+                                                <th>Game Details</th>
+                                                <th>Request By</th>
+                                                <th>#/C/Gear</th>
+                                                <th>Sent</th>
+                                                <th>Acc/Dec/Pend</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="request in taxi.requests" ng-if="taxi.requestFilter(request)">
+                                                <td>{{request.division}}</td>
+                                                <td><a href="#!/game/{{request.gameId}}">{{request.gameDetails}}</a></td>
+                                                <td>{{request.requestor}}</td>
+                                                <td>{{request.players}} / {{request.catchers}} / {{request.gear == 1 ? "Y": "N"}}</td>
+                                                <td>{{request.requestTime | date : 'M/dd/yy HH:mm' }}</td>
+                                                <td>
+                                                    <a role="button" ng-click="taxi.getDetails(request)">
+                                                        <span class="label" ng-class="request.closed == 1 ? 'success fa fa-check' : 'danger fa fa-circle-o-notch fa-spin'">&nbsp;</span>
+                                                        {{request.accepted}} : {{request.declined}} : {{request.pending}}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div ng-if="taxi.view =='Details'">
+                                <h3>Details for request #{{taxi.selected.id}} by {{taxi.selected.requestor}} ({{taxi.selected.requestTeam}}) for game:</h3>
+                                <h4 style="color:blue">{{taxi.selected.gameDetails}}</h4>
+                                {{taxi.details[0].requestor}} requested {{taxi.details[0].players}} player(s) and {{taxi.details[0].catchers}} catcher(s) on {{taxi.details[0].requestTime | date }}:
+                                <ul>
+                                    <li ng-repeat="response in taxi.details" ng-style="taxi.responseStyle(response.status)">
+                                        {{response.responder}} {{response.status}} {{(response.catcher == 1) ? "(as catcher)": ""}} on {{response.responseTime | date}}
+                                    </li>
+                                </ul>
+                                <button ng-click="taxi.view='List'">Return to List</button>
+                                <button ng-click="taxi.showPending()">Show Pending</button>
+                            </div>
+                            <div ng-if="taxi.view =='Pending'">
+                                <h3>Still pending for request by {{taxi.selected.requestor}} ({{taxi.selected.requestTeam}}) for game:</h3>
+                                <h4 style="color:blue">{{taxi.selected.gameDetails}}</h4>
+                                {{taxi.details[0].requestor}} requested {{taxi.details[0].players}} player(s) and {{taxi.details[0].catchers}} catcher(s) on {{taxi.details[0].requestTime | date }}:
+                                <ul>
+                                    <li ng-repeat="response in taxi.details" style="color:darkorange">
+                                        {{response.responder}} has not responded {{(response.catcher == 1) ? "(as catcher)": ""}} (Sent: {{response.responseTime}})
+                                    </li>
+                                </ul>
+                                <button ng-click="taxi.view='List'">Return to List</button>
+                                <button ng-click="taxi.showResponses()">Show Responses</button>
+                            </div>
+                        </div>
+                        <div class="panel-footer" ng-show="taxi.requests.length > 0 && taxi.view == 'List'">
+                            <button ng-click="taxi.download()" class="btn btn-info"><span class="glyphicon glyphicon-save"></span>Export as .csv File</button>
+                        </div>
+                    </div>
+
+                    <div ng-if="taxi.type == 'Create'">
+                        <div class="well well-sm">
+                            <form ng-if="true || taxi.inviteTeam > 0">
+                                <h4>Create a New Request Without Sending Invitations</h4>
+                                <p>
+                                This allows you to create a new taxi pool request without any invitations attached. This is useful to manually fill a taxi pool assignment even if
+                                no request was originally submitted for the game. You must know the game id and the team id.
+                                </p>
+                                <p>
+                                    <label for="game-id">Game Id</label>
+                                    <input name="game-id" type="number" min="0" max="99999" ng-model="taxi.gameId" />
+                                    <label for="team-id">Team Id</label>
+                                    <input name="team-id" type="number" min="0" max="9999" ng-model="taxi.teamId" />
+                                    <label for="invite-count">Number of non-catchers needed</label>
+                                    <input name="invite-count" type="number" min="0" max="4" ng-model="taxi.inviteCount" />
+                                    <label for="invite-catcher">Need catcher?</label>
+                                    <input name="invite-catcher" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="taxi.inviteCatcher" />
+                                    <label for="invite-gear">With own gear?</label>
+                                    <input ng-disabled="!taxi.inviteCatcher" name="invite-gear" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="taxi.inviteGear" />
+                                </p>
+                                <p>
+                                    <input type="submit" ng-disabled="!taxi.gameId || !taxi.teamId || (!taxi.inviteCount && !taxi.inviteCatcher)" ng-click="taxi.createTaxiRequest()" value="Create Request" class="btn btn-success">
+                                    <img ng-show="taxi.loadingData" src="img/loading1.gif" title="Loading" />
+                                </p>
+                                <div ng-show="taxi.confirm" class="alert alert-success">
+                                    {{taxi.confirm}}
+                                    <a ng-show="taxi.confirm" role="button" style="float:right" ng-click="taxi.confirm = ''" class="glyphicon glyphicon-remove-sign"></a>
+                                </div>
+                                <div ng-show="taxi.error" class="alert alert-danger">
+                                    {{taxi.error}}
+                                    <a ng-show="taxi.error" role="button" style="float:right" ng-click="taxi.error = ''" class="glyphicon glyphicon-remove-sign"></a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div ng-if="taxi.type == 'Players'">
+                        <section class="registered-players">
+                            <h2>
+                                Taxi Players
+                                <small class="heading-subtext">
+                                    Summer {{taxi.year}}&nbsp;
+                                </small>
+                                <img ng-show="taxi.loadingData" src="img/loading1.gif" title="Loading" />
+                            </h2>
+                            <div class="pagination-container row">
+                                <ul uib-pagination boundary-links="true" total-items="taxi.players.playerCount" items-per-page="taxi.players.itemsPerPage" ng-change="taxi.pageChanged(taxi.players.currentPage)" ng-model="taxi.players.currentPage" class="pagination-md" max-size="taxi.players.maxPages" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+
+                                <!-- Button dropdown with keyboard nav -->
+                                <div class="btn-group" uib-dropdown keyboard-nav style="margin-top:-28px">
+                                    <button id="per-page-btn" type="button" class="btn btn-primary" uib-dropdown-toggle>
+                                        Show Per Page <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+                                        <li role="menuitem"><a role="button" ng-click="taxi.setPerPage(20)">20</a></li>
+                                        <li role="menuitem"><a role="button" ng-click="taxi.setPerPage(50)">50</a></li>
+                                        <li role="menuitem"><a role="button" ng-click="taxi.setPerPage(100)">100</a></li>
+                                        <li class="divider"></li>
+                                        <li role="menuitem"><a role="button" ng-click="taxi.setPerPage(-1)">Show All</a></li>
+                                    </ul>
+                                    <span>&nbsp;&nbsp;<input ng-model="taxi.players.query" type="text" placeholder="Filter by" autofocus></span>
+                                </div>
+                                <div>
+                                    <div class="pagination-info" style="margin-top:-40px">
+                                        Showing
+                                        <span class="label label-info">{{taxi.players.currentPage * taxi.players.itemsPerPage - taxi.players.itemsPerPage + 1}}&mdash;{{taxi.players.currentPage * taxi.players.itemsPerPage}}</span>
+                                        of <span class="label label-info">{{taxi.players.playerCount}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Name	Accepted/Invited	Positions	Has Gear?	Notes	Created-->
+                            <!--{"firstName":"Zachary","lastName":"Auer","playerName":"Zachary Auer","playerId":"4684","invited":"0","accepted":"0","gear":"0","notes":"Pitcher 2nd base and any outfield","positions":"100100001"}-->
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Taxi ID</th>
+                                            <th></th>
+                                            <th>Acc/Dec/Blk/Pnd</th>
+                                            <th>Age</th>
+                                            <th>Email</th>
+                                            <th>Positions</th>
+                                            <th>Gear?</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="player in taxi.players.list | filter:taxi.players.query">
+                                            <td width="15%"><a href="#!/player/{{player.playerId}}">{{player.playerName}}</a></td>
+                                            <td class="text-center">{{player.taxiId}}</td>
+                                            <td>
+                                                <a role="button" ng-click="taxi.selectPlayer(player)" class="btn btn-info btn-xs">
+                                                    <span class="glyphicon glyphicon-arrow-up"></span>
+                                                </a>
+                                            </td>
+                                            <td class="text-center">{{player.accepted}}/{{player.declined}}/{{player.blocked}}/{{player.pending}}</td>
+                                            <td class="text-center">{{taxi.getPlayerAge(player.birthDate)}}</td>
+                                            <td class="text-left">{{player.email}}</td>
+                                            <td width="15%">{{taxi.formatPositions(player.positions)}}</td>
+                                            <td>
+                                                <span class="label" ng-class="taxi.isTrue(player.gear) ? 'success fa fa-check' : 'danger fa fa-times'">{{taxi.isTrue(player.gear) ? 'Yes' : 'No'}}</span>
+                                            </td>
+                                            <td>{{player.notes}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+

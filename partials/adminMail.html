@@ -1,0 +1,45 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+
+                <div class="col-sm-9 col-md-9">
+                    <article class="blog-post">
+                        <h1><span style="color: #3366ff;">Mass Email</span></h1>
+                        <p>Mass mailings to league members will now be handled by a separate online mailing utility. This facility should provide better capabilities for message formatting, delivery tracking, and custom mailing list construction.</p>
+                        <p>League officials with credentials to send mass mailings can access the new mail system at the following link:</p>
+                        <h3><a title="Elastic Email Login" target="_blank" href="https://elasticemail.com/account/">Elastic Email</a></h3>
+                        <p>&nbsp;</p>
+
+                        <h2><span style="color:#008000;"><strong><em>Download Mailing Lists</em></strong></span></h2>
+
+                        <p>
+                            The external mail site does not have direct access to our database.
+                            Therefore, it will be necessary from time to time to refresh the mailing lists on the mail
+                            site with the latest information from our site. Toward that end, the buttons below can be
+                            used to download a current file of the latest email addresses. This file is in a format that can be directly imported into our mail server.
+                        </p>
+                        <label ng-if="false" for="select-year" class="control-label">Choose year:</label>
+                        <select ng-if="false" ng-model="mail.year" name="select-year">
+                            <option value="{{season.currentYear}}" selected>{{season.currentYear}}</option>
+                            <option ng-repeat="year in mail.yearList" value="{{year}}">{{year}}</option>
+                        </select>
+                        <label for="list-choices" style="display:block" class="control-label">Choose mailing list:</label>
+                        <select ng-model="mail.listType" class="btn btn-success" name="list-choices">
+                            <option value="All" selected>All Registered Users</option>
+                            <option value="GMs">GMs</option>
+                            <option value="AllTryout">All Tryout Players</option>
+                            <option value="PaidTryout">Paid Tryout Players</option>
+                            <option value="UnpaidTryout">Unpaid Tryout Players</option>
+                        </select>
+                        <br /><br />
+                        <button ng-click="mail.downloadMailList()" class="btn btn-info"><span class="glyphicon glyphicon-save"></span>Download as .csv File</button>
+                        <img ng-show="mail.loadingData" src="img/loading1.gif" title="Loading" />
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

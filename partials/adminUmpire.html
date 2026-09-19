@@ -1,0 +1,50 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+
+                <div class="col-md-10">
+                    <h2 ng-click="callDebug()">Umpire Feedback<small class="heading-subtext">Summer {{season.currentYear}}</small></h2>
+                    <img ng-show="admin.umpire.loadingData" src="img/loading1.gif" title="Loading" />
+                    <div class="row feedback-row">
+                        <div class="col-md-12">
+                            <label>By Year: 
+                            <span class="nullable">
+                                <select class="btn btn-primary" ng-model="admin.umpire.yearFilter">
+                                    <option ng-repeat="year in admin.umpire.yearList" value="{{year}},">{{year}}</option>
+                                </select>
+                            </span></label>
+                            
+                            <label>Search Contents:<span>&nbsp;&nbsp;<input ng-model="admin.umpire.search" type="text" placeholder="Search" autofocus></span></label>
+                            <div ng-repeat="report in admin.umpire.reports | filter: admin.umpire.search | filter: admin.umpire.yearFilter" class="well clearfix">
+                                <dl class="dl-horizontal">
+                                    <dt>Author</dt>
+                                    <dd>
+                                        <a href="#!/player/{{report.user}}">{{report.userName}}</a>
+                                    </dd>
+                                    <dt>Game</dt>
+                                    <dd><a href="#!/game/{{report.game}}">{{report.teams}}</a></dd>
+                                    <dt>Umpire</dt>
+                                    <dd>{{report.umpire}} ID: {{report.id}}</dd>
+                                    <dt>Position</dt>
+                                    <dd>{{report.position}}</dd>
+                                    <dt>Rating</dt>
+                                    <dd>{{report.rating}}</dd>
+                                    <dt>Feedback</dt>
+                                    <dd>{{report.feedback}}</dd>
+                                    <dt>Created</dt>
+                                    <dd>{{report.created}}</dd>
+                                </dl>
+                                <form class="delete-feedback-form">
+                                    <button ng-disabled=true autocomplete="off" class="btn btn-danger btn-sm submit-input"><span class=" btn btn-content">Delete</span></button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

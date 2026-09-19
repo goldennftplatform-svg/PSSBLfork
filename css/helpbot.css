@@ -1,0 +1,451 @@
+/**
+ * PSSBL Help Bot - Main Styles
+ * Scoped styles for the help bot application
+ * All styles are scoped to .helpbot-page or .helpbot-container
+ * to prevent conflicts with other website pages
+ */
+
+/* ==========================================
+   RESET & BASE STYLES
+   ========================================== */
+
+.helpbot-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1f2937;
+}
+
+/* Force background with higher specificity */
+body.helpbot-page {
+    background: #888 url(../img/bg.png) !important;
+}
+
+.helpbot-page * {
+    box-sizing: border-box;
+}
+
+.helpbot-container {
+    background: #888 url(../img/bg.png);
+    min-height: 100vh;
+}
+
+/* ==========================================
+   UTILITIES
+   ========================================== */
+
+.helpbot-container .text-muted {
+    color: #6b7280 !important;
+}
+
+.helpbot-container .text-success {
+    color: #10b981 !important;
+}
+
+.helpbot-container .text-danger {
+    color: #ef4444 !important;
+}
+
+.helpbot-container .text-warning {
+    color: #f59e0b !important;
+}
+
+.helpbot-container .text-info {
+    color: #3b82f6 !important;
+}
+
+/* ==========================================
+   BUTTONS
+   ========================================== */
+
+.helpbot-container .btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 8px 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    border-radius: 6px;
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.helpbot-container .btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.25);
+}
+
+.helpbot-container .btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.helpbot-container .btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.helpbot-container .btn-xs {
+    padding: 2px 6px;
+    font-size: 11px;
+}
+
+.helpbot-container .btn-default {
+    color: #374151;
+    background: #ffffff;
+    border-color: #d1d5db;
+}
+
+.helpbot-container .btn-default:hover:not(:disabled) {
+    background: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.helpbot-container .btn-primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+}
+
+.helpbot-container .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.helpbot-container .btn-success {
+    color: #ffffff;
+    background: #10b981;
+    border-color: #10b981;
+}
+
+.helpbot-container .btn-success:hover:not(:disabled) {
+    background: #059669;
+}
+
+.helpbot-container .btn-danger {
+    color: #ffffff;
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+.helpbot-container .btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+}
+
+/* ==========================================
+   FORMS
+   ========================================== */
+
+.helpbot-container .form-control {
+    display: block;
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #1f2937;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.helpbot-container .form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    outline: none;
+}
+
+.helpbot-container .form-control:disabled {
+    background: #f3f4f6;
+    opacity: 0.65;
+}
+
+.helpbot-container textarea.form-control {
+    resize: vertical;
+    min-height: 38px;
+}
+
+/* ==========================================
+   ALERTS
+   ========================================== */
+
+.helpbot-container .alert {
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+}
+
+.helpbot-container .alert-info {
+    color: #1e40af;
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+
+.helpbot-container .alert-success {
+    color: #065f46;
+    background: #d1fae5;
+    border-color: #6ee7b7;
+}
+
+.helpbot-container .alert-warning {
+    color: #92400e;
+    background: #fef3c7;
+    border-color: #fcd34d;
+}
+
+.helpbot-container .alert-danger {
+    color: #991b1b;
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+/* ==========================================
+   TABLES
+   ========================================== */
+
+.helpbot-container .table {
+    width: 100%;
+    margin-bottom: 16px;
+    border-collapse: collapse;
+}
+
+.helpbot-container .table-striped {
+    background: #ffffff;
+}
+
+.helpbot-container .table thead th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #374151;
+    background: #f9fafb;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.helpbot-container .table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.helpbot-container .table-striped tbody tr:nth-of-type(odd) {
+    background: #f9fafb;
+}
+
+.helpbot-container .table tbody tr:hover {
+    background: #f3f4f6;
+}
+
+/* ==========================================
+   NAVIGATION TABS
+   ========================================== */
+
+.helpbot-container .nav-tabs {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.helpbot-container .nav-tabs li {
+    margin-bottom: -1px;
+}
+
+.helpbot-container .nav-tabs li a {
+    display: block;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #6b7280;
+    border: 1px solid transparent;
+    border-radius: 6px 6px 0 0;
+    transition: all 0.15s ease-in-out;
+}
+
+.helpbot-container .nav-tabs li a:hover {
+    color: #374151;
+    background: #f9fafb;
+}
+
+.helpbot-container .nav-tabs li.active a {
+    color: #667eea;
+    background: #ffffff;
+    border-color: #e5e7eb #e5e7eb #ffffff;
+}
+
+/* ==========================================
+   BADGES & LABELS
+   ========================================== */
+
+.helpbot-container .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    color: #ffffff;
+    background: #6b7280;
+    border-radius: 10px;
+}
+
+.helpbot-container .badge-success {
+    background: #10b981;
+}
+
+.helpbot-container .badge-danger {
+    background: #ef4444;
+}
+
+.helpbot-container .badge-warning {
+    background: #f59e0b;
+}
+
+.helpbot-container .badge-info {
+    background: #3b82f6;
+}
+
+/* ==========================================
+   ICONS (Font Awesome)
+   ========================================== */
+
+.helpbot-container .fa {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.helpbot-container .fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.helpbot-container .slide-in-down {
+    animation: slideInDown 0.3s ease-out;
+}
+
+.helpbot-container .slide-in-up {
+    animation: slideInUp 0.3s ease-out;
+}
+
+/* ==========================================
+   LOADING SPINNER
+   ========================================== */
+
+.helpbot-container .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(102, 126, 234, 0.3);
+    border-radius: 50%;
+    border-top-color: #667eea;
+    animation: spin 1s ease-in-out infinite;
+}
+
+.helpbot-container .voice-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.helpbot-container .voice-btn-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.helpbot-container .voice-btn-wrapper[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   CHAT INTERFACE
+   ========================================== */
+
+.helpbot-container .chat-messages {
+    padding: 16px;
+    min-height: 60vh;
+    height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.helpbot-container .message {
+    margin-bottom: 12px;
+}
+
+.helpbot-container .message.system {
+    margin-bottom: 8px;
+}
+
+.helpbot-container .helpbot-input {
+    margin-top: 8px;
+}
+
+/* ==========================================
+   RESPONSIVE UTILITIES
+   ========================================== */
+
+.helpbot-container .message-content {
+    max-width: 70%;
+    padding: 8px 12px;
+}
+
+@media (max-width: 768px) {
+    .helpbot-container .hide-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .helpbot-container .hide-desktop {
+        display: none !important;
+    }
+}

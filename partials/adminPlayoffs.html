@@ -1,0 +1,42 @@
+﻿<div class="container admin-body">
+    <section id="main" class="admin-container">
+        <div class="container">
+            <div class="row">
+                <!-- Sidebar navigation needs to be built as a directive since it appears on multiple pages -->
+                <admin-directive></admin-directive>
+
+                <div class="col-sm-9 col-md-9">
+                    <section id="playoffs">
+                            <h1>Playoff Brackets</h1>
+                            <h5>Click on any division box to preview bracket</h5>
+                            <h5>Copy bracket image from spreadsheet and paste into corresponding division box below</h5>
+                            <div class = "playoffGrid">
+                                <span ng-repeat="divisionName in playoffs.divisionNames">
+                                    <textarea ng-class="playoffs.divisionStyle($index)" ng-click="playoffs.selectDivision($index)"
+                                            ng-paste="playoffs.paste($event, playoffs.divisionNames[$index], $index)" 
+                                            ng-change="playoffs.restoreDivisionName($index)"
+                                            ng-model="playoffs.divisionNames[$index]">
+                                    </textarea>
+                                </span>
+                            </div>
+
+                            <hr />
+                            <h2>Preview</h2>
+                            <div ng-show="playoffs.confirm" class="alert alert-success col-md-8">
+                                {{playoffs.confirm}}
+                                <a ng-show="playoffs.confirm" role="button" style="float:right" ng-click="playoffs.confirm = ''"
+                                    class="glyphicon glyphicon-remove-sign"></a>
+                            </div>
+                            <div ng-show="playoffs.error" class="alert alert-danger col-md-8">
+                                {{playoffs.error}}
+                                <a ng-show="playoffs.error" role="button" style="float:right" ng-click="playoffs.error = ''"
+                                    class="glyphicon glyphicon-remove-sign"></a>
+                            </div>
+                                <img style="width:100%;" check-bracket ng-src="{{playoffs.previewLink}}" />
+                            <hr />
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
