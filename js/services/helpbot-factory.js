@@ -1,13 +1,13 @@
 /**
- * PSSBL Help Bot - API Factory
+ * PCBL Help Bot - API Factory
  * Handles all API communication between frontend and backend
  */
 
-angular.module('pssblApp').factory('helpbotFactory', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
+angular.module('pcblApp').factory('helpbotFactory', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
 
     // App configuration (from app_bot.js)
     $rootScope.appConfig = {
-        name: 'PSSBL AI Assistant',
+        name: 'PCBL AI Assistant',
         version: '1.0.0',
         supportedLanguages: ['en', 'es', 'fr', 'de', 'zh', 'ja', 'ko', 'pt', 'it', 'ru'],
         defaultLanguage: 'en',

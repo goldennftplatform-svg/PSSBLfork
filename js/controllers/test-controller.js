@@ -235,7 +235,7 @@
 
     $scope.httpTests.uploadHttp = function (data, fileBase) {
 
-        var fileName = '/data/articles/' + fileBase + ".html";
+        var fileName = 'data/articles/' + fileBase + ".html";
         $http.post(fileName, data, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }

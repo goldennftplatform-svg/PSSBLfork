@@ -567,7 +567,7 @@
     function DownloadSchedule(games, fileType) {
         var text = "";
         if (fileType == "ics") {
-            text += "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//PSSBL//NONSGML Schedule Data//EN\n";
+            text += "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//PCBL//NONSGML Schedule Data//EN\n";
         }
         for (var i = 0; i < games.length; i++) {
             var game = games[i];
@@ -578,8 +578,8 @@
                 text += game.homeName + "," + game.awayName + "," + formattedDate + "," + game.fieldName + "," + game.result;
             } else if (fileType == "ics") {
                 text += "BEGIN:VEVENT\nVERSION:2.0\n";
-                text += "UID:g" + game.gameId + "@pssbl.com\n";
-                //text += "ORGANIZER:CN=PSSBL Staff:MAILTO:info@pssbl.com\n";
+text += "UID:g" + game.gameId + "@pcbl.org\n";
+            //text += "ORGANIZER:CN=PCBL Staff:MAILTO:info@pcbl.org\n";
                 text += "DTSTART:" + ConvertDateToCalendar(game.dateTime) + "\n";
                 var endTime = new Date(game.dateTime);
                 endTime.setMinutes(endTime.getMinutes() + 180); // start + 3 hours

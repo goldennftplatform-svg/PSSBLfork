@@ -265,7 +265,7 @@ app.controller('adminController', function ($scope, $route, $routeParams, $locat
             if (acceptResult.error) {
                 $scope.signup.page = "ErrorMessage";
                 $scope.signup.errorTitle = "Invitation Could Not Be Completed";
-                $scope.signup.errorText = "Something went wrong while processing this invitation. Please contact support@pssbl.com and report the following error: ";
+                $scope.signup.errorText = "Something went wrong while processing this invitation. Please contact info@pcbl.org and report the following error: ";
                 $scope.signup.errorText += acceptResult.error;
             } else {
                 $scope.signup.page = "Invite";
@@ -712,8 +712,8 @@ app.controller('adminController', function ($scope, $route, $routeParams, $locat
                         } else if (error == "repeat") {
                             $scope.admin.buddy.resend = "An invitation has already been sent to this address. Do you wish to re-send?";
                         } else if (error == "noAccount") {
-                            $scope.admin.buddy.resend = "No existing account matches the specified email address. If this player has previously been a member of the PSSBL, you are attempting to "
-                                + "send to the wrong address; please use the correct address.\n\nCan you confirm that the invited player has no existing PSSBL account?\n";
+$scope.admin.buddy.resend = "No existing account matches the specified email address. If this player has previously been a member of the PCBL, you are attempting to "
+            + "send to the wrong address; please use the correct address.\n\nCan you confirm that the invited player has no existing PCBL account?\n";
                         } else {
                             $scope.admin.buddy.error = "Invitation Failed: Reason = " + $scope.admin.buddy.result.error;
                         }

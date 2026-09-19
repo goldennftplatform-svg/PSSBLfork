@@ -317,7 +317,7 @@ app.factory('authFactory', function ($http, $q, dataFactory) {
         if (permission) {
             switch (permission.discriminator) {
                 case "affiliate":
-                    return "PSSBL";
+                    return "PCBL";
                     break;
                 case "competition":
                     return "Summer " + permission.year;

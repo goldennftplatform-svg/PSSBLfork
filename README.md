@@ -1,47 +1,74 @@
-# PSSBL Fork
+# PSSBLfork — stat-site, rebranded as a PCBL proposal
 
-A static mirror/fork of the **Puget Sound Senior Baseball League** website
-(https://www.pssbl.com), captured as it stood in September 2026.
+A static fork of the **Puget Sound Senior Baseball League** website (pssbl.com),
+captured September 2026, with the site chrome rebranded to the **Pacific Coast
+Baseball League** (PCBL, the LA adult league at pcbl.com/la-league).
 
-## What's in this repo
+Everything you do matters. This is a **proposal build** — a low-cost, zero-
+maintenance way for the PCBL to get a cleaner stats/data site — not a
+claim to own anything that belongs to the league it was forked from.
 
-Complete client-side application source, mirrored verbatim:
+---
+
+## What this repo is
+
+The full client-side AngularJS 1.6 SPA of pssbl.com, mirrored verbatim:
 
 ```
-index.html            AngularJS 1.6 single-page app entry point
-partials/             54 route templates (home, league, team, game, admin, ...)
-js/                   app.js, controllers, services, filters, directives
-css/                  stylesheets (StyleSheet, pssbl, helpbot, tablet)
-img/                  logos, banners, draft board, clipart, textures
+index.html            app entry point (ng-app="pcblApp")
+partials/             ~54 route templates
+js/                   controllers, services, filters, directives
+css/                  stylesheets (StyleSheet, pcbl, helpbot, tablet)
+img/                  logos, banners, draft board, clipart, ad art
 lib/                  ng-ckeditor.js
-data/library.json     article/blog index (249 content entries)
-data/articles/        259 article HTML pages + teasers
+data/library.json     article index (249 content entries)
+data/articles/        259 archived article pages
 data/history/         division history pages
 data/adList.json      sponsor ad list
 data/marketList.json  marketplace ad list
 ```
 
-All external libraries (Angular, Bootstrap, ui-bootstrap, Braintree, CKEditor,
-Font Awesome) load from the same CDNs the original uses, so no local copies are
-needed.
+Everything the browser needs is served statically — no build step. External
+libraries (Angular, Bootstrap, ui-bootstrap, Braintree, CKEditor, Font Awesome)
+load from the same CDNs the original uses.
 
-## What is NOT in this repo
+## What was rebranded (and what deliberately was not)
 
-The **live data API** is a PHP + database backend that cannot be forked:
+**Changed to PCBL** — site chrome only:
 
-- `https://pssbl.com/PHP/fetchData.php`  (scores, standings, rosters, schedules)
-- `https://pssbl.com/PHP/admin.php`      (authentication / registration)
-- `https://pssbl.com/PHP/payment.php`    (payments, Braintree)
-- `https://pssbl.com/PHP/support.php`    (support tickets / messaging)
+- `index.html` title/meta/OG, favicon (`img/PCBL_favicon.png`), apple-touch icon
+- `partials/header.html` — logo (`img/PCBL_header_logo.png`), banner
+  (`img/PCBL_banner.png`), nav labels (About the PCBL / League Staff / Hall of
+  Fame), social icons → PCBL's real Facebook / Instagram / YouTube / Flickr,
+  contact line → info@pcbl.org
+- `partials/footer.html` — `img/PCBL_footer_logo.png`, outside links, copyright
+- `partials/home.html`, `league.html`, `division.html`, `event.html`,
+  `market.html`, `media.html`, `chat.html` — page titles, copy, the Twitter
+  embed replaced with a "PCBL Around the Web" social link well
+- Form/account partials (signup, register, login, draft, free-agent, waiver,
+  career, admin pages) — brand text, support emails → info@pcbl.org, the
+  Seattle PO Box lines → "contact info@pcbl.org for the mailing address"
+- `css/pssbl.css` → `css/pcbl.css`
+- `js/` — module id `pssblApp` → `pcblApp`, `dataFactory.configure("PSSBL.COM")`
+  guard label, helpbot strings, ICS `PRODID`/`UID`/`ORGANIZER`, admin copy
+- All asset/data paths made relative (`/data/…` → `data/…`, `/img/…` →
+  `img/…`) so the whole tree serves from a repo subpath on GitHub Pages.
 
-The API base URL is hard-coded in `js/services/data-factory.js`
-(`dataFactory.configure("PSSBL.COM")`). As-forked, the app still reads *live*
-data from pssbl.com's public endpoints (read-only surfaces work; login,
-registration and the data-entry workflows will not until you point these at
-your own backend).
+**Deliberately kept as-is** — do not "clean these up," they are intentional:
 
-Images embedded in a few articles hot-link to `pssbl.com/data/upload/...` videos
-and remain external.
+- `data/` (`library.json`, `articles/`, `history/`, `config.json`) — archived
+  verbatim. It is the PSSBL's content and history; a proposal build does not
+  rewrite the source league's pages.
+- `js/services/data-factory.js` — the PSSBL.COM endpoint picker and every API
+  base URL (`fetchData.php`, `admin.php`, `payment.php`, `support.php`) stay
+  functional. As forked, read-only surfaces hit the live pssbl.com endpoints;
+  login/registration/payment will not work against your own backend until this
+  is repointed.
+- Amazon affiliate links (`tag=pssbl-20`) and the Loyaltee merch-store link in
+  `partials/home.html` — keep the PSSBL's revenue streams attached to their own
+  tracking tags. Do not redirect them.
+- `partials/test.html` — dev debug page, left untouched.
+- Article hot-links to `pssbl.com/data/upload/...` videos — external, untouched.
 
 ## Run it locally
 
@@ -50,20 +77,29 @@ python -m http.server 8000 --directory .
 # open http://localhost:8000
 ```
 
-## Things to change before treating this as your own site
+No build, no dependencies.
 
-1. `dataFactory.configure(...)` in `js/services/data-factory.js` — point the API
-   at your own backend, or the fork keeps hammering pssbl.com's servers.
-2. `dataFactory.season.*` — current year / dues / draft date constants in the
-   same file.
-3. Branding: logos, banners, social links in `partials/header.html` /
-   `partials/footer.html`.
-4. The `img/` favicon is the original league mark (see LICENSE below).
+## Before this becomes a real site (if the PCBL wants it)
+
+1. **Point the API at your own backend.** `dataFactory.configure(...)` and the
+   season constants in `js/services/data-factory.js`. As long as this points at
+   pssbl.com, the fork keeps reading their public endpoints — fine for the
+   read-only proposal, wrong for a live site.
+2. **Replace `info@pcbl.org`** (used across partials/admin) with whatever
+   mailbox actually owns the inbox. Left as the league's published public
+   address.
+3. **Swap the editorially-odd leftover Seattle bits** you care about (the
+   header's commented survey line, `img/clipart/safeco.jpg` in the event page)
+   — left in because the fork is a mirror, not a redesign.
+4. **Your own backend for auth/payments** if the goal is a full replacement.
 
 ## Licensing / ownership
 
 The site content, league marks, logos, articles and data belong to the Puget
-Sound Senior Baseball League. This fork is for development/evaluation purposes;
-do not publish it under the PSSBL name/branding or present its data as your own
-without the league's permission. The AngularJS application code is mirrored
-from the public site and inherits whatever terms the original project carries.
+Sound Senior Baseball League (and, for the rebranded chrome, reference the
+Pacific Coast Baseball League). This fork is for development/evaluation and is
+published under the original fork's name so nobody mistakes it for an official
+PCBL/PSSBL site. Do not present the archived data as your own, and do not run
+this under the PSSBL branding.
+
+Connect the dots. Everything here is NFA. ez.

@@ -1,9 +1,9 @@
 /**
- * PSSBL Help Bot - Main Controller
+ * PCBL Help Bot - Main Controller
  * Manages the chat interface and user interactions
  */
 
-angular.module('pssblApp').controller('helpbotController', ['$scope', '$http', '$timeout', '$window', '$rootScope', 'helpbotFactory',
+angular.module('pcblApp').controller('helpbotController', ['$scope', '$http', '$timeout', '$window', '$rootScope', 'helpbotFactory',
     function($scope, $http, $timeout, $window, $rootScope, helpbotFactory) {
 
         // ==========================================
@@ -23,7 +23,7 @@ angular.module('pssblApp').controller('helpbotController', ['$scope', '$http', '
 
         // App configuration (from app_bot.js)
         $scope.appConfig = {
-            name: 'PSSBL AI Assistant',
+            name: 'PCBL AI Assistant',
             version: '1.0.0',
             supportedLanguages: ['en', 'es', 'fr', 'de', 'zh', 'ja', 'ko', 'pt', 'it', 'ru'],
             defaultLanguage: 'en',
@@ -139,16 +139,16 @@ angular.module('pssblApp').controller('helpbotController', ['$scope', '$http', '
 
         function getGreetingMessage(language) {
             var greetings = {
-                'en': 'Hello! I\'m the PSSBL AI Assistant. How can I help you today? You can ask me about league rules, registration, divisions, schedules, and more.',
-                'es': '¡Hola! Soy el asistente de IA de la PSSBL. ¿Cómo puedo ayudarte hoy? Puedes preguntarme sobre las reglas de la liga, registro, divisiones, horarios y más.',
-                'fr': 'Bonjour! Je suis l\'assistant IA de la PSSBL. Comment puis-je vous aider aujourd\'hui? Vous pouvez me poser des questions sur les règles de la ligue, l\'inscription, les divisions, les horaires, et plus encore.',
-                'de': 'Hallo! Ich bin der PSSBL-KI-Assistent. Wie kann ich Ihnen heute helfen? Sie können mich nach Ligaregeln, Anmeldung, Divisionen, Spielplänen und mehr fragen.',
-                'zh': '你好！我是PSSBL AI助手。今天我能为您做些什么？您可以向我询问有关联盟规则、注册、分区、时间表等更多信息。',
-                'ja': 'こんにちは！PSSBL AIアシスタントです。今日はどのようにお手伝いできますか？リーグのルール、登録、ディビジョン、スケジュールなどについて質問できます。',
-                'ko': '안녕하세요! 저는 PSSBL AI 어시스턴트입니다. 오늘 어떻게 도와드릴까요? 리그 규칙, 등록, 디비전, 일정 등에 대해 물어볼 수 있습니다.',
-                'pt': 'Olá! Sou o assistente de IA da PSSBL. Como posso ajudá-lo hoje? Você pode me perguntar sobre regras da liga, registro, divisões, horários e muito mais.',
-                'it': 'Ciao! Sono l\'assistente IA della PSSBL. Come posso aiutarti oggi? Puoi chiedermi delle regole della lega, registrazione, divisioni, orari e altro ancora.',
-                'ru': 'Здравствуйте! Я AI-ассистент PSSBL. Чем могу помочь сегодня? Вы можете спросить меня о правилах лиги, регистрации, дивизионах, расписании и многом другом.'
+                'en': 'Hello! I\'m the PCBL AI Assistant. How can I help you today? You can ask me about league rules, registration, divisions, schedules, and more.',
+                'es': '¡Hola! Soy el asistente de IA de la PCBL. ¿Cómo puedo ayudarte hoy? Puedes preguntarme sobre las reglas de la liga, registro, divisiones, horarios y más.',
+                'fr': 'Bonjour! Je suis l\'assistant IA de la PCBL. Comment puis-je vous aider aujourd\'hui? Vous pouvez me poser des questions sur les règles de la ligue, l\'inscription, les divisions, les horaires, et plus encore.',
+                'de': 'Hallo! Ich bin der PCBL-KI-Assistent. Wie kann ich Ihnen heute helfen? Sie können mich nach Ligaregeln, Anmeldung, Divisionen, Spielplänen und mehr fragen.',
+                'zh': '你好！我是PCBL AI助手。今天我能为您做些什么？您可以向我询问有关联盟规则、注册、分区、时间表等更多信息。',
+                'ja': 'こんにちは！PCBL AIアシスタントです。今日はどのようにお手伝いできますか？リーグのルール、登録、ディビジョン、スケジュールなどについて質問できます。',
+                'ko': '안녕하세요! 저는 PCBL AI 어시스턴트입니다. 오늘 어떻게 도와드릴까요? 리그 규칙, 등록, 디비전, 일정 등에 대해 물어볼 수 있습니다.',
+                'pt': 'Olá! Sou o assistente de IA da PCBL. Como posso ajudá-lo hoje? Você pode me perguntar sobre regras da liga, registro, divisões, horários e muito mais.',
+                'it': 'Ciao! Sono l\'assistente IA della PCBL. Come posso aiutarti oggi? Puoi chiedermi delle regole della lega, registrazione, divisioni, orari e altro ancora.',
+                'ru': 'Здравствуйте! Я AI-ассистент PCBL. Чем могу помочь сегодня? Вы можете спросить меня о правилах лиги, регистрации, дивизионах, расписании и многом другом.'
             };
 
             return greetings[language] || greetings['en'];

@@ -1,11 +1,11 @@
-﻿<div class="container main-body">
+<div class="container main-body">
     <section id="main" class="content-container">
 
         <div ng-switch on="draft.page">
 
             <!-- Main draft registration page  -->
             <div ng-switch-when="EnterDraft">
-                <h1 ng-click="callDebug()">Register for the 2026 PSSBL Player Draft&nbsp;<img ng-show="draft.loadingData" src="img/loading1.gif" title="Loading" /></h1>
+                <h1 ng-click="callDebug()">Register for the 2026 PCBL Player Draft&nbsp;<img ng-show="draft.loadingData" src="img/loading1.gif" title="Loading" /></h1>
                 <!--
                     Pressed for time here, but eventually need to move all styling to .css file
                     and reformat for responsive display.
@@ -229,7 +229,7 @@
                         <div class="well row">
                             <h2>About the Waiver</h2>
                             <p>
-                                Signing the Waiver of Liability is required to play in the Puget Sound Senior Baseball League.
+                                Signing the Waiver of Liability is required to play in the Pacific Coast Baseball League.
                             </p>
                             <p>Please take the time to read the waiver, and then digitally sign the waiver at the bottom of the page.</p>
                             <p>If you have any questions about the waiver, please contact the league staff.</p>
@@ -260,7 +260,7 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">Draft Registration Successful</h2>
                     <p>
-                        You have successfully registered for the {{season.currentYear}} PSSBL player draft. You must attend one of the tryouts and
+                        You have successfully registered for the {{season.currentYear}} PCBL player draft. You must attend one of the tryouts and
                         be fully paid in order to be eligible to be drafted {{season.draftHeld}}.
                     </p>
                     <p>
@@ -268,8 +268,8 @@
                     </p>
                     <p>
                         You can find additional information about the tryouts and the league on this website. If you have additional questions about the
-                        league, contact <a href="mailto:info@pssbl.com">info@pssbl.com</a>. If you have any technical issues with the signup process,
-                        contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> <br />
+                        league, contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>. If you have any technical issues with the signup process,
+                        contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> <br />
                     </p>
                     <p>
                         <strong>Good luck!</strong>
@@ -283,7 +283,7 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">Draft Registration Unsuccessful</h2>
                     <p>
-                        The system was unable to register you for the {{season.currentYear}} draft. Please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> and report the
+                        The system was unable to register you for the {{season.currentYear}} draft. Please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> and report the
                         following error: "{{draft.result.error}}"
                     </p>
                 </div>

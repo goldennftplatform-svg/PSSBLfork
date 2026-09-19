@@ -1,10 +1,10 @@
 /**
- * PSSBL Help Bot - Filters
+ * PCBL Help Bot - Filters
  * AngularJS filters for the helpbot interface
  */
 
 // Trust as HTML filter (for rendering markdown/formatted text)
-angular.module('pssblApp').filter('trustAsHtml', ['$sce', function($sce) {
+angular.module('pcblApp').filter('trustAsHtml', ['$sce', function($sce) {
     return function(text) {
         if (!text) return '';
         
@@ -27,7 +27,7 @@ angular.module('pssblApp').filter('trustAsHtml', ['$sce', function($sce) {
 }]);
 
 // Newline to break filter
-angular.module('pssblApp').filter('nlToBr', function() {
+angular.module('pcblApp').filter('nlToBr', function() {
     return function(text) {
         if (!text) return '';
         return text.replace(/\n/g, '<br>');
@@ -35,7 +35,7 @@ angular.module('pssblApp').filter('nlToBr', function() {
 });
 
 // Language code to name filter
-angular.module('pssblApp').filter('languageName', function() {
+angular.module('pcblApp').filter('languageName', function() {
     var languageNames = {
         'en': 'English',
         'es': 'Español',

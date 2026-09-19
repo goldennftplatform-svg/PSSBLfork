@@ -1,4 +1,4 @@
-﻿<div class="container main-body">
+<div class="container main-body">
     <section id="main-media" class="content-container">
 
         <div ng-switch on="RegisterPage">
@@ -9,7 +9,7 @@
             </div>
 
             <div ng-switch-when="Main">
-                <h1 ng-click="callDebug()">Welcome to {{currentYear}} PSSBL Player Registration</h1>
+                <h1 ng-click="callDebug()">Welcome to {{currentYear}} PCBL Player Registration</h1>
                 <!--
                     Pressed for time here, but eventually need to move all styling to .css file
                     and reformat for responsive display.
@@ -191,7 +191,7 @@
                             <a role="button" ng-disabled="blockRegistration(false)" ng-click="Register(false)" class="btn btn-info a">Register without Payment</a>
                             <em>Total shown does not include any rollover credits or discounts that will be applied at time of payment</em>
                         </td>
-                        <td>You can pay later or send a check for payment to: PSSBL, P.O. Box 577, Seattle, WA  98111-0177</td>
+                        <td>You can pay later or send a check; contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> for the mailing address.</td>
                         <td class="tg-yw4l tg-money"><h3>{{.01 * registerForm.totalDues | currency}}</h3></td>
                     </tr>
                 </table>
@@ -203,7 +203,7 @@
                         <div class="well row">
                             <h2>About the Waiver</h2>
                             <p>
-                                Signing the Waiver of Liability is required to play in the Puget Sound Senior Baseball League.
+                                Signing the Waiver of Liability is required to play in the Pacific Coast Baseball League.
                             </p>
                             <p>Please take the time to read the waiver, and then digitally sign the waiver at the bottom of the page.</p>
                             <p>If you have any questions about the waiver, please contact the league staff.</p>
@@ -271,7 +271,7 @@
                                     <h2>Data Error</h2>
                                     <p>
                                         There was a problem retrieving your registration information from the server.
-                                        If this problem persists please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a>.
+                                        If this problem persists please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>.
                                     </p>
                                 </div>
                             </div>
@@ -284,7 +284,7 @@
                                     <h2>Registration Failure</h2>
                                     <p>
                                         There was a problem processing your registration information on the server.
-                                        Please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a>. and report the following result:
+                                        Please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>. and report the following result:
                                         <br />{{registerForm.errorDetails}}
                                     </p>
                                 </div>
@@ -353,7 +353,7 @@
             </div>
             <div ng-show="registerForm.showComplete" class="row">
                 <h1>Registration Complete!</h1>
-                <p>You can pay later or send a check for payment to: PSSBL, P.O. Box 577, Seattle, WA  98111-0177</p>
+                <p>You can pay later or send a check; contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> for the mailing address.</p>
             </div>
         </div>
     </section>

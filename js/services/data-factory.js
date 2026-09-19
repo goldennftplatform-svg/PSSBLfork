@@ -127,7 +127,7 @@
     // TODO: Clean up and consolidate all related functions
     dataFactory.loadHttp = function (loadObject, fileBase) {
 
-        var fileName = '/data/articles/' + fileBase + ".html";
+        var fileName = 'data/articles/' + fileBase + ".html";
         $http.get(fileName)
             .then(function successCallback(response) {
                 loadObject.html = response.data;
@@ -189,7 +189,7 @@
     function loadConfig() {
         // Temp load from json file
         Utilities.log("Loading config data ...");
-        $http.get('/data/config.json')
+        $http.get('data/config.json')
             .then(function successCallback(response) {
                 config = response.data;
                 dataFactory.requestBase = config.requestBase;
@@ -207,7 +207,7 @@
 
     dataFactory.getArticleHtml = function (callingScope, contentId) {
         // Direct load of Html: no SQL
-        var fileName = '/data/articles/' + contentId + ".html";
+        var fileName = 'data/articles/' + contentId + ".html";
         $http.get(fileName)
             .then(function successCallback(response) {
                 callingScope.html = response.data;
@@ -218,7 +218,7 @@
 
     dataFactory.getHistoryHtml = function (callingScope, divisionName) {
       // Direct load of Html: no SQL
-      var fileName = "/data/history/" + divisionName + ".html";
+      var fileName = "data/history/" + divisionName + ".html";
       $http.get(fileName).then(
         function successCallback(response) {
           callingScope.html = response.data;
@@ -232,7 +232,7 @@
     
     dataFactory.getMessageHtml = function (callingScope, messageId) {
         // Direct load of Html: no SQL
-        var fileName = '/data/messages/' + messageId + ".html";
+        var fileName = 'data/messages/' + messageId + ".html";
         $http.get(fileName)
             .then(function successCallback(response) {
                 callingScope.html = response.data;
@@ -250,7 +250,7 @@
             callingScope.libraryLoaded = (new Date()).getMilliseconds();
         } else {
             // Get from json file (Might eventually move to database)
-            $http.get('/data/library.json')
+            $http.get('data/library.json')
                 .then(function successCallback(response) {
                     dataFactory.content.library = response.data;
                     if (callingScope) callingScope.library = dataFactory.content.library;
@@ -285,7 +285,7 @@
             return;
         }
         // Load article from file
-        var fileName = '/data/articles/' + article.contentId;
+        var fileName = 'data/articles/' + article.contentId;
         if (article.hasTeaser) fileName += "-teaser";
         fileName += ".html";
         $http.get(fileName)
@@ -315,7 +315,7 @@
 
     dataFactory.getAds = function (callingScope) {
         // Temp load from json file
-        $http.get('/data/adList.json')
+        $http.get('data/adList.json')
             .then(function successCallback(response) {
                 callingScope.adList = response.data;
                 callingScope.initAds();
@@ -326,7 +326,7 @@
 
     dataFactory.getMarketAds = function (callingScope) {
         // Temp load from json file
-        $http.get('/data/marketList.json')
+        $http.get('data/marketList.json')
             .then(function successCallback(response) {
                 callingScope.marketAds = response.data;
             }, function errorCallback(response) {

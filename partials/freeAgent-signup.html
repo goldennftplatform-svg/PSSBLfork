@@ -1,11 +1,11 @@
-﻿<div class="container main-body">
+<div class="container main-body">
     <section id="main" class="content-container">
 
         <div ng-switch on="freeAgent.page">
 
             <!-- Main freeAgent registration page  -->
             <div ng-switch-when="EnterFreeAgent">
-                <h1 ng-click="callDebug()">Register for the {{currentYear}} PSSBL Waiver Wire&nbsp;<img ng-show="freeAgent.loadingData" src="img/loading1.gif" title="Loading" /></h1>
+                <h1 ng-click="callDebug()">Register for the {{currentYear}} PCBL Waiver Wire&nbsp;<img ng-show="freeAgent.loadingData" src="img/loading1.gif" title="Loading" /></h1>
                 <!--
                     Pressed for time here, but eventually need to move all styling to .css file
                     and reformat for responsive display.
@@ -81,7 +81,7 @@
                         <td class="tg-kjho">
                             <h2> WAIVER WIRE DESCRIPTION:</h2>
                             <b>The Waiver Wire is intended for players who currently are NOT rostered on a team.
-                            If you are currently on a Team in the PSSBL, do not proceed.</b><br>
+                            If you are currently on a Team in the PCBL, do not proceed.</b><br>
                             <b>Waiver Wire</b> - While all teams already have rosters of 15 or more players by the conclusion of the draft, situations often arise during the season which cause teams to need additional players. 
                             The league player agent maintains a list of players who wish to be considered as late adds and distributes this list to all teams periodically throughout the season.  
                             Every effort will be made to help players find a team, but understand that it will be on a best effort basis and depends largely on the needs of the teams.
@@ -160,7 +160,7 @@
                             </div>
                             <div class="form-group">
                                 <h3> PROFILE PICTURE INSTRUCTIONS:</h3>
-                                <strong>Please provide and up-to-date picture of yourself for your profile. To do so, email a < 1MB image to <a href="mailto:support@pssbl.com">support@pssbl.com</a>
+                                <strong>Please provide and up-to-date picture of yourself for your profile. To do so, email a < 1MB image to <a href="mailto:info@pcbl.org">info@pcbl.org</a>
                                 with [Waiver Wire Profile Picture] in the subject line and include your full name in the body.</strong>
                             </div>
                         </td>
@@ -193,7 +193,7 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">freeAgent Registration Successful</h2>
                     <p>
-                        You have successfully registered for the {{currentYear}} PSSBL Waiver Wire Pool.
+                        You have successfully registered for the {{currentYear}} PCBL Waiver Wire Pool.
                         The Player Agent will review you application and Approve or Reject.
                     </p>
                     <p>
@@ -207,8 +207,8 @@
                     </p>
 
                     <p>
-                        If you have additional questions about the Waiver Wire process, contact <a href="mailto:info@pssbl.com">info@pssbl.com</a>. 
-                        If you have any technical issues with the signup process, contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> <br />
+                        If you have additional questions about the Waiver Wire process, contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>. 
+                        If you have any technical issues with the signup process, contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> <br />
                     </p>
                 </div>
                 <div class="row"><canvas width="200" height="400"></canvas></div>
@@ -219,7 +219,7 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">Waiver Wire Registration Unsuccessful</h2>
                     <p>
-                        The system was unable to register you for the {{currentYear}} Waiver Wire Pool. Please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> and report the
+                        The system was unable to register you for the {{currentYear}} Waiver Wire Pool. Please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> and report the
                         following error: "{{freeAgent.result.error}}"
                     </p>
                 </div>

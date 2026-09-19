@@ -64,7 +64,7 @@ app.directive('checkImage', function () {
     return {
         link: function (scope, element, attrs) {
             element.bind('error', function () {
-                element.attr('src', '/data/upload/photos/draft/missing.png'); // set default image
+                element.attr('src', 'data/upload/photos/draft/missing.png'); // set default image
             });
         }
     }

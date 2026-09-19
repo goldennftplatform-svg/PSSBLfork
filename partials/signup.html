@@ -1,4 +1,4 @@
-﻿<div class="container main-body">
+<div class="container main-body">
     <section id="main" class="content-container">
 
         <div ng-switch on="signup.page">
@@ -88,9 +88,9 @@
                     </tr>
                     <tr>
                         <td class="tg-kjho" colspan="2">
-                            Please do not create a new account if you have previously established an account on PSSBL. If you have played in the
+                            Please do not create a new account if you have previously established an account on PCBL. If you have played in the
                             league since 2006 or have tried out in either of the last two seasons, you likely already have an account here. If you can not
-                            remember the login information for that account, please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> rather than creating
+                            remember the login information for that account, please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> rather than creating
                             a new account. Thank you.
                         </td>
                     </tr>
@@ -112,7 +112,7 @@
                                         <input name="signup-email" type="email" disabled ng-model="signup.email" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="signup-password" class="control-label">Password (Select a password to log in to PSSBL.com)</label>
+                                        <label for="signup-password" class="control-label">Password (Select a password to log in to PCBL.com)</label>
                                         <input name="signup-password" type="password" ng-model="signup.password" placeholder="password" required min-length="6" class="form-control">
                                     </div>
                                     <div class="form-group">
@@ -189,7 +189,7 @@
                     </p>
                     <p>
                         If you are unable to locate the mail at all, please
-                        contact <a href="mailto:support@pssbl.com">support@pssbl.com</a>
+                        contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>
                     </p>
                 </div>
                 <div class="row"><canvas width="200" height="400"></canvas></div>
@@ -224,9 +224,9 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">Account Created</h2>
                     <p>
-                        Your account on PSSBL.com has been created. Click the "Login" button on the top right of the page to login to your new account.
+                        Your account on PCBL.com has been created. Click the "Login" button on the top right of the page to login to your new account.
                         <strong>Please note that creating an account does not automatically register you for the draft or as a team member and additional registration steps
-                        are required!</strong> If you are new to the PSSBL,
+                        are required!</strong> If you are new to the PCBL,
                         you will be able to register for the {{currentYear}} draft. You may also register with a team if you are invited to join by the General Manager,
                         subject to divisional restrictions. After logging in, look for the "Registration" menu item under your name (where the "Login" button orginally appeared) to
                         continue the registration process. You can also click the button below to continue the registration process.
@@ -241,7 +241,7 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">Account Creation Failed</h2>
                     <p>
-                        The system was unable to create the account. Please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> and report the
+                        The system was unable to create the account. Please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> and report the
                         following error: "{{signup.createResult.error}}"
                     </p>
                 </div>
@@ -253,7 +253,7 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">Signup Mail Could Not Be Sent</h2>
                     <p>
-                        The system was unable to send the invitation mail. Please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a> and report the
+                        The system was unable to send the invitation mail. Please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> and report the
                         following error: "{{signup.error}}"
                     </p>
                 </div>
@@ -270,7 +270,7 @@
                     </p>
                     <p>
                         If you are unable to resolve this issue, please
-                        contact <a href="mailto:support@pssbl.com">support@pssbl.com</a>
+                        contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>
                     </p>
                 </div>
                 <div class="row"><canvas width="200" height="400"></canvas></div>
@@ -285,16 +285,16 @@
                     </p> 
                     <p>   
                         <p><strong>Taxi Pool</strong></p>
-                        <p>The Taxi Pool is a pool (or sub-group) of PSSBL members who wish to be contacted from time to time to play for teams requesting additional players for a particular game.</p>
+                        <p>The Taxi Pool is a pool (or sub-group) of PCBL members who wish to be contacted from time to time to play for teams requesting additional players for a particular game.</p>
                         <p>
                         The purposes of the Taxi Pool are: a) to ensure that no game is ever forfeited due to a lack of available players on a team, and b) to provide an opportunity for the League's members to play in extra games.   
                         More details can be found here:  Taxi Pool Policy
                         </p>
                     </p>
                     <p>
-                        All members of the PSSBL are eligible to participate in the Taxi Pool, so all that is required is to register and pay the PSSBL base dues of {{season.baseDues}}. 
+                        All members of the PCBL are eligible to participate in the Taxi Pool, so all that is required is to register and pay the PCBL base dues of {{season.baseDues}}. 
                         Taxi pool usage is based on the needs of the teams, so there is no guaranteed number of games a player will be invited to play; however we do prioritize “Taxi-Pool” only players in the selection. 
-                        Follow the instructions at the <a href="https://pssbl.com/#!/articles/existing-player-help#taxireg">FAQ</a> (How / when can I sign up?) to register for the taxi pool.
+                        Follow the instructions at the <a href="#!/articles/existing-player-help#taxireg">FAQ</a> (How / when can I sign up?) to register for the taxi pool.
                     </p>
                     <p>
                         <p><strong>Free Agents</strong></p>
@@ -314,19 +314,19 @@
                 <div class="col-md-8 col-md-offset-2 well">
                     <h2 ngclick="callDebug()">Request New Account &nbsp;<img ng-show="signup.loadingData" src="img/loading1.gif" title="Loading" /></h2>
                     <p>
-                        In order to register for the {{season.currentYear}} player draft, you must first have an account on PSSBL.com.                    </p>
+                        In order to register for the {{season.currentYear}} player draft, you must first have an account on PCBL.com.                    </p>
                     <p>
                         In the form below, please enter a valid e-mail address that will serve as your login account name on this web site. You will be sent an
                         email asking you to confirm this request. It will include a link that will return you to the site with an opportunity to register for an
                         account. You will then be able to log in and register for the draft.
                     </p>
                     <p>
-                        Please do not submit a request if you already have an account on PSSBL.com. Anyone who has played in the league or tried out for a team since
+                        Please do not submit a request if you already have an account on PCBL.com. Anyone who has played in the league or tried out for a team since
                         2006 is likely to already have an account.
                     </p>
                     <p>
                         If you do not receive the email message within a few minutes, remember to check your junk mail folder as well. If you are unable to locate the
-                        mail at all, please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a>
+                        mail at all, please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>
                     </p>
                     <form name="requestForm" class="form">
                         <noscript>

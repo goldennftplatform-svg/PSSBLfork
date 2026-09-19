@@ -1,0 +1,15 @@
+# OS / editor junk
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Node / build detritus (none of the app builds, but keep the tree clean)
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Temp / generated scratch
+*.tmp
+*.log
+System.Drawing.*
+elk-stats/

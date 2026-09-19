@@ -1,4 +1,4 @@
-var app = angular.module('pssblApp', ['ui.bootstrap', 'ngRoute', 'ngSanitize', 'ngCkeditor', 'ui.bootstrap']);
+var app = angular.module('pcblApp', ['ui.bootstrap', 'ngRoute', 'ngSanitize', 'ngCkeditor', 'ui.bootstrap']);
 
 app.config(['$routeProvider',
   function ($routeProvider) {

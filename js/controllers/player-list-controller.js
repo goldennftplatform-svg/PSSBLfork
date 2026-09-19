@@ -692,7 +692,7 @@
     function LoadLeagueDraft() {
         // Load league draft info
         // Should only happen on Init or refresh
-        var filePath = "/data/draft/" + $scope.draft.year + "/league";
+        var filePath = "data/draft/" + $scope.draft.year + "/league";
         $scope.buffer.loadType = "league";
         authFactory.loadJson($scope.buffer, filePath);
     }
@@ -700,14 +700,14 @@
     function SaveLeagueDraft() {
         // Save league draft info
         // Only do this when switching draft divisions, or on key status events.
-        var filePath = "/data/draft/" + $scope.draft.year + "/league";
+        var filePath = "data/draft/" + $scope.draft.year + "/league";
         authFactory.saveJson($scope.draft.league, $scope.draft.league, filePath);
     }
 
     function LoadDivisionDraft(divisionName) {
         // Load division draft info
         // Happens on Init, refresh or possibly on Undo
-        var filePath = "/data/draft/" + $scope.draft.year + "/" + divisionName + "_Current";
+        var filePath = "data/draft/" + $scope.draft.year + "/" + divisionName + "_Current";
         $scope.buffer.loadType = "division";
         $scope.buffer.status = null;
         authFactory.loadJson($scope.buffer, filePath);
@@ -718,7 +718,7 @@
         // Save league draft info
         // Save on every action that changes contents
         var UNDO_LEVELS = 5 //  (5 levels of undo)
-        var filePath = "/data/draft/" + $scope.draft.year + "/" + divisionName;
+        var filePath = "data/draft/" + $scope.draft.year + "/" + divisionName;
         authFactory.saveJson($scope.draft.division, $scope.draft.division, filePath + "_Current");
         // Save extra copy for undo purposes
         var undoVersion = $scope.draft.division.version % (UNDO_LEVELS + 1);

@@ -12,7 +12,7 @@
                 <p style="text-align:center">
                     <img src="img/clipart/safeco.jpg" align="middle" style="max-width:100%" />
                 </p>
-                <h1 ng-click="callDebug()">Register for {{currentYear}} PSSBL Safeco Field Event</h1>
+                <h1 ng-click="callDebug()">Register for {{currentYear}} PCBL Field Event</h1>
 
                 <table class="table table-bordered">
                     <tr>
@@ -47,7 +47,7 @@
                         <td ng-if="event.status=='Paid'" colspan="2">
                             <span style="color:green"><strong>You have successfully registered and paid for this event</strong></span>
                         </td>
-                        <td ng-show="false" style="width:30%">You can pay later or send a check for payment to: PSSBL, P.O. Box 577, Seattle, WA  98111-0177</td>
+                        <td ng-show="false" style="width:30%">You can pay later or mail a check; contact <a href="mailto:info@pcbl.org">info@pcbl.org</a> for the mailing address.</td>
                         <td><h3>{{.01 * event.amountDue | currency}}</h3></td>
                     </tr>
                 </table>
@@ -60,7 +60,7 @@
                             <h2>Event Registration Failure</h2>
                             <p>
                                 There was a problem accessing event registration information on the server.
-                                <br />Please contact <a href="mailto:support@pssbl.com">support@pssbl.com</a>. and report the following error:
+                                <br />Please contact <a href="mailto:info@pcbl.org">info@pcbl.org</a>. and report the following error:
                                 <br />{{event.error}}
                             </p>
                         </div>
