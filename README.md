@@ -81,7 +81,23 @@ Set real passwords as host secrets, not in git. Missing keys fall back to `playb
 
 GitHub Pages can serve the frontend, but cannot run this live server. Without `/api/config`, the UI visibly switches to **LOCAL DEMO**: games are saved in that browser's local storage and the password is only a demonstration gate. This is not secure or cross-device live scoring. Sharing is disabled in local demo mode. Serve the frontend and API together on the Node host for real shared games.
 
-## Development
+## Admin & historical game recovery
+
+The footer now links to **Admin** (`/#admin`) and **Historical results** (`/#history`). Set a separate **`ADMIN_PASSWORD`** environment variable in Render and redeploy to unlock the importer. Team passwords cannot access it. Admin remains disabled until that setting exists.
+
+Upload old **CSV, TSV or JSON** game exports (up to 2 MB / 1,000 rows). The server preserves the original source, parses team names/dates/scores, flags assumptions and duplicates, and shows a row-by-row preview. An administrator explicitly approves selected valid rows before publishing. Recovered records and filtered team totals appear on the historical-results page, separate from live games. Final GameDay JSON exports can also recover native event-derived details. Scanned scorecards/PDFs need transcription; missing innings/player stats are never invented.
+
+Use a persistent disk for `DATA_DIR`; ephemeral hosting is not a durable archive. Admin can download original files, review reports and a full private backup.
+
+**[Full migration guide and formats →](docs/history-import.md)**
+
+```sh
+npm run history:parse -- old-games.csv --season "2025 Fall" --out review.json
+```
+
+The standalone script previews only; it never publishes records automatically.
+
+## Development checks
 
 ```sh
 npm test
@@ -93,6 +109,9 @@ npm test
 - `assets/teams.js`: sourced PCBL clubs and clearly labeled mock lineup generator.
 - `assets/gameday.css`: responsive California visual design.
 - `server.mjs`: authentication, persistence, API, live events; serves only current frontend files.
+- `assets/admin.js`: protected upload/review interface and public historical-results view.
+- `lib/history-parser.mjs`, `lib/history-store.mjs`: parser, private originals, review reports, deduplication and publication audit.
+- `scripts/parse-history.mjs`: offline, dry-run migration parser.
 - `tests/`: scoring and server integration tests.
 
 Everything you do matters. Connect the dots.

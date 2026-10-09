@@ -4,26 +4,69 @@ import {randomUUID, randomBytes, scryptSync, timingSafeEqual} from 'node:crypto'
 import {fileURLToPath} from 'node:url';
 import {createGame, append} from './assets/engine.js';
 import {allTeams, teams} from './assets/teams.js';
+import {historyStore} from './lib/history-store.mjs';
 
-export async function startServer({port = Number(process.env.PORT || 8080), directory = process.env.DATA_DIR || './runtime', passwords = JSON.parse(process.env.TEAM_PASSWORDS || '{}')} = {}) {
+export async function startServer({port = Number(process.env.PORT || 8080), directory = process.env.DATA_DIR || './runtime', passwords = JSON.parse(process.env.TEAM_PASSWORDS || '{}'), adminPassword = process.env.ADMIN_PASSWORD || ''} = {}) {
   await mkdir(directory, {recursive: true});
   let games = {};
   try {games = JSON.parse(await readFile(`${directory}/games.json`, 'utf8'));} catch (e) {if (e.code !== 'ENOENT') throw e;}
   const salt = randomBytes(32), keys = Object.fromEntries(allTeams.map(t => [t.id, scryptSync(passwords[t.id] || 'playball123', salt, 32)]));
+  const history = await historyStore(directory);
+  const adminKey = adminPassword ? scryptSync(adminPassword, salt, 32) : null;
   const sessions = new Map(), attempts = new Map(), listeners = new Map();
   let queue = Promise.resolve();
   function serialize(fn) {const pending = queue.then(fn); queue = pending.catch(() => {}); return pending;}
   async function save(next) {await writeFile(`${directory}/games.tmp`, JSON.stringify(next)); await rename(`${directory}/games.tmp`, `${directory}/games.json`); games = next;}
   const json = (res, code, data) => {res.writeHead(code, {'Content-Type': 'application/json', 'Cache-Control': 'no-store'}); res.end(JSON.stringify(data));};
-  async function body(req) {
-    let content = ''; for await (const chunk of req) {content += chunk; if (content.length > 65536) throw Error('Request too large.');}
-    return JSON.parse(content || '{}');
+  async function body(req, limit = 65536) {
+    const chunks = []; let size = 0;
+    for await (const chunk of req) {size += chunk.length; if (size > limit) throw Error('Request too large.'); chunks.push(chunk);}
+    return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}');
   }
   const server = http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url, 'http://localhost');
       if (req.method === 'POST' && req.headers.origin && new URL(req.headers.origin).host !== req.headers.host) return json(res, 403, {error: 'Cross-origin writes are disabled.'});
-      if (url.pathname === '/api/config') return json(res, 200, {live: true, demoPassword: teams.some(t => !passwords[t.id])});
+      if (url.pathname === '/api/config') return json(res, 200, {live: true, demoPassword: teams.some(t => !passwords[t.id]), adminConfigured: !!adminKey});
+      if (url.pathname === '/api/history' && req.method === 'GET') return json(res, 200, history.publicRecords());
+      if (url.pathname === '/api/admin/login' && req.method === 'POST') {
+        if (!adminKey) return json(res, 503, {error: 'Admin access is not configured. Set ADMIN_PASSWORD in the Render service Environment settings and redeploy.'});
+        const ip = `admin:${req.socket.remoteAddress}`, old = attempts.get(ip), record = old && old.until > Date.now() ? old : {count: 0, until: Date.now() + 60000};
+        attempts.set(ip, record);
+        if (++record.count > 5) return json(res, 429, {error: 'Too many admin login attempts. Wait a minute.'});
+        const b = await body(req);
+        if (typeof b.password !== 'string' || b.password.length > 200 || !timingSafeEqual(adminKey, scryptSync(b.password, salt, 32))) return json(res, 401, {error: 'Incorrect admin password.'});
+        const token = randomBytes(32).toString('hex'); sessions.set(token, {role: 'admin', expires: Date.now() + 2 * 3600000});
+        return json(res, 200, {token});
+      }
+      if (url.pathname.startsWith('/api/admin/')) {
+        const session = sessions.get((req.headers.authorization || '').replace(/^Bearer /, ''));
+        if (!session || session.role !== 'admin' || session.expires < Date.now()) return json(res, 401, {error: 'Sign in with the separate admin password.'});
+        if (url.pathname === '/api/admin/logout' && req.method === 'POST') {
+          sessions.delete((req.headers.authorization || '').replace(/^Bearer /, '')); return json(res, 200, {success: true});
+        }
+        if (url.pathname === '/api/admin/imports' && req.method === 'GET') return json(res, 200, history.list());
+        if (url.pathname === '/api/admin/imports' && req.method === 'POST') return json(res, 201, await history.upload(await body(req, 4 * 1024 * 1024)));
+        if (url.pathname === '/api/admin/backup' && req.method === 'GET') {
+          res.setHeader('Content-Disposition', 'attachment; filename="gameday-history-backup.json"');
+          return json(res, 200, history.backup());
+        }
+        const importMatch = url.pathname.match(/^\/api\/admin\/imports\/([\w-]+)(?:\/(source|publish))?$/);
+        if (importMatch) {
+          if (req.method === 'GET' && !importMatch[2]) return json(res, 200, history.preview(importMatch[1]));
+          if (req.method === 'GET' && importMatch[2] === 'source') {
+            const source = history.source(importMatch[1]);
+            res.writeHead(200, {'Content-Type': 'application/octet-stream', 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'no-store', 'Content-Disposition': `attachment; filename="original-export.txt"; filename*=UTF-8''${encodeURIComponent(source.filename)}`});
+            return res.end(source.content);
+          }
+          if (req.method === 'POST' && importMatch[2] === 'publish') {
+            const b = await body(req);
+            if (b.confirm !== true) return json(res, 400, {error: 'Explicit review confirmation is required before publishing historical records.'});
+            return json(res, 200, await history.publish(importMatch[1], b.rows));
+          }
+        }
+        return json(res, 404, {error: 'Admin endpoint not found.'});
+      }
       if (url.pathname === '/api/login' && req.method === 'POST') {
         const ip = req.socket.remoteAddress, old = attempts.get(ip), record = old && old.until > Date.now() ? old : {count: 0, until: Date.now() + 60000};
         attempts.set(ip, record);
@@ -46,7 +89,7 @@ export async function startServer({port = Number(process.env.PORT || 8080), dire
       }
       if (req.method === 'POST' && (url.pathname === '/api/games' || match)) {
         const session = sessions.get((req.headers.authorization || '').replace(/^Bearer /, ''));
-        if (!session || session.expires < Date.now()) return json(res, 401, {error: 'Sign in with your team password.'});
+        if (!session || !session.team || session.expires < Date.now()) return json(res, 401, {error: 'Sign in with your team password.'});
         const b = await body(req);
         return await serialize(async () => {
           if (!match) {
@@ -65,7 +108,7 @@ export async function startServer({port = Number(process.env.PORT || 8080), dire
         });
       }
       if (url.pathname.startsWith('/api/')) return json(res, 404, {error: 'Endpoint not found.'});
-      const file = {'/': 'index.html', '/index.html': 'index.html', '/assets/app.js': 'assets/app.js', '/assets/engine.js': 'assets/engine.js', '/assets/teams.js': 'assets/teams.js', '/assets/views.js': 'assets/views.js', '/assets/gameday.css': 'assets/gameday.css'}[url.pathname];
+      const file = {'/': 'index.html', '/index.html': 'index.html', '/assets/app.js': 'assets/app.js', '/assets/admin.js': 'assets/admin.js', '/assets/engine.js': 'assets/engine.js', '/assets/teams.js': 'assets/teams.js', '/assets/views.js': 'assets/views.js', '/assets/gameday.css': 'assets/gameday.css'}[url.pathname];
       if (!file || !['GET', 'HEAD'].includes(req.method)) return json(res, 404, {error: 'Not found.'});
       const content = await readFile(new URL(file, import.meta.url));
       res.writeHead(200, {'Content-Type': file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin'});

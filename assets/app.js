@@ -5,6 +5,7 @@ import {mockRoster} from './teams.js';
 const app = document.querySelector('#app');
 let live = false, demoPassword = true, games = [], game = null, session = null;
 let stream = null, pending = null, connection = '', busy = false;
+let pageCleanup = null;
 try {session = JSON.parse(sessionStorage.getItem('pcbl-session'));} catch {}
 const localKey = 'california-gameday-v1';
 const context = () => ({live, demoPassword, games, game, session, connection});
@@ -75,7 +76,14 @@ async function route() {
     return;
   }
   stream?.close(); stream = null;
+  pageCleanup?.(); pageCleanup = null;
   document.querySelector('dialog')?.close();
+  if (['#admin', '#history'].includes(location.hash)) {
+    game = null;
+    const {mountAdmin, mountHistory} = await import('./admin.js');
+    pageCleanup = await (location.hash === '#admin' ? mountAdmin : mountHistory)(app, {live});
+    return;
+  }
   games = live ? await api('games') : JSON.parse(localStorage.getItem(localKey) || '[]');
   const id = location.hash.match(/^#game\/([\w-]+)$/)?.[1];
   game = id ? games.find(g => g.id === id) : null;
@@ -188,6 +196,7 @@ document.addEventListener('change', event => {
 window.addEventListener('hashchange', () => guarded(route));
 window.addEventListener('storage', e => {
   if (!live && e.key === localKey) guarded(async () => {
+    if (['#admin', '#history'].includes(location.hash)) return;
     games = JSON.parse(localStorage.getItem(localKey) || '[]');
     if (game) {game = games.find(g => g.id === game.id); scorecard();} else dashboard();
   });
