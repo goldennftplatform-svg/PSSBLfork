@@ -2,7 +2,15 @@
 
 A mobile-first baseball hub and browser scorecard for the California PCBL proposal. No app installation. Open a game link to follow it; sign in with the scoring team's password to record plays.
 
-The previous Washington articles, team records, images, affiliate links, forms, and PHP connections have been removed. The new region covers Los Angeles County, Orange County, San Diego County, and the Inland Empire. These are **demo clubs**, not verified PCBL membership or schedules. Supply official teams and rosters before using this as the league's record system.
+The previous Washington articles, team records, images, affiliate links, forms, and PHP connections have been removed. The team directory now includes **28 published PCBL team names** from the LA League and Majors directories linked from pcbl.com, checked October 9, 2026: 8 AAA, 5 AA, 8 Single A, 6 active Majors, and Crooks (listed inactive). These are sourced names/divisions; generated batting orders and games remain **mock records**, not official league results.
+
+The layout adapts to widescreen desktops, iPads in portrait and landscape, and phones. Desktop uses a two-column game hub and side-by-side scoring workspace; tablets retain a game/feed split; phone controls remain touch-sized. Wide score tables scroll within their panels instead of widening the page.
+
+### Published team directory
+
+Sources: [PCBL LA League](https://www.pcbl.com/la-league) → [LA teams](https://www.htosports.com/teams/default.asp?u=PCBLLA&s=baseball&p=teams), and [PCBL Majors](https://www.pcbl.com/majors-division) → [Majors teams](https://www.htosports.com/teams/default.asp?u=PCBLMAJORS&s=baseball&p=teams). `assets/teams.js` records source URLs, retrieval date, stable team IDs, division, and active/inactive status. Source IDs are preserved even where a team's current name differs from its older URL.
+
+All 28 clubs are selectable for mock testing, grouped by division. Nine explicitly labeled demo players are prefilled per lineup. Changing a team refreshes an untouched demo lineup; user-edited names are preserved. No official players, schedules, standings, or results are imported. The four old regional demo IDs remain readable for existing saved games and passwords but are not included in the published club count. This is a snapshot, not an ongoing scrape.
 
 ## Run shared live scoring
 
@@ -58,12 +66,12 @@ Environment variables:
 |---|---|
 | `PORT` | HTTP port, default `8080` |
 | `DATA_DIR` | Persistent storage folder, default `./runtime` |
-| `TEAM_PASSWORDS` | JSON map with `la`, `oc`, `sd`, `ie` passwords |
+| `TEAM_PASSWORDS` | JSON map keyed by IDs in `assets/teams.js`, e.g. `berserkers`, `braves`, `cba-tigers`; legacy IDs remain supported |
 
 Example PowerShell for local testing with custom passwords:
 
 ```powershell
-$env:TEAM_PASSWORDS='{"la":"replace-la-password","oc":"replace-oc-password","sd":"replace-sd-password","ie":"replace-ie-password"}'
+$env:TEAM_PASSWORDS='{"berserkers":"replace-berserkers-password","braves":"replace-braves-password","cba-tigers":"replace-tigers-password"}'
 npm start
 ```
 
@@ -81,6 +89,8 @@ npm test
 
 - `assets/engine.js`: deterministic event-based scoring and validation.
 - `assets/app.js`: hub, login, scorer, spectator view, local demo.
+- `assets/views.js`: dashboard, sourced team directory, responsive scorebook markup.
+- `assets/teams.js`: sourced PCBL clubs and clearly labeled mock lineup generator.
 - `assets/gameday.css`: responsive California visual design.
 - `server.mjs`: authentication, persistence, API, live events; serves only current frontend files.
 - `tests/`: scoring and server integration tests.

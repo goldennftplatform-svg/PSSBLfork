@@ -17,6 +17,16 @@ test('team authorization, persistence, concurrent updates and spectator live str
     assert.equal((await request('login', {team: 'la', password: 'bad'})).status, 401);
     const la = (await request('login', {team: 'la', password: 'playball123'})).data.token;
     const oc = (await request('login', {team: 'oc', password: 'playball123'})).data.token;
+    const braves = (await request('login', {team: 'braves', password: 'playball123'})).data.token;
+    const mock = await request('games', {away: 'braves', home: 'cba-tigers', rosters: {away: ['BR Demo Player 1'], home: ['CT Demo Player 1']}}, braves);
+    assert.equal(mock.status, 201);
+    assert.equal(mock.data.owner, 'braves');
+    assert.equal((await request(`games/${mock.data.id}`, {version: 0, event: {type: 'pitch', value: 'ball'}}, la)).status, 403);
+    for (const module of ['views', 'teams']) {
+      const asset = await fetch(`${base}/assets/${module}.js`);
+      assert.equal(asset.status, 200);
+      assert.match(asset.headers.get('content-type'), /javascript/);
+    }
     const payload = {away: 'la', home: 'oc', rosters: {away: ['A'], home: ['B']}};
     assert.equal((await request('games', payload)).status, 401);
     const g = (await request('games', payload, la)).data;

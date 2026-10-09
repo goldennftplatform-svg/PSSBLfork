@@ -1,12 +1,8 @@
-export const teams = [
-  {id: 'la', name: 'Los Angeles', region: 'Los Angeles County'},
-  {id: 'oc', name: 'Orange County', region: 'Orange County'},
-  {id: 'sd', name: 'San Diego', region: 'San Diego County'},
-  {id: 'ie', name: 'Inland Empire', region: 'Riverside / San Bernardino'}
-];
+import {allTeams} from './teams.js';
+export {teams} from './teams.js';
 export const results = ['1B', '2B', '3B', 'HR', 'BB', 'HBP', 'K', 'OUT', 'SAC', 'E', 'FC'];
 export function createGame(id, away, home, rosters, innings = 9) {
-  if (!teams.some(t => t.id === away) || !teams.some(t => t.id === home) || away === home) throw Error('Choose two different California teams.');
+  if (!allTeams.some(t => t.id === away) || !allTeams.some(t => t.id === home) || away === home) throw Error('Choose two different California teams.');
   for (const side of ['away', 'home']) {
     if (!Array.isArray(rosters[side]) || rosters[side].length < 1 || rosters[side].length > 15 || rosters[side].some(n => typeof n !== 'string' || !n.trim() || n.length > 60)) throw Error('Enter 1–15 player names per lineup, at most 60 characters each.');
   }

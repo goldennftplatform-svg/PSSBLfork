@@ -2,13 +2,14 @@ import http from 'node:http';
 import {readFile, writeFile, mkdir, rename} from 'node:fs/promises';
 import {randomUUID, randomBytes, scryptSync, timingSafeEqual} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {teams, createGame, append} from './assets/engine.js';
+import {createGame, append} from './assets/engine.js';
+import {allTeams, teams} from './assets/teams.js';
 
 export async function startServer({port = Number(process.env.PORT || 8080), directory = process.env.DATA_DIR || './runtime', passwords = JSON.parse(process.env.TEAM_PASSWORDS || '{}')} = {}) {
   await mkdir(directory, {recursive: true});
   let games = {};
   try {games = JSON.parse(await readFile(`${directory}/games.json`, 'utf8'));} catch (e) {if (e.code !== 'ENOENT') throw e;}
-  const salt = randomBytes(32), keys = Object.fromEntries(teams.map(t => [t.id, scryptSync(passwords[t.id] || 'playball123', salt, 32)]));
+  const salt = randomBytes(32), keys = Object.fromEntries(allTeams.map(t => [t.id, scryptSync(passwords[t.id] || 'playball123', salt, 32)]));
   const sessions = new Map(), attempts = new Map(), listeners = new Map();
   let queue = Promise.resolve();
   function serialize(fn) {const pending = queue.then(fn); queue = pending.catch(() => {}); return pending;}
@@ -64,7 +65,7 @@ export async function startServer({port = Number(process.env.PORT || 8080), dire
         });
       }
       if (url.pathname.startsWith('/api/')) return json(res, 404, {error: 'Endpoint not found.'});
-      const file = {'/': 'index.html', '/index.html': 'index.html', '/assets/app.js': 'assets/app.js', '/assets/engine.js': 'assets/engine.js', '/assets/gameday.css': 'assets/gameday.css'}[url.pathname];
+      const file = {'/': 'index.html', '/index.html': 'index.html', '/assets/app.js': 'assets/app.js', '/assets/engine.js': 'assets/engine.js', '/assets/teams.js': 'assets/teams.js', '/assets/views.js': 'assets/views.js', '/assets/gameday.css': 'assets/gameday.css'}[url.pathname];
       if (!file || !['GET', 'HEAD'].includes(req.method)) return json(res, 404, {error: 'Not found.'});
       const content = await readFile(new URL(file, import.meta.url));
       res.writeHead(200, {'Content-Type': file.endsWith('.js') ? 'text/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin'});

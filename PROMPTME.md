@@ -4,7 +4,7 @@ The user's current direction supersedes the previous mirror/archive policy: remo
 
 - Current stack: dependency-free Node 22 server and vanilla ES-module frontend.
 - Run `npm start`; verify with `npm test` and a browser at mobile width.
-- California demo teams are defined in `assets/engine.js`. Do not describe them as official league teams. Obtain actual clubs and rosters from the owner.
+- `assets/teams.js` contains 28 names from PCBL's linked LA/Majors team directories, checked 2026-10-09. Preserve attribution, source IDs, division membership, and the inactive Crooks label. Player lineups and generated games are mock data; never present them as official results. Preserve legacy IDs for existing games.
 - Testing password is `playball123` for each club. Production passwords come from server-only `TEAM_PASSWORDS` JSON.
 - True cross-device live scoring requires the Node server. GitHub Pages runs a clearly labeled local demo only. Never imply localStorage or a client-side password is secure shared infrastructure.
 - Server writes require a token scoped to the game's owner team and the current game version. Keep validation in the shared engine, not only the UI.
@@ -14,4 +14,6 @@ The user's current direction supersedes the previous mirror/archive policy: remo
 - `runtime/` contains private operational data and must not be committed. Only allowlisted frontend files are served by Node.
 - No requests to legacy Washington APIs, no archived Washington pages, no old merchant or affiliate links.
 - No dependencies, generated bundles, or package lock needed currently. Prefer targeted meaningful tests for scoring and authorization changes.
-- Commit/push/deploy only when requested. A static deployment alone does not deploy the live service.
+- Responsive layouts live in `assets/gameday.css`; templates in `assets/views.js`. Check 390px phones, 768/820px portrait tablets, 1024/1180px landscape tablets, and 1440/1920px desktops. Table overflow must stay within the panel. Keep a 44px minimum interactive target.
+- Standing user authorization: automatically commit and push completed, checked builds to `main` so the connected Render service can deploy them. No repeated approval needed. Stage only intended files, never secrets, and verify deployment before claiming a build is live. The live service is https://pssblfork.onrender.com/; GitHub Pages is only the local-demo frontend.
+- Do not open visible browser pages on the user's PC without permission. Use background HTTP checks and automated tests; be explicit about any visual checks not performed.
