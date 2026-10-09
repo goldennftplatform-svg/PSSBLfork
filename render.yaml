@@ -1,0 +1,24 @@
+# Paid web service + persistent disk. Review Render's price before deploying.
+# One instance only: the current game store is a single JSON file.
+services:
+  - type: web
+    name: california-gameday
+    runtime: node
+    region: oregon
+    plan: 0.5c-512mb
+    numInstances: 1
+    buildCommand: npm test
+    startCommand: npm start
+    healthCheckPath: /api/config
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data/gameday
+    disk:
+      name: gameday-records
+      mountPath: /var/data
+      sizeGB: 1

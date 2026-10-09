@@ -33,6 +33,23 @@ Runner advancement is **suggested, never assumed to be official**. Confirm actua
 
 ## Deploy the live server
 
+### Render setup
+
+`render.yaml` configures one Node web service, an API health check, and a 1 GB persistent disk. The build runs the test suite before starting the app. **This uses paid compute and storage**; review the current cost in Render before approving the deployment. The free web service tier is not a durable hosting option for this file-backed game store.
+
+After committing and pushing `render.yaml`:
+
+1. Sign in at https://dashboard.render.com using your hosting account.
+2. Choose **New → Blueprint**, connect GitHub, and select `goldennftplatform-svg/PSSBLfork` on `main`.
+3. Review the service and disk pricing, then deploy the blueprint.
+4. Open the HTTPS service URL Render assigns. It serves both the website and the live API; use this URL for scorers and spectators instead of the GitHub Pages demo.
+5. Confirm the banner reads **LIVE SERVER**. Create a test game, copy its spectator link, and open it on another phone. A saved play should update there automatically.
+6. Restart the service and verify the test game remains. Sign in again after a restart.
+
+The requested testing password remains `playball123`. For real games, set `TEAM_PASSWORDS` in Render's Environment settings using the JSON format below; keep real passwords out of the blueprint and repository. Download JSON exports as additional game backups. Deployments can briefly interrupt connections with a persistent disk; spectator streams reconnect automatically.
+
+### Other Node hosts
+
 Run one Node service using `npm start`. Route HTTPS traffic to its `PORT` (default 8080). Attach a **persistent disk** and set `DATA_DIR` to its mount path. Games are saved atomically to `games.json`; back up this file. A restart preserves games but signs users out. Use a single instance: the JSON store is not a multi-instance database.
 
 Environment variables:
