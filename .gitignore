@@ -13,3 +13,7 @@ package-lock.json
 *.log
 System.Drawing.*
 elk-stats/
+runtime/
+.env
+.env.*
+.playwright-mcp/

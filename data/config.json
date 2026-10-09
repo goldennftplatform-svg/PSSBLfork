@@ -1,9 +1,0 @@
-﻿[
-  {
-    "loggingEnabled": false,
-    "requestBase": "http://www.pssbl.com/PHP/fetchData.php?",
-    "authBase": "http://www.pssbl.com/PHP/admin.php?",
-    "firstYear": 2006,
-    "defaultYear": 2015
-  }
-]

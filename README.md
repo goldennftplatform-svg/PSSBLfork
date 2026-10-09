@@ -1,105 +1,71 @@
-# PSSBLfork — stat-site, rebranded as a PCBL proposal
+# California GameDay
 
-A static fork of the **Puget Sound Senior Baseball League** website (pssbl.com),
-captured September 2026, with the site chrome rebranded to the **Pacific Coast
-Baseball League** (PCBL, the LA adult league at pcbl.com/la-league).
+A mobile-first baseball hub and browser scorecard for the California PCBL proposal. No app installation. Open a game link to follow it; sign in with the scoring team's password to record plays.
 
-Everything you do matters. This is a **proposal build** — a low-cost, zero-
-maintenance way for the PCBL to get a cleaner stats/data site — not a
-claim to own anything that belongs to the league it was forked from.
+The previous Washington articles, team records, images, affiliate links, forms, and PHP connections have been removed. The new region covers Los Angeles County, Orange County, San Diego County, and the Inland Empire. These are **demo clubs**, not verified PCBL membership or schedules. Supply official teams and rosters before using this as the league's record system.
 
----
+## Run shared live scoring
 
-## What this repo is
-
-The full client-side AngularJS 1.6 SPA of pssbl.com, mirrored verbatim:
-
-```
-index.html            app entry point (ng-app="pcblApp")
-partials/             ~54 route templates
-js/                   controllers, services, filters, directives
-css/                  stylesheets (StyleSheet, pcbl, helpbot, tablet)
-img/                  logos, banners, draft board, clipart, ad art
-lib/                  ng-ckeditor.js
-data/library.json     article index (249 content entries)
-data/articles/        259 archived article pages
-data/history/         division history pages
-data/adList.json      sponsor ad list
-data/marketList.json  marketplace ad list
-```
-
-Everything the browser needs is served statically — no build step. External
-libraries (Angular, Bootstrap, ui-bootstrap, Braintree, CKEditor, Font Awesome)
-load from the same CDNs the original uses.
-
-## What was rebranded (and what deliberately was not)
-
-**Changed to PCBL** — site chrome only:
-
-- `index.html` title/meta/OG, favicon (`img/PCBL_favicon.png`), apple-touch icon
-- `partials/header.html` — logo (`img/PCBL_header_logo.png`), banner
-  (`img/PCBL_banner.png`), nav labels (About the PCBL / League Staff / Hall of
-  Fame), social icons → PCBL's real Facebook / Instagram / YouTube / Flickr,
-  contact line → info@pcbl.org
-- `partials/footer.html` — `img/PCBL_footer_logo.png`, outside links, copyright
-- `partials/home.html`, `league.html`, `division.html`, `event.html`,
-  `market.html`, `media.html`, `chat.html` — page titles, copy, the Twitter
-  embed replaced with a "PCBL Around the Web" social link well
-- Form/account partials (signup, register, login, draft, free-agent, waiver,
-  career, admin pages) — brand text, support emails → info@pcbl.org, the
-  Seattle PO Box lines → "contact info@pcbl.org for the mailing address"
-- `css/pssbl.css` → `css/pcbl.css`
-- `js/` — module id `pssblApp` → `pcblApp`, `dataFactory.configure("PSSBL.COM")`
-  guard label, helpbot strings, ICS `PRODID`/`UID`/`ORGANIZER`, admin copy
-- All asset/data paths made relative (`/data/…` → `data/…`, `/img/…` →
-  `img/…`) so the whole tree serves from a repo subpath on GitHub Pages.
-
-**Deliberately kept as-is** — do not "clean these up," they are intentional:
-
-- `data/` (`library.json`, `articles/`, `history/`, `config.json`) — archived
-  verbatim. It is the PSSBL's content and history; a proposal build does not
-  rewrite the source league's pages.
-- `js/services/data-factory.js` — the PSSBL.COM endpoint picker and every API
-  base URL (`fetchData.php`, `admin.php`, `payment.php`, `support.php`) stay
-  functional. As forked, read-only surfaces hit the live pssbl.com endpoints;
-  login/registration/payment will not work against your own backend until this
-  is repointed.
-- Amazon affiliate links (`tag=pssbl-20`) and the Loyaltee merch-store link in
-  `partials/home.html` — keep the PSSBL's revenue streams attached to their own
-  tracking tags. Do not redirect them.
-- `partials/test.html` — dev debug page, left untouched.
-- Article hot-links to `pssbl.com/data/upload/...` videos — external, untouched.
-
-## Run it locally
+Install Node.js 22 or newer, then:
 
 ```sh
-python -m http.server 8000 --directory .
-# open http://localhost:8000
+npm start
 ```
 
-No build, no dependencies.
+Open **http://localhost:8080**. No npm dependencies or build step are needed. On a local network, other devices can open `http://YOUR-COMPUTER-LAN-IP:8080` if the firewall permits it. Public use needs an HTTPS Node host.
 
-## Before this becomes a real site (if the PCBL wants it)
+**Testing password for every team: `playball123`.** Choose a team in the access panel. Create a matchup involving that team, enter batting-order names (one per line), and start scoring. The creating team owns the scorecard. Other teams cannot edit it. Spectator links require no password.
 
-1. **Point the API at your own backend.** `dataFactory.configure(...)` and the
-   season constants in `js/services/data-factory.js`. As long as this points at
-   pssbl.com, the fork keeps reading their public endpoints — fine for the
-   read-only proposal, wrong for a live site.
-2. **Replace `info@pcbl.org`** (used across partials/admin) with whatever
-   mailbox actually owns the inbox. Left as the league's published public
-   address.
-3. **Swap the editorially-odd leftover Seattle bits** you care about (the
-   header's commented survey line, `img/clipart/safeco.jpg` in the event page)
-   — left in because the fork is a mirror, not a redesign.
-4. **Your own backend for auth/payments** if the goal is a full replacement.
+### Included
 
-## Licensing / ownership
+- Mobile scoreboard, inning line score, base occupancy, ball/strike/out counts.
+- Singles, doubles, triples, home runs, walks, hit batters, strikeouts, outs, sacrifices, errors, and fielder's choice.
+- Explicit runner destinations for steals, advances, caught stealing, and multi-out plays.
+- Automatically derived runs, hits, errors, plate appearances, at-bats, runs scored, RBI, walks, strikeouts, total bases, and batting average.
+- Fourth ball / third strike opens a walk / strikeout confirmation. Fouls never increase a two-strike count.
+- Third out advances the half-inning. Extra innings are available; final and walk-off closure are manual.
+- Undo last action, JSON export, persistent game records, and live spectator updates via server-sent events.
+- Server-side password checking, team-scoped write access, expiring sessions, login throttling, and conflict detection when two scorers edit simultaneously.
 
-The site content, league marks, logos, articles and data belong to the Puget
-Sound Senior Baseball League (and, for the rebranded chrome, reference the
-Pacific Coast Baseball League). This fork is for development/evaluation and is
-published under the original fork's name so nobody mistakes it for an official
-PCBL/PSSBL site. Do not present the archived data as your own, and do not run
-this under the PSSBL branding.
+### Scoring boundaries
 
-Connect the dots. Everything here is NFA. ez.
+Runner advancement is **suggested, never assumed to be official**. Confirm actual destinations and RBI before saving. For third-out plays, the scorer must determine whether runs legally count; no runs may count on a force third out or a batter retired before first. The form explains how to exclude those runs. SAC combines sacrifice bunts and flies. Errors count once for a reached-on-error result; multiple fielding errors, pitching stats, earned runs, substitutions, fielding notation, season aggregation, and official rules adjudication are not yet implemented. This is a tested first-pass game scorecard, not a complete official scoring system.
+
+## Deploy the live server
+
+Run one Node service using `npm start`. Route HTTPS traffic to its `PORT` (default 8080). Attach a **persistent disk** and set `DATA_DIR` to its mount path. Games are saved atomically to `games.json`; back up this file. A restart preserves games but signs users out. Use a single instance: the JSON store is not a multi-instance database.
+
+Environment variables:
+
+| Variable | Meaning |
+|---|---|
+| `PORT` | HTTP port, default `8080` |
+| `DATA_DIR` | Persistent storage folder, default `./runtime` |
+| `TEAM_PASSWORDS` | JSON map with `la`, `oc`, `sd`, `ie` passwords |
+
+Example PowerShell for local testing with custom passwords:
+
+```powershell
+$env:TEAM_PASSWORDS='{"la":"replace-la-password","oc":"replace-oc-password","sd":"replace-sd-password","ie":"replace-ie-password"}'
+npm start
+```
+
+Set real passwords as host secrets, not in git. Missing keys fall back to `playball123` for testing. Team passwords are shared within that club; individual accounts/audit identities are not implemented. Rosters and game records are public to spectators—enter only names you intend to publish.
+
+### GitHub Pages
+
+GitHub Pages can serve the frontend, but cannot run this live server. Without `/api/config`, the UI visibly switches to **LOCAL DEMO**: games are saved in that browser's local storage and the password is only a demonstration gate. This is not secure or cross-device live scoring. Sharing is disabled in local demo mode. Serve the frontend and API together on the Node host for real shared games.
+
+## Development
+
+```sh
+npm test
+```
+
+- `assets/engine.js`: deterministic event-based scoring and validation.
+- `assets/app.js`: hub, login, scorer, spectator view, local demo.
+- `assets/gameday.css`: responsive California visual design.
+- `server.mjs`: authentication, persistence, API, live events; serves only current frontend files.
+- `tests/`: scoring and server integration tests.
+
+Everything you do matters. Connect the dots.
